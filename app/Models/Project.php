@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Project extends Model
 {
@@ -24,5 +25,10 @@ class Project extends Model
             'end_date' => 'date',
             'budget' => 'decimal:2',
         ];
+    }
+
+    public function schedules(): HasMany
+    {
+        return $this->hasMany(ProjectSchedule::class);
     }
 }
