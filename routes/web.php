@@ -10,6 +10,9 @@ Route::resource('workers', \App\Http\Controllers\WorkerController::class);
 // Route khusus jadwal (overview, timeline) harus didaftarkan SEBELUM resource ini.
 Route::resource('schedules', \App\Http\Controllers\ProjectScheduleController::class);
 
+Route::post('schedules/{schedule}/progress', [\App\Http\Controllers\ProgressUpdateController::class, 'store'])
+    ->name('schedules.progress.store');
+
 Route::get('/', function () {
     return view('welcome');
 });

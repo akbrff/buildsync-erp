@@ -51,12 +51,18 @@ class ProjectScheduleController extends Controller
             ->with('success', 'Jadwal pekerjaan berhasil ditambahkan.');
     }
 
-    public function show(ProjectSchedule $schedule)
+        public function show(ProjectSchedule $schedule)
     {
         $schedule->load('project');
         $usedWeight = (float) ProjectSchedule::where('project_id', $schedule->project_id)->sum('weight');
 
-        return view('schedules.show', compact('schedule', 'usedWeight'));
+        $latestProgress = $schedule->latestProgress;
+        $history = $schedule->progressUpdates()
+            ->orderByDesc('recorded_at')
+            ->orderByDesc('id')
+            ->paginate(10, ['*'], 'riwayat');
+
+        return view('schedules.show', compact('schedule', 'usedWeight', 'latestProgress', 'history'));
     }
 
     public function edit(ProjectSchedule $schedule)
