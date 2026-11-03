@@ -23,14 +23,27 @@
 
     @if ($selectedProject)
         <div class="mb-6 rounded-lg bg-blue-50 p-4 border border-blue-100">
-            <h3 class="font-semibold text-blue-800">Progres Keseluruhan: {{ $selectedProject->name }}</h3>
+            <div class="flex justify-between items-center">
+                <h3 class="font-semibold text-blue-800">Progres Keseluruhan: {{ $selectedProject->name }}</h3>
+                <div class="text-sm">
+                    @if(!$selectedProject->is_weight_final)
+                        <span class="text-amber-600 font-medium bg-amber-100 px-2 py-1 rounded text-xs">
+                            ⚠ Belum Final (Cakupan Bobot: {{ number_format($selectedProject->total_weight, 2, ',', '.') }}% dari 100%)
+                        </span>
+                    @else
+                        <span class="text-green-700 font-medium bg-green-100 px-2 py-1 rounded text-xs">
+                            ✓ Bobot Final (100%)
+                        </span>
+                    @endif
+                </div>
+            </div>
             <div class="mt-2 flex items-center gap-4">
                 <div class="h-3 flex-1 rounded-full bg-blue-200">
                     <div class="h-3 rounded-full bg-blue-600 transition-all" style="width: {{ $selectedProject->overall_progress }}%"></div>
                 </div>
                 <span class="text-sm font-bold text-blue-800">{{ number_format($selectedProject->overall_progress, 2, ',', '.') }}%</span>
             </div>
-            <p class="mt-2 text-xs text-blue-600">*Progres dihitung berdasarkan bobot masing-masing pekerjaan (Weighted Average).</p>
+            <p class="mt-2 text-xs text-blue-600">*Progres dihitung dari (Bobot x Progres) / 100. Jika cakupan bobot belum 100%, progres belum final.</p>
         </div>
     @endif
 

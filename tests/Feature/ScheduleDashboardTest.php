@@ -44,8 +44,6 @@ class ScheduleDashboardTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Dashboard Jadwal & Progres', false);
         
-        // Memastikan angka statistik sesuai (Total Proyek: 1, Total Pekerjaan: 2, Selesai: 1, Terlambat: 1)
-        // Kita menggunakan assertViewHas untuk mengecek data yang dikirim controller ke view
         $response->assertViewHas('totalProjects', 1);
         $response->assertViewHas('totalSchedules', 2);
         $response->assertViewHas('completed', 1);
@@ -69,5 +67,33 @@ class ScheduleDashboardTest extends TestCase
         $response->assertSee('Timeline & Gantt Chart', false);
         $response->assertSee('Pekerjaan Timeline');
         $response->assertSee('Garis Waktu (Gantt)');
+    }
+
+    public function test_dashboard_hanya_menghitung_rata_rata_dari_proyek_final(): void
+    {
+        // Proyek 1: Bobot 100%, progres 100% (Final)
+        $p1 = $this->makeProject();
+        $s1 = $p1->schedules()->create([
+            'name' => 'P1', 'start_date' => now()->toDateString(),
+            'end_date' => now()->addDays(5)->toDateString(), 'weight' => 100
+        ]);
+        $s1->progressUpdates()->create(['progress_percentage' => 100, 'recorded_at' => now()->toDateString()]);
+
+        // Proyek 2: Bobot 50%, progres 50% (Tidak Final)
+        $p2 = Project::create([
+            'project_code' => 'PRJ-INCOMPLETE', 'name' => 'Proyek Belum Final',
+            'start_date' => now()->toDateString(), 'budget' => 1000, 'status' => 'ongoing'
+        ]);
+        $s2 = $p2->schedules()->create([
+            'name' => 'P2', 'start_date' => now()->toDateString(),
+            'end_date' => now()->addDays(5)->toDateString(), 'weight' => 50
+        ]);
+        $s2->progressUpdates()->create(['progress_percentage' => 50, 'recorded_at' => now()->toDateString()]);
+
+        $response = $this->get(route('schedules.dashboard'));
+
+        // Rata-rata progres harus 100 (dari P1), bukan 75
+        $response->assertViewHas('overallProgress', 100.0);
+        $response->assertViewHas('incompleteProjectsCount', 1);
     }
 }

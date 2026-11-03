@@ -22,13 +22,18 @@ class ScheduleDashboardController extends Controller
         $late = $schedules->filter(fn($s) => $s->status === 'Terlambat')->count();
 
         // 2. Progres Keseluruhan (Global)
-        // Menghitung rata-rata progres dari semua proyek yang ada
         $projects = Project::has('schedules')->get();
-        $overallProgress = $projects->avg('overall_progress') ?? 0;
+        
+        // Hanya hitung rata-rata dari proyek yang bobotnya SUDAH 100% (Final)
+        $finalProjects = $projects->filter(fn($p) => $p->is_weight_final);
+        $overallProgress = $finalProjects->avg('overall_progress') ?? 0;
+        
+        // Hitung proyek yang belum final
+        $incompleteProjectsCount = $projects->count() - $finalProjects->count();
 
         return view('schedules.dashboard', compact(
             'totalProjects', 'totalSchedules', 'completed', 'ongoing', 
-            'notStarted', 'late', 'overallProgress'
+            'notStarted', 'late', 'overallProgress', 'incompleteProjectsCount'
         ));
     }
 

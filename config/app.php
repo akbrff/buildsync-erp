@@ -65,6 +65,10 @@ return [
     |
     */
 
+    // Aplikasi BuildSync ERP menggunakan zona waktu Asia/Jakarta (WIB) secara global.
+    // Alasannya: input tanggal pada jadwal & progres (start_date, end_date, recorded_at) 
+    // krusial untuk status "Terlambat". Jika menggunakan UTC, input di bawah jam 07:00 WIB 
+    // akan dianggap sebagai "masa depan" oleh validasi.
     'timezone' => 'Asia/Jakarta',
 
     /*

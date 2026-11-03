@@ -135,4 +135,17 @@ class ScheduleMonitoringTest extends TestCase
         $this->assertEquals(100.0, $project->total_weight);
         $this->assertTrue($project->is_weight_final);
     }
+
+    public function test_halaman_monitoring_menampilkan_peringatan_jika_bobot_belum_100(): void
+    {
+        $project = $this->makeProject();
+        $schedule = $this->makeSchedule($project, ['weight' => 50]); // Bobot 50% belum final
+
+        $response = $this->get(route('schedules.monitoring', ['project_id' => $project->id]));
+
+        $response->assertStatus(200);
+        // Memastikan teks peringatan muncul
+        $response->assertSee('Belum Final');
+        $response->assertSee('50,00% dari 100%');
+    }
 }

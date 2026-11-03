@@ -19,10 +19,19 @@
             <p class="mt-2 text-3xl font-bold text-slate-800">{{ $totalSchedules }}</p>
         </div>
         <div class="rounded-lg bg-white p-5 shadow-sm border border-slate-200">
-            <p class="text-sm font-medium text-slate-500">Progres Global Rata-rata</p>
+            <p class="text-sm font-medium text-slate-500">Progres Global (Proyek Final)</p>
             <div class="mt-2 flex items-center gap-3">
                 <p class="text-3xl font-bold text-blue-600">{{ number_format($overallProgress, 2, ',', '.') }}%</p>
             </div>
+            @if($incompleteProjectsCount > 0)
+                <p class="mt-1 text-xs text-amber-600 font-medium">
+                    ⚠ {{ $incompleteProjectsCount }} proyek belum final (bobot &lt; 100%)
+                </p>
+            @else
+                <p class="mt-1 text-xs text-green-600 font-medium">
+                    ✓ Semua proyek sudah final
+                </p>
+            @endif
         </div>
         <div class="rounded-lg bg-white p-5 shadow-sm border border-slate-200">
             <p class="text-sm font-medium text-slate-500">Pekerjaan Terlambat</p>
