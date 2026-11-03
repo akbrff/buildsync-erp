@@ -7,6 +7,9 @@ Route::view('/dashboard', 'dashboard')->name('dashboard');
 
 Route::resource('workers', \App\Http\Controllers\WorkerController::class);
 
+Route::get('schedules/monitoring', [\App\Http\Controllers\ScheduleMonitoringController::class, 'index'])
+    ->name('schedules.monitoring');
+
 // Route khusus jadwal (overview, timeline) harus didaftarkan SEBELUM resource ini.
 Route::resource('schedules', \App\Http\Controllers\ProjectScheduleController::class);
 

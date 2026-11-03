@@ -41,4 +41,54 @@ class ProjectSchedule extends Model
     {
         return $this->hasOne(ProgressUpdate::class)->latestOfMany(['recorded_at', 'id']);
     }
+    /**
+     * Progres aktual terakhir (0 jika belum ada catatan).
+     */
+    public function getCurrentProgressAttribute(): float
+    {
+        return (float) ($this->latestProgress?->progress_percentage ?? 0);
+    }
+
+    /**
+     * Mendapatkan status pekerjaan berdasarkan tanggal dan progres aktual.
+     */
+    public function getStatusAttribute(): string
+    {
+        $progress = $this->current_progress;
+        $today = now()->startOfDay();
+        $endDate = \Illuminate\Support\Carbon::parse($this->end_date)->startOfDay();
+
+        if ($progress >= 100) {
+            return 'Selesai';
+        }
+
+        if ($endDate->lt($today)) {
+            return 'Terlambat';
+        }
+
+        if ($progress > 0) {
+            return 'Berlangsung';
+        }
+
+        return 'Belum Dimulai';
+    }
+
+    /**
+     * Scope untuk filter query berdasarkan status.
+     */
+    public function scopeByStatus($query, string $status)
+    {
+        $today = now()->toDateString();
+
+        return match ($status) {
+            'Selesai' => $query->whereHas('latestProgress', fn($q) => $q->where('progress_percentage', '>=', 100)),
+            'Terlambat' => $query->where('end_date', '<', $today)
+                ->where(fn($q) => $q->whereDoesntHave('latestProgress')->orWhereHas('latestProgress', fn($q2) => $q2->where('progress_percentage', '<', 100))),
+            'Berlangsung' => $query->where('end_date', '>=', $today)
+                ->whereHas('latestProgress', fn($q) => $q->where('progress_percentage', '>', 0)->where('progress_percentage', '<', 100)),
+            'Belum Dimulai' => $query->where('end_date', '>=', $today)
+                ->where(fn($q) => $q->whereDoesntHave('latestProgress')->orWhereHas('latestProgress', fn($q2) => $q2->where('progress_percentage', 0))),
+            default => $query,
+        };
+    }
 }

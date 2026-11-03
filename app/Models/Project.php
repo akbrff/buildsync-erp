@@ -31,4 +31,30 @@ class Project extends Model
     {
         return $this->hasMany(ProjectSchedule::class);
     }
+
+    /**
+     * Menghitung progres keseluruhan proyek berdasarkan bobot pekerjaan.
+     */
+    public function getOverallProgressAttribute(): float
+    {
+        // Eager load agar tidak N+1
+        $this->loadMissing('schedules.latestProgress');
+
+        if ($this->schedules->isEmpty()) {
+            return 0;
+        }
+
+        $totalWeight = $this->schedules->sum('weight');
+        
+        // Jika total bobot 0, hindari division by zero
+        if ($totalWeight <= 0) {
+            return 0;
+        }
+
+        $weightedProgress = $this->schedules->sum(function ($schedule) {
+            return $schedule->weight * $schedule->current_progress;
+        });
+
+        return round($weightedProgress / $totalWeight, 2);
+    }
 }
