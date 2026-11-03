@@ -10,6 +10,12 @@ Route::resource('workers', \App\Http\Controllers\WorkerController::class);
 Route::get('schedules/monitoring', [\App\Http\Controllers\ScheduleMonitoringController::class, 'index'])
     ->name('schedules.monitoring');
 
+Route::get('schedules/dashboard', [\App\Http\Controllers\ScheduleDashboardController::class, 'index'])
+    ->name('schedules.dashboard');
+
+Route::get('schedules/timeline', [\App\Http\Controllers\ScheduleDashboardController::class, 'timeline'])
+    ->name('schedules.timeline');
+
 // Route khusus jadwal (overview, timeline) harus didaftarkan SEBELUM resource ini.
 Route::resource('schedules', \App\Http\Controllers\ProjectScheduleController::class);
 

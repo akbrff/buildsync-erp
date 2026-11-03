@@ -15,6 +15,8 @@
         ['label' => 'Proyek',             'route' => 'projects.index'],
         ['label' => 'Jadwal & Progres',   'route' => 'schedules.index'],
 	['label' => 'Monitoring & Keterlambatan', 'route' => 'schedules.monitoring'],
+	['label' => 'Dashboard Jadwal',   'route' => 'schedules.dashboard'], 
+        ['label' => 'Timeline Proyek',    'route' => 'schedules.timeline'], 
         ['label' => 'Material & Inventaris', 'route' => 'materials.index'],
         ['label' => 'Tenaga Kerja',       'route' => 'workers.index'],
         ['label' => 'Anggaran & Biaya',   'route' => 'budgets.index'],
