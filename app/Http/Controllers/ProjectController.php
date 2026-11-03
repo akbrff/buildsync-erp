@@ -75,6 +75,13 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+        // Cek apakah proyek memiliki jadwal pekerjaan
+        if ($project->schedules()->exists()) {
+            return redirect()
+                ->route('projects.index')
+                ->with('error', 'Proyek tidak dapat dihapus karena masih memiliki Jadwal Pekerjaan. Silakan hapus jadwalnya terlebih dahulu.');
+        }
+
         $project->delete();
 
         return redirect()

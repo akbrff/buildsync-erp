@@ -78,7 +78,7 @@ class ScheduleMonitoringTest extends TestCase
         $this->assertEquals('Terlambat', $schedule->status);
     }
 
-    // --- PENGUJIAN PERHITUNGAN PROGRES KESELURUHAN (WEIGHTED) ---
+    // --- PENGUJIAN PERHITUNGAN PROGRES KESELURUHAN ---
 
     public function test_overall_progress_dihitung_berdasarkan_bobot(): void
     {
@@ -96,6 +96,8 @@ class ScheduleMonitoringTest extends TestCase
         // Rumus = ( (40 * 100) + (60 * 50) ) / 100 = 70
         $project->refresh();
         $this->assertEquals(70.0, $project->overall_progress);
+        $this->assertEquals(100.0, $project->total_weight);
+        $this->assertTrue($project->is_weight_final);
     }
 
     public function test_overall_progress_dengan_bobot_tidak_penuh(): void
@@ -111,8 +113,26 @@ class ScheduleMonitoringTest extends TestCase
         $this->seedProgress($scheduleB, 50, now()->toDateString());
 
         // Total bobot = 50 (belum mencapai 100)
-        // ( (20 * 100) + (30 * 50) ) / 50 = (2000 + 1500) / 50 = 3500 / 50 = 70
+        // Rumus baru: ( (20 * 100) + (30 * 50) ) / 100 = 35
+        $project->refresh();
+        $this->assertEquals(35.0, $project->overall_progress);
+        $this->assertEquals(50.0, $project->total_weight);
+        $this->assertFalse($project->is_weight_final);
+    }
+
+    public function test_overall_progress_final_jika_bobot_100(): void
+    {
+        $project = $this->makeProject();
+        
+        $scheduleA = $this->makeSchedule($project, ['weight' => 40, 'end_date' => now()->addDay()->toDateString()]);
+        $this->seedProgress($scheduleA, 100, now()->toDateString());
+        
+        $scheduleB = $this->makeSchedule($project, ['weight' => 60, 'end_date' => now()->addDay()->toDateString()]);
+        $this->seedProgress($scheduleB, 50, now()->toDateString());
+
         $project->refresh();
         $this->assertEquals(70.0, $project->overall_progress);
+        $this->assertEquals(100.0, $project->total_weight);
+        $this->assertTrue($project->is_weight_final);
     }
 }

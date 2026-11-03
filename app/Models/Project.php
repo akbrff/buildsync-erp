@@ -33,28 +33,40 @@ class Project extends Model
     }
 
     /**
-     * Menghitung progres keseluruhan proyek berdasarkan bobot pekerjaan.
+     * Menghitung progres keseluruhan proyek (skala 0-100).
+     * Jika total bobot belum 100, progres dihitung proporsional terhadap 100.
      */
     public function getOverallProgressAttribute(): float
     {
-        // Eager load agar tidak N+1
         $this->loadMissing('schedules.latestProgress');
 
         if ($this->schedules->isEmpty()) {
             return 0;
         }
 
-        $totalWeight = $this->schedules->sum('weight');
-        
-        // Jika total bobot 0, hindari division by zero
-        if ($totalWeight <= 0) {
-            return 0;
-        }
-
+        // Total (Bobot x Progres)
         $weightedProgress = $this->schedules->sum(function ($schedule) {
             return $schedule->weight * $schedule->current_progress;
         });
 
-        return round($weightedProgress / $totalWeight, 2);
+        // Dibagi 100, BUKAN dibagi total bobot yang ada.
+        // Contoh: Bobot 50%, Progres 100% -> (50*100)/100 = 50%.
+        return round($weightedProgress / 100, 2);
+    }
+
+    /**
+     * Mendapatkan total bobot pekerjaan saat ini.
+     */
+    public function getTotalWeightAttribute(): float
+    {
+        return (float) $this->schedules->sum('weight');
+    }
+
+    /**
+     * Cek apakah bobot pekerjaan sudah mencapai 100% (final).
+     */
+    public function getIsWeightFinalAttribute(): bool
+    {
+        return $this->total_weight >= 100;
     }
 }
