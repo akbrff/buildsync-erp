@@ -32,6 +32,11 @@ class Project extends Model
         return $this->hasMany(ProjectSchedule::class);
     }
 
+    public function budgets(): HasMany
+    {
+        return $this->hasMany(Budget::class);
+    }
+
     /**
      * Menghitung progres keseluruhan proyek (skala 0-100).
      * Jika total bobot belum 100, progres dihitung proporsional terhadap 100.
