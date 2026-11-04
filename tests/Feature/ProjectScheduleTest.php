@@ -216,6 +216,26 @@ class ProjectScheduleTest extends TestCase
         $this->assertDatabaseMissing('project_schedules', ['id' => $schedule->id]);
     }
 
+
+    public function test_schedule_with_progress_history_cannot_be_deleted(): void
+    {
+        $project = $this->makeProject();
+        $schedule = $this->makeSchedule($project);
+
+        $progress = $schedule->progressUpdates()->create([
+            'progress_percentage' => 45,
+            'recorded_at' => '2026-11-04',
+            'notes' => 'Pekerjaan sedang berjalan.',
+        ]);
+
+        $response = $this->delete(route('schedules.destroy', $schedule));
+
+        $response->assertRedirect(route('schedules.index', ['project_id' => $project->id]));
+        $response->assertSessionHas('error');
+        $this->assertDatabaseHas('project_schedules', ['id' => $schedule->id]);
+        $this->assertDatabaseHas('progress_updates', ['id' => $progress->id, 'project_schedule_id' => $schedule->id]);
+    }
+
     public function test_index_can_be_filtered_by_project(): void
     {
         $this->withoutVite();

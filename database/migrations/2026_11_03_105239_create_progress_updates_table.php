@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('progress_updates', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('project_schedule_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('project_schedule_id')->constrained()->restrictOnDelete();
             $table->decimal('progress_percentage', 5, 2);
             $table->text('notes')->nullable();
             $table->boolean('is_correction')->default(false);

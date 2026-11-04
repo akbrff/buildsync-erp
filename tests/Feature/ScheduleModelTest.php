@@ -91,16 +91,18 @@ class ScheduleModelTest extends TestCase
         $this->assertSame('55.00', $latest->progress_percentage);
     }
 
-    public function test_deleting_schedule_cascades_to_progress_updates(): void
+    public function test_schedule_with_progress_history_cannot_be_deleted_at_database_level(): void
     {
         $schedule = $this->makeSchedule($this->makeProject());
-        $this->makeProgress($schedule, 20, '2026-11-01');
-        $this->makeProgress($schedule, 50, '2026-11-10');
-        $this->assertDatabaseCount('progress_updates', 2);
+        $progress = $this->makeProgress($schedule, 20, '2026-11-01');
 
-        $schedule->delete();
-
-        $this->assertDatabaseCount('progress_updates', 0);
+        try {
+            $schedule->delete();
+            $this->fail('Jadwal dengan riwayat progres seharusnya tidak dapat dihapus.');
+        } catch (QueryException) {
+            $this->assertDatabaseHas('project_schedules', ['id' => $schedule->id]);
+            $this->assertDatabaseHas('progress_updates', ['id' => $progress->id]);
+        }
     }
 
     public function test_project_with_schedules_cannot_be_deleted(): void
