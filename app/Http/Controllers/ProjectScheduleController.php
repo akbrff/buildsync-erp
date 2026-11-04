@@ -91,6 +91,12 @@ class ProjectScheduleController extends Controller
     {
         $projectId = $schedule->project_id;
 
+        if ($schedule->progressUpdates()->exists()) {
+            return redirect()
+                ->route('schedules.index', ['project_id' => $projectId])
+                ->with('error', 'Jadwal tidak dapat dihapus karena memiliki riwayat progres. Riwayat tersebut harus dipertahankan sebagai catatan proyek.');
+        }
+
         $schedule->delete();
 
         return redirect()
