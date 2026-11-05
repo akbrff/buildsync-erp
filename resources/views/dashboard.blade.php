@@ -4,28 +4,28 @@
 
 @section('content')
     <!-- 4 Kotak Statistik Atas -->
-    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-6">
-        <div class="rounded-lg bg-white p-6 shadow-sm border border-slate-200">
+    <div class="mb-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <div class="rounded-2xl bg-white p-7 shadow-sm border border-slate-200">
             <p class="text-sm font-medium text-slate-500">Total Proyek</p>
-            <p class="mt-2 text-3xl font-bold text-slate-800">{{ $totalProjects }}</p>
+            <p class="mt-2 text-4xl font-extrabold tracking-tight text-slate-800">{{ $totalProjects }}</p>
         </div>
-        <div class="rounded-lg bg-white p-6 shadow-sm border border-slate-200">
+        <div class="rounded-2xl bg-white p-7 shadow-sm border border-slate-200">
             <p class="text-sm font-medium text-slate-500">Proyek Berjalan</p>
-            <p class="mt-2 text-3xl font-bold text-blue-600">{{ $ongoingProjects }}</p>
+            <p class="mt-2 text-4xl font-extrabold tracking-tight text-blue-600">{{ $ongoingProjects }}</p>
         </div>
-        <div class="rounded-lg bg-white p-6 shadow-sm border border-slate-200">
+        <div class="rounded-2xl bg-white p-7 shadow-sm border border-slate-200">
             <p class="text-sm font-medium text-slate-500">Proyek Selesai</p>
-            <p class="mt-2 text-3xl font-bold text-green-600">{{ $completedProjects }}</p>
+            <p class="mt-2 text-4xl font-extrabold tracking-tight text-green-600">{{ $completedProjects }}</p>
         </div>
-        <div class="rounded-lg bg-white p-6 shadow-sm border border-slate-200">
+        <div class="rounded-2xl bg-white p-7 shadow-sm border border-slate-200">
             <p class="text-sm font-medium text-slate-500">Ditunda</p>
-            <p class="mt-2 text-3xl font-bold text-amber-500">{{ $onHoldProjects }}</p>
+            <p class="mt-2 text-4xl font-extrabold tracking-tight text-amber-500">{{ $onHoldProjects }}</p>
         </div>
     </div>
 
-    <div class="grid gap-6 lg:grid-cols-3">
+    <div class="grid gap-6 2xl:grid-cols-3">
         <!-- Tabel Progres Proyek (Kiri) -->
-        <div class="lg:col-span-2 rounded-lg bg-white shadow-sm border border-slate-200 overflow-hidden">
+        <div class="2xl:col-span-2 rounded-2xl bg-white shadow-sm border border-slate-200 overflow-hidden">
             <div class="border-b border-slate-100 px-6 py-4">
                 <h3 class="font-semibold text-slate-800">Progres Proyek Terbaru</h3>
             </div>
@@ -81,7 +81,7 @@
         </div>
 
         <!-- Panel Stok Material (Kanan) -->
-        <div class="rounded-lg bg-white shadow-sm border border-slate-200">
+        <div class="rounded-2xl bg-white shadow-sm border border-slate-200">
             <div class="border-b border-slate-100 px-6 py-4">
                 <h3 class="font-semibold text-slate-800">Status Stok Material</h3>
             </div>
