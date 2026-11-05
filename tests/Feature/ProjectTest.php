@@ -50,4 +50,29 @@ class ProjectTest extends TestCase
             'status' => 'ongoing',
         ]);
     }
+
+    public function test_project_tidak_bisa_dihapus_jika_memiliki_jadwal(): void
+    {
+        $project = Project::create([
+            'project_code' => 'PRJ-DEL',
+            'name' => 'Proyek Test Hapus',
+            'start_date' => now()->toDateString(),
+            'budget' => 1000000,
+            'status' => 'ongoing'
+        ]);
+
+        $project->schedules()->create([
+            'name' => 'Pekerjaan 1',
+            'start_date' => now()->toDateString(),
+            'end_date' => now()->addDays(2)->toDateString(),
+            'weight' => 100
+        ]);
+
+        $response = $this->delete(route('projects.destroy', $project));
+
+        // Harus redirect dengan pesan error, dan proyek TIDAK terhapus
+        $response->assertRedirect(route('projects.index'));
+        $response->assertSessionHas('error');
+        $this->assertDatabaseHas('projects', ['id' => $project->id]);
+    }
 }
