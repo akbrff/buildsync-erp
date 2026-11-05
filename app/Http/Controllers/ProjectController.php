@@ -71,15 +71,20 @@ class ProjectController extends Controller
     }
 
     /**
-     * Menghapus proyek.
+     * Menghapus proyek hanya jika belum memiliki data turunan.
      */
     public function destroy(Project $project)
     {
-        // Cek apakah proyek memiliki jadwal pekerjaan
         if ($project->schedules()->exists()) {
             return redirect()
                 ->route('projects.index')
-                ->with('error', 'Proyek tidak dapat dihapus karena masih memiliki Jadwal Pekerjaan. Silakan hapus jadwalnya terlebih dahulu.');
+                ->with('error', 'Proyek tidak dapat dihapus karena masih memiliki Jadwal Pekerjaan. Hapus atau selesaikan data jadwal terlebih dahulu.');
+        }
+
+        if ($project->budgets()->exists()) {
+            return redirect()
+                ->route('projects.index')
+                ->with('error', 'Proyek tidak dapat dihapus karena masih memiliki catatan anggaran. Pertahankan riwayat biaya proyek.');
         }
 
         $project->delete();
@@ -99,18 +104,14 @@ class ProjectController extends Controller
                 'required',
                 'string',
                 'max:50',
-                Rule::unique('projects', 'project_code')
-                    ->ignore($project?->id),
+                Rule::unique('projects', 'project_code')->ignore($project?->id),
             ],
             'name' => ['required', 'string', 'max:255'],
             'location' => ['nullable', 'string', 'max:255'],
             'start_date' => ['required', 'date'],
             'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
             'budget' => ['required', 'numeric', 'min:0'],
-            'status' => [
-                'required',
-                Rule::in(['planning', 'ongoing', 'completed', 'on_hold']),
-            ],
+            'status' => ['required', Rule::in(['planning', 'ongoing', 'completed', 'on_hold'])],
             'description' => ['nullable', 'string'],
         ]);
     }
