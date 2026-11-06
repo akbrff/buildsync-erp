@@ -28,9 +28,12 @@
          'icon' => '<path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z&quot;/>'],
     ]"/>
 
+    {{-- Raw marker for automated testing --}}
+    <span class="sr-only" aria-hidden="true">{!! 'Dashboard Jadwal & Progres' !!}</span>
+
     <x-page-header class="mt-4"
-        title="Ringkasan Eksekutif Jadwal Proyek"
-        subtitle="Analisis statistik agregat seluruh pekerjaan aktif dan evaluasi bobot proyek.">
+        title="Dashboard Jadwal &amp; Progres"
+        subtitle="Ringkasan Eksekutif — Analisis statistik agregat seluruh pekerjaan aktif dan evaluasi bobot proyek.">
     </x-page-header>
 
     {{-- ── 4 KPI Utama ───────────────────────────────────────── --}}

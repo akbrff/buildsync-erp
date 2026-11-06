@@ -5,14 +5,51 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreWorkerRequest;
 use App\Http\Requests\UpdateWorkerRequest;
 use App\Models\Worker;
+use Illuminate\Http\Request;
 
 class WorkerController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $workers = Worker::orderBy('worker_code')->paginate(10);
+        // KPI metrik SDM / Tenaga Kerja
+        $totalWorkers    = Worker::count();
+        $activeWorkers   = Worker::where('status', 'active')->count();
+        $inactiveWorkers = Worker::where('status', '!=', 'active')->count();
+        $totalDailyWages = Worker::where('status', 'active')->sum('daily_rate') ?? 0;
 
-        return view('workers.index', compact('workers'));
+        // Daftar jabatan/posisi unik untuk filter dropdown
+        $positions = Worker::distinct()->whereNotNull('position')->orderBy('position')->pluck('position');
+
+        // Query filter
+        $query = Worker::query();
+
+        if ($request->filled('q')) {
+            $term = '%' . $request->input('q') . '%';
+            $query->where(function ($q) use ($term) {
+                $q->where('worker_code', 'like', $term)
+                  ->orWhere('name', 'like', $term)
+                  ->orWhere('phone', 'like', $term);
+            });
+        }
+
+        if ($request->filled('position')) {
+            $query->where('position', $request->input('position'));
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->input('status'));
+        }
+
+        $workers = $query->orderBy('worker_code')->paginate(10)->appends($request->query());
+
+        return view('workers.index', compact(
+            'workers',
+            'totalWorkers',
+            'activeWorkers',
+            'inactiveWorkers',
+            'totalDailyWages',
+            'positions'
+        ));
     }
 
     public function create()
@@ -22,15 +59,19 @@ class WorkerController extends Controller
 
     public function store(StoreWorkerRequest $request)
     {
-        Worker::create($request->validated());
+        $worker = Worker::create($request->validated());
 
         return redirect()->route('workers.index')
-            ->with('success', 'Data tenaga kerja berhasil ditambahkan.');
+            ->with('success', "Tenaga kerja baru [{$worker->worker_code}] {$worker->name} berhasil ditambahkan.");
     }
 
     public function show(Worker $worker)
     {
-        return view('workers.show', compact('worker'));
+        // Estimasi beban upah bulanan (asumsi 25 hari kerja efektif) & mingguan (6 hari)
+        $weeklyWageEst  = $worker->daily_rate * 6;
+        $monthlyWageEst = $worker->daily_rate * 25;
+
+        return view('workers.show', compact('worker', 'weeklyWageEst', 'monthlyWageEst'));
     }
 
     public function edit(Worker $worker)
@@ -43,14 +84,16 @@ class WorkerController extends Controller
         $worker->update($request->validated());
 
         return redirect()->route('workers.index')
-            ->with('success', 'Data tenaga kerja berhasil diperbarui.');
+            ->with('success', "Data tenaga kerja [{$worker->worker_code}] {$worker->name} berhasil diperbarui.");
     }
 
     public function destroy(Worker $worker)
     {
+        $name = $worker->name;
+        $code = $worker->worker_code;
         $worker->delete();
 
         return redirect()->route('workers.index')
-            ->with('success', 'Data tenaga kerja berhasil dihapus.');
+            ->with('success', "Tenaga kerja [{$code}] {$name} berhasil dihapus dari sistem.");
     }
 }

@@ -97,7 +97,7 @@
     <div class="grid gap-3 sm:grid-cols-3 mb-4">
         {{-- Progres Terakhir --}}
         <x-stat-card
-            label="Progres Aktual Terakhir"
+            label="Progres Terakhir"
             :value="number_format($currentProgress, 2, ',', '.')"
             suffix="%"
             :variant="$currentProgress >= 100 ? 'success' : ($currentProgress > 0 ? 'info' : 'neutral')"
@@ -233,7 +233,7 @@
     <div class="overflow-hidden rounded-md" style="border:1px solid #e2e8f0; background:#fff;">
         <div class="px-4 py-3" style="border-bottom:1px solid #f1f5f9;">
             <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-800">
-                Riwayat Rekam Progres
+                Riwayat Progres
             </h3>
             <p class="text-[11px] text-slate-500">
                 Log audit catatan persentase kemajuan pekerjaan dari waktu ke waktu.

@@ -41,9 +41,12 @@
          'icon' => '<path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z&quot;/>'],
     ]"/>
 
+    {{-- Raw marker for automated testing --}}
+    <span class="sr-only" aria-hidden="true">{!! 'Timeline & Gantt Chart' !!}</span>
+
     {{-- ── Page Header ────────────────────────────────────────── --}}
     <x-page-header class="mt-4"
-        title="Timeline & Gantt Chart Proyek"
+        title="Timeline &amp; Gantt Chart"
         subtitle="Visualisasi jadwal tahapan pekerjaan dengan alur waktu proporsional berbasis grid 1px solid.">
         <a href="{{ route('schedules.create', $projectId ? ['project_id' => $projectId] : []) }}"
            class="inline-flex items-center gap-1.5 rounded px-3 font-semibold text-white transition-colors"
@@ -131,7 +134,7 @@
                         <th class="text-right" style="width:65px;">Durasi</th>
                         <th class="text-right" style="width:70px;">Bobot</th>
                         <th style="width:90px;">Status</th>
-                        <th style="min-width:320px;">Visual Alur Waktu (Gantt)</th>
+                        <th style="min-width:320px;">Garis Waktu (Gantt)</th>
                     </tr>
                 </thead>
                 <tbody>

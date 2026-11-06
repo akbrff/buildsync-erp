@@ -1,29 +1,21 @@
 @props([
-    /**
-     * Komponen Filter Bar — form GET untuk menyaring data tabel.
-     *
-     * Props:
-     *   $action     → URL target form (required)
-     *   $method     → GET (default, karena ini filter URL)
-     *   $searchable → boolean, tampilkan input search text (default: false)
-     *   $searchName → name attribute input search (default: 'q')
-     *   $searchPlaceholder → placeholder input search
-     *
-     * Slot: isi dengan select/input filter tambahan (project, status, tanggal, dll.)
-     *
-     * Contoh penggunaan:
-     *   <x-filter-bar action="{{ route('schedules.index') }}" :searchable="true">
-     *       <select name="project_id" onchange="this.form.submit()"> ... </select>
-     *   </x-filter-bar>
-     */
     'action'            => '',
     'method'            => 'GET',
     'searchable'        => false,
     'searchName'        => 'q',
     'searchPlaceholder' => 'Cari...',
 ])
+{{--
+    Komponen Filter Bar — form GET untuk menyaring data tabel.
+    Props:
+      $action     → URL target form (required)
+      $method     → GET (default, karena ini filter URL)
+      $searchable → boolean, tampilkan input search text (default: false)
+      $searchName → name attribute input search (default: 'q')
+      $searchPlaceholder → placeholder input search
+    Slot: isi dengan select/input filter tambahan
+--}}
 @php
-    // Ambil semua query string saat ini untuk menjaga state filter lain
     $currentQuery = request()->except($searchName);
     $hasFilters   = count(array_filter(request()->except(['page', '_token']))) > 0;
 @endphp

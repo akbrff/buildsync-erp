@@ -140,7 +140,7 @@
                 <div class="flex items-center gap-3">
                     @if (!$selectedProject->is_weight_final)
                         <x-badge variant="warning" :dot="true">
-                            Bobot {{ number_format($selectedProject->total_weight, 2, ',', '.') }}% / 100%
+                            Belum Final ({{ number_format($selectedProject->total_weight, 2, ',', '.') }}% dari 100%)
                         </x-badge>
                     @else
                         <x-badge variant="success" :dot="true">Bobot Final 100%</x-badge>

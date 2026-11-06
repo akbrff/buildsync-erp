@@ -21,6 +21,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('projects', ProjectController::class);
     Route::resource('workers', \App\Http\Controllers\WorkerController::class);
+    Route::post('materials/{material}/adjust', [\App\Http\Controllers\MaterialController::class, 'adjustStock'])->name('materials.adjust');
     Route::resource('materials', \App\Http\Controllers\MaterialController::class);
     Route::resource('budgets', \App\Http\Controllers\BudgetController::class);
     Route::get('reports', [\App\Http\Controllers\ReportController::class, 'index'])->name('reports.index');

@@ -99,8 +99,8 @@
                     </svg>
                 </div>
                 <div>
-                    <p class="text-sm font-semibold leading-tight text-white">BuildSync</p>
-                    <p class="text-[10px] leading-tight" style="color:#64748b;">ERP Konstruksi</p>
+                    <p class="text-sm font-semibold leading-tight text-white">BuildSync ERP</p>
+                    <p class="text-[10px] leading-tight" style="color:#64748b;">Sistem Manajemen Konstruksi</p>
                 </div>
             </div>
         </div>
