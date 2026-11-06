@@ -1,81 +1,129 @@
 @extends('layouts.app')
 
-@section('title', 'Timeline Proyek')
+@section('title', 'Jadwal Proyek — Timeline')
+
+@section('breadcrumbs')
+<x-breadcrumb :links="[
+    ['label' => 'Dashboard',        'href' => route('dashboard')],
+    ['label' => 'Jadwal Proyek',    'href' => route('schedules.index')],
+    ['label' => 'Timeline / Gantt', 'href' => '#'],
+]"/>
+@endsection
 
 @section('content')
-    <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-            <h2 class="text-xl font-bold text-slate-800">Timeline & Gantt Chart</h2>
-            <p class="mt-1 text-sm text-slate-500">Visualisasi jadwal pekerjaan.</p>
-        </div>
-        
-        <form method="GET" action="{{ route('schedules.timeline') }}" class="flex items-center gap-2">
-            <select name="project_id" class="rounded-md border border-slate-300 text-sm focus:border-blue-500 focus:ring-blue-500" onchange="this.form.submit()">
-                <option value="">-- Semua Proyek --</option>
+
+    {{-- ── Secondary Tab Bar ─────────────────────────────────── --}}
+    <x-tab-bar :tabs="[
+        ['label' => 'Daftar Jadwal',    'route' => 'schedules.index',
+         'active_routes' => ['schedules.index'],
+         'icon' => '<path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M4 6h16M4 10h16M4 14h16M4 18h7&quot;/>'],
+        ['label' => 'Timeline / Gantt', 'route' => 'schedules.timeline',
+         'active_routes' => ['schedules.timeline'],
+         'icon' => '<path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z&quot;/>'],
+        ['label' => 'Monitoring',       'route' => 'schedules.monitoring',
+         'active_routes' => ['schedules.monitoring'],
+         'icon' => '<path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z&quot;/>'],
+        ['label' => 'Ringkasan KPI',    'route' => 'schedules.dashboard',
+         'active_routes' => ['schedules.dashboard'],
+         'icon' => '<path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z&quot;/>'],
+    ]"/>
+
+    {{-- ── Page Header ────────────────────────────────────────── --}}
+    <x-page-header class="mt-4"
+        title="Timeline & Gantt Chart"
+        subtitle="Visualisasi durasi dan kemajuan setiap tahapan pekerjaan proyek.">
+    </x-page-header>
+
+    {{-- ── Filter Bar ─────────────────────────────────────────── --}}
+    <div class="mb-3">
+        <x-filter-bar action="{{ route('schedules.timeline') }}">
+            <select name="project_id" class="erp-input" style="width:240px;" onchange="this.form.submit()">
+                <option value="">— Semua Proyek —</option>
                 @foreach ($projects as $project)
                     <option value="{{ $project->id }}" @selected($projectId == $project->id)>
-                        {{ $project->project_code }} - {{ $project->name }}
+                        {{ $project->project_code }} – {{ $project->name }}
                     </option>
                 @endforeach
             </select>
-        </form>
+        </x-filter-bar>
     </div>
 
-    <div class="rounded-lg bg-white shadow-sm border border-slate-200 overflow-hidden">
+    {{-- ── Timeline Table ─────────────────────────────────────── --}}
+    <div class="overflow-hidden rounded-md" style="border:1px solid #e2e8f0; background:#fff;">
         <div class="overflow-x-auto">
-            <table class="w-full text-left text-sm">
-                <thead class="bg-slate-50 text-xs uppercase text-slate-500 border-b border-slate-200">
+            <table class="erp-table w-full text-left">
+                <thead>
                     <tr>
-                        <th class="px-4 py-3 min-w-[200px]">Pekerjaan</th>
-                        <th class="px-4 py-3 min-w-[120px]">Mulai</th>
-                        <th class="px-4 py-3 min-w-[120px]">Selesai</th>
-                        <th class="px-4 py-3 min-w-[80px]">Durasi</th>
-                        <th class="px-4 py-3 min-w-[100px]">Status</th>
-                        <th class="px-4 py-3 min-w-[300px]">Garis Waktu (Gantt)</th>
+                        <th style="min-width:200px;">Pekerjaan</th>
+                        <th style="min-width:110px;">Mulai</th>
+                        <th style="min-width:110px;">Selesai</th>
+                        <th class="text-right" style="min-width:70px;">Durasi</th>
+                        <th style="min-width:90px;">Status</th>
+                        <th style="min-width:260px;">Gantt (Progres)</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100">
+                <tbody>
                     @forelse ($schedules as $schedule)
                         @php
-                            $start = \Carbon\Carbon::parse($schedule->start_date);
-                            $end = \Carbon\Carbon::parse($schedule->end_date);
+                            $start    = \Carbon\Carbon::parse($schedule->start_date);
+                            $end      = \Carbon\Carbon::parse($schedule->end_date);
                             $duration = $start->diffInDays($end) ?: 1;
-                            
-                            // Warna bar berdasarkan status
-                            $barColor = match($schedule->status) {
-                                'Selesai' => 'bg-green-500',
-                                'Terlambat' => 'bg-red-500',
-                                'Berlangsung' => 'bg-blue-500',
-                                default => 'bg-slate-400',
+
+                            $statusVariant = match ($schedule->status) {
+                                'Selesai'       => 'success',
+                                'Terlambat'     => 'danger',
+                                'Berlangsung'   => 'info',
+                                default         => 'neutral',
+                            };
+                            $barColor = match ($schedule->status) {
+                                'Selesai'       => '#22c55e',
+                                'Terlambat'     => '#ef4444',
+                                'Berlangsung'   => '#3b82f6',
+                                default         => '#cbd5e1',
                             };
                         @endphp
-                        <tr class="hover:bg-slate-50">
-                            <td class="px-4 py-3">
-                                <a href="{{ route('schedules.show', $schedule) }}" class="font-medium text-blue-600 hover:underline">{{ $schedule->name }}</a>
-                                <p class="text-xs text-slate-500">{{ $schedule->project->project_code }}</p>
+                        <tr>
+                            <td>
+                                <a href="{{ route('schedules.show', $schedule) }}"
+                                   class="block text-xs font-semibold transition-colors"
+                                   style="color:#2563eb;"
+                                   onmouseover="this.style.textDecoration='underline';"
+                                   onmouseout="this.style.textDecoration='none';">
+                                    {{ $schedule->name }}
+                                </a>
+                                <p class="mt-0.5 text-[11px] font-code font-semibold" style="color:#94a3b8;">
+                                    {{ $schedule->project->project_code }}
+                                </p>
                             </td>
-                            <td class="px-4 py-3 text-slate-600">{{ $start->format('d M Y') }}</td>
-                            <td class="px-4 py-3 text-slate-600">{{ $end->format('d M Y') }}</td>
-                            <td class="px-4 py-3 text-slate-600">{{ $duration }} Hari</td>
-                            <td class="px-4 py-3">
-                                <span class="inline-block rounded-full px-2 py-1 text-xs font-semibold {{ $barColor }} bg-opacity-20 text-slate-800">
-                                    {{ $schedule->status }}
-                                </span>
+                            <td class="tabular" style="color:#475569;">{{ $start->format('d M Y') }}</td>
+                            <td class="tabular" style="color:#475569;">{{ $end->format('d M Y') }}</td>
+                            <td class="text-right tabular" style="color:#475569;">{{ $duration }}h</td>
+                            <td>
+                                <x-badge :variant="$statusVariant">{{ $schedule->status }}</x-badge>
                             </td>
-                            <td class="px-4 py-3">
-                                <div class="w-full bg-slate-100 rounded-full h-4 relative">
-                                    <!-- Visualisasi bar -->
-                                    <div class="h-4 rounded-full {{ $barColor }} relative group" style="width: {{ $schedule->current_progress }}%; min-width: 4px;">
-                                        <span class="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-10">
-                                            {{ $schedule->current_progress }}%
-                                        </span>
+                            <td>
+                                {{-- Progress bar gantt style --}}
+                                <div class="flex items-center gap-2">
+                                    <div class="relative h-3 flex-1 overflow-hidden rounded-sm"
+                                         style="background:#f1f5f9; min-width:120px;">
+                                        <div class="absolute inset-y-0 left-0 rounded-sm"
+                                             style="width:{{ $schedule->current_progress }}%;
+                                                    min-width:{{ $schedule->current_progress > 0 ? '3px' : '0' }};
+                                                    background:{{ $barColor }}; opacity:.85;">
+                                        </div>
                                     </div>
+                                    <span class="shrink-0 text-[11px] font-semibold tabular w-10 text-right"
+                                          style="color:#0f172a;">
+                                        {{ number_format($schedule->current_progress, 0, ',', '.') }}%
+                                    </span>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-4 py-10 text-center text-slate-500">Belum ada data jadwal.</td>
+                            <td colspan="6" class="py-10 text-center text-sm" style="color:#94a3b8;">
+                                Belum ada data jadwal.
+                            </td>
                         </tr>
                     @endforelse
                 </tbody>

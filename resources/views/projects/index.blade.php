@@ -2,68 +2,104 @@
 
 @section('title', 'Manajemen Proyek')
 
+@section('breadcrumbs')
+<x-breadcrumb :links="[
+    ['label' => 'Dashboard', 'href' => route('dashboard')],
+    ['label' => 'Proyek',    'href' => route('projects.index')],
+]"/>
+@endsection
+
 @section('content')
-    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-            <h2 class="text-xl font-bold text-slate-800">Daftar Proyek</h2>
-            <p class="mt-1 text-sm text-slate-500">Kelola seluruh data proyek konstruksi.</p>
-        </div>
 
+    <x-page-header
+        title="Daftar Proyek"
+        subtitle="Kelola seluruh data proyek konstruksi.">
         <a href="{{ route('projects.create') }}"
-           class="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
-            + Tambah Proyek
+           class="inline-flex items-center gap-1.5 rounded px-3 font-semibold text-white transition-colors"
+           style="height:2.25rem; font-size:.8125rem; background:#2563eb; border:1px solid #1d4ed8;"
+           onmouseover="this.style.background='#1d4ed8';" onmouseout="this.style.background='#2563eb';">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            Tambah Proyek
         </a>
-    </div>
+    </x-page-header>
 
-    @if (session('success'))
-        <div class="mt-4 rounded-md bg-green-100 px-4 py-3 text-sm text-green-700">
-            {{ session('success') }}
-        </div>
-    @endif
+    <x-flash-alert/>
 
-    <div class="mt-6 overflow-hidden rounded-lg bg-white shadow-sm">
+    {{-- ── Data Table ─────────────────────────────────────────── --}}
+    <div class="overflow-hidden rounded-md" style="border:1px solid #e2e8f0; background:#fff;">
         <div class="overflow-x-auto">
-            <table class="w-full text-left text-sm">
-                <thead class="bg-slate-50 text-xs uppercase text-slate-500">
+            <table class="erp-table w-full text-left">
+                <thead>
                     <tr>
-                        <th class="px-6 py-4">Kode</th>
-                        <th class="px-6 py-4">Nama Proyek</th>
-                        <th class="px-6 py-4">Lokasi</th>
-                        <th class="px-6 py-4">Tanggal Mulai</th>
-                        <th class="px-6 py-4">Status</th>
-                        <th class="px-6 py-4 text-center">Aksi</th>
+                        <th>Kode</th>
+                        <th>Nama Proyek</th>
+                        <th>Lokasi</th>
+                        <th>Tanggal Mulai</th>
+                        <th>Status</th>
+                        <th class="text-center">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100">
+                <tbody>
                     @forelse ($projects as $project)
                         @php
-                            $statusMap = [
-                                'planning' => ['Perencanaan', 'bg-slate-100 text-slate-700'],
-                                'ongoing' => ['Berjalan', 'bg-blue-100 text-blue-700'],
-                                'completed' => ['Selesai', 'bg-green-100 text-green-700'],
-                                'on_hold' => ['Ditunda', 'bg-amber-100 text-amber-700'],
-                            ];
-                            $status = $statusMap[$project->status] ?? [$project->status, 'bg-slate-100 text-slate-700'];
+                            $statusVariant = match ($project->status) {
+                                'ongoing'   => 'info',
+                                'completed' => 'success',
+                                'planning'  => 'neutral',
+                                'on_hold'   => 'warning',
+                                default     => 'neutral',
+                            };
+                            $statusLabel = match ($project->status) {
+                                'ongoing'   => 'Berjalan',
+                                'completed' => 'Selesai',
+                                'planning'  => 'Perencanaan',
+                                'on_hold'   => 'Ditunda',
+                                default     => ucfirst(str_replace('_', ' ', $project->status)),
+                            };
                         @endphp
-                        <tr class="hover:bg-slate-50">
-                            <td class="px-6 py-4 font-medium text-slate-600">{{ $project->project_code }}</td>
-                            <td class="px-6 py-4 font-medium text-slate-800">{{ $project->name }}</td>
-                            <td class="px-6 py-4 text-slate-600">{{ $project->location ?? '-' }}</td>
-                            <td class="px-6 py-4 text-slate-600">{{ $project->start_date?->format('d M Y') ?? '-' }}</td>
-                            <td class="px-6 py-4">
-                                <span class="rounded-full px-2 py-1 text-xs {{ $status[1] }}">{{ $status[0] }}</span>
+                        <tr>
+                            <td>
+                                <span class="font-code text-[11px] font-semibold" style="color:#64748b;">
+                                    {{ $project->project_code }}
+                                </span>
                             </td>
-                            <td class="px-6 py-4">
-                                <div class="flex justify-center gap-3">
-                                    <a href="{{ route('projects.show', $project) }}" class="text-blue-600 hover:underline">Detail</a>
-                                    <a href="{{ route('projects.edit', $project) }}" class="text-amber-600 hover:underline">Edit</a>
+                            <td class="font-medium" style="color:#0f172a;">
+                                {{ $project->name }}
+                            </td>
+                            <td class="text-xs" style="color:#475569;">
+                                {{ $project->location ?? '—' }}
+                            </td>
+                            <td class="tabular text-xs" style="color:#475569;">
+                                {{ $project->start_date->format('d M Y') }}
+                            </td>
+                            <td>
+                                <x-badge :variant="$statusVariant">{{ $statusLabel }}</x-badge>
+                            </td>
+                            <td class="text-center">
+                                <div class="flex items-center justify-center gap-3">
+                                    <a href="{{ route('projects.show', $project) }}"
+                                       class="text-xs font-medium transition-colors"
+                                       style="color:#2563eb;"
+                                       onmouseover="this.style.textDecoration='underline';"
+                                       onmouseout="this.style.textDecoration='none';">Detail</a>
+                                    <a href="{{ route('projects.edit', $project) }}"
+                                       class="text-xs font-medium transition-colors"
+                                       style="color:#b45309;"
+                                       onmouseover="this.style.textDecoration='underline';"
+                                       onmouseout="this.style.textDecoration='none';">Edit</a>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-10 text-center text-sm text-slate-500">
+                            <td colspan="6" class="py-10 text-center text-sm" style="color:#94a3b8;">
                                 Belum ada data proyek.
+                                <br>
+                                <a href="{{ route('projects.create') }}"
+                                   class="mt-1 inline-block text-xs font-medium"
+                                   style="color:#2563eb;">+ Buat proyek pertama</a>
                             </td>
                         </tr>
                     @endforelse
@@ -72,7 +108,7 @@
         </div>
 
         @if ($projects->hasPages())
-            <div class="border-t border-slate-100 px-6 py-4">
+            <div class="px-4 py-3" style="border-top:1px solid #f1f5f9;">
                 {{ $projects->links() }}
             </div>
         @endif
