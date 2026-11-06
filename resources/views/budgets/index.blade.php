@@ -1,76 +1,243 @@
 @extends('layouts.app')
 
-@section('title', 'Anggaran & Biaya')
+@section('title', 'Anggaran & Kas Proyek')
+
+@section('breadcrumbs')
+<x-breadcrumb :links="[
+    ['label' => 'Dashboard',        'href' => route('dashboard')],
+    ['label' => 'Anggaran & Biaya', 'href' => '#'],
+]"/>
+@endsection
 
 @section('content')
-    <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-            <h2 class="text-xl font-bold text-slate-800">Anggaran & Biaya</h2>
-            <p class="mt-1 text-sm text-slate-500">Catat dan pantau pengeluaran aktual proyek.</p>
-        </div>
-        
-        <div class="flex items-center gap-3">
-            <form method="GET" action="{{ route('budgets.index') }}" class="flex items-center gap-2">
-                <select name="project_id" class="rounded-md border border-slate-300 text-sm focus:border-blue-500 focus:ring-blue-500" onchange="this.form.submit()">
-                    <option value="">-- Semua Proyek --</option>
-                    @foreach ($projects as $project)
-                        <option value="{{ $project->id }}" @selected($projectId == $project->id)>
-                            {{ $project->project_code }} - {{ $project->name }}
-                        </option>
-                    @endforeach
-                </select>
-            </form>
-            <a href="{{ route('budgets.create', ['project_id' => $projectId]) }}" class="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">Catat Biaya</a>
-        </div>
+
+    {{-- ── Page Header ────────────────────────────────────────── --}}
+    <x-page-header
+        title="Realisasi Anggaran & Kas Proyek"
+        subtitle="Pencatatan pengeluaran riil, approval kas proyek, kontrol pagu biaya, dan dokumen bukti pembayaran.">
+        <a href="{{ route('budgets.create', $projectId ? ['project_id' => $projectId] : []) }}"
+           class="inline-flex items-center gap-1.5 rounded px-3 font-semibold text-white transition-colors"
+           style="height:2.25rem; font-size:.8125rem; background:#2563eb; border:1px solid #1d4ed8;"
+           onmouseover="this.style.background='#1d4ed8';" onmouseout="this.style.background='#2563eb';">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            Catat Pengeluaran Kas
+        </a>
+    </x-page-header>
+
+    {{-- ── 4 KPI Finansial Atas ───────────────────────────────── --}}
+    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 mb-4">
+        {{-- Total Pagu --}}
+        <x-stat-card
+            label="Total Pagu Anggaran"
+            :value="'Rp ' . number_format($totalPagu, 0, ',', '.')"
+            variant="default"
+            :note="$selectedProject ? 'Pagu Proyek: ' . $selectedProject->project_code : 'Akumulasi Seluruh Proyek'"/>
+
+        {{-- Realisasi Pengeluaran Kas --}}
+        <x-stat-card
+            label="Realisasi Kas Disetujui"
+            :value="'Rp ' . number_format($totalActualCost, 0, ',', '.')"
+            :variant="$totalActualCost > $totalPagu ? 'danger' : ($serapanPercent > 85 ? 'warning' : 'info')"
+            :note="'Serapan Kas: ' . $serapanPercent . '% dari pagu'">
+            <div class="mt-2 h-1.5 overflow-hidden rounded-full" style="background:#e2e8f0;">
+                <div class="h-full rounded-full transition-all"
+                     style="width:{{ min(100, $serapanPercent) }}%; background:{{ $totalActualCost > $totalPagu ? '#ef4444' : '#2563eb' }};"></div>
+            </div>
+        </x-stat-card>
+
+        {{-- Sisa Saldo / Margin --}}
+        <x-stat-card
+            label="Sisa Saldo Pagu Kas"
+            :value="'Rp ' . number_format($sisaSaldo, 0, ',', '.')"
+            :variant="$sisaSaldo < 0 ? 'danger' : 'success'"
+            :note="$sisaSaldo < 0 ? '⚠ Pagu terlampaui (Defisit)' : '✓ Sisa pagu aman terkendali'"/>
+
+        {{-- Menunggu Approval / Pending --}}
+        <x-stat-card
+            label="Menunggu Approval"
+            :value="'Rp ' . number_format($pendingAmount, 0, ',', '.')"
+            :variant="$pendingCount > 0 ? 'warning' : 'neutral'"
+            :note="$pendingCount > 0 ? $pendingCount . ' transaksi pending verifikasi' : 'Tidak ada transaksi pending'"/>
     </div>
 
-    @if (session('success'))
-        <div class="mb-4 rounded-md bg-green-100 px-4 py-3 text-sm text-green-700">{{ session('success') }}</div>
-    @endif
+    {{-- ── Filter Bar Presisi ─────────────────────────────────── --}}
+    <div class="mb-4">
+        <x-filter-bar action="{{ route('budgets.index') }}" :searchable="true" searchPlaceholder="Cari voucher / keterangan...">
+            {{-- Proyek --}}
+            <select name="project_id" class="erp-input" style="width:200px;" onchange="this.form.submit()">
+                <option value="">— Semua Proyek —</option>
+                @foreach ($projects as $project)
+                    <option value="{{ $project->id }}" @selected($projectId == $project->id)>
+                        {{ $project->project_code }} – {{ $project->name }}
+                    </option>
+                @endforeach
+            </select>
 
-    <div class="rounded-lg bg-white shadow-sm border border-slate-200 overflow-hidden">
+            {{-- Kategori --}}
+            <select name="category" class="erp-input" style="width:160px;" onchange="this.form.submit()">
+                <option value="">— Semua Kategori —</option>
+                @foreach (['Material', 'Upah Tenaga Kerja', 'Sewa Alat', 'Operasional'] as $cat)
+                    <option value="{{ $cat }}" @selected(($categoryFilter ?? '') === $cat)>{{ $cat }}</option>
+                @endforeach
+            </select>
+
+            {{-- Status Verifikasi --}}
+            <select name="status" class="erp-input" style="width:145px;" onchange="this.form.submit()">
+                <option value="">— Status Kas —</option>
+                <option value="approved" @selected(($statusFilter ?? '') === 'approved')>Disetujui (Approved)</option>
+                <option value="pending" @selected(($statusFilter ?? '') === 'pending')>Menunggu (Pending)</option>
+                <option value="rejected" @selected(($statusFilter ?? '') === 'rejected')>Ditolak (Rejected)</option>
+            </select>
+
+            {{-- Rentang Tanggal --}}
+            <div class="flex items-center gap-1.5">
+                <input type="date" name="start_date" value="{{ $startDate ?? request('start_date') }}"
+                       class="erp-input tabular" style="width:130px;" title="Tanggal Mulai">
+                <span class="text-xs text-slate-400">s/d</span>
+                <input type="date" name="end_date" value="{{ $endDate ?? request('end_date') }}"
+                       class="erp-input tabular" style="width:130px;" title="Tanggal Selesai">
+            </div>
+        </x-filter-bar>
+    </div>
+
+    <x-flash-alert/>
+
+    {{-- ── Data Table ─────────────────────────────────────────── --}}
+    <div class="overflow-hidden rounded-md" style="border:1px solid #e2e8f0; background:#fff;">
         <div class="overflow-x-auto">
-            <table class="w-full text-left text-sm">
-                <thead class="bg-slate-50 text-xs uppercase text-slate-500 border-b border-slate-200">
+            <table class="erp-table w-full text-left">
+                <thead>
                     <tr>
-                        <th class="px-6 py-3">Tanggal</th>
-                        <th class="px-6 py-3">Proyek</th>
-                        <th class="px-6 py-3">Kategori</th>
-                        <th class="px-6 py-3">Keterangan</th>
-                        <th class="px-6 py-3 text-right">Nominal</th>
-                        <th class="px-6 py-3 text-right">Aksi</th>
+                        <th style="width:105px;">No. Voucher</th>
+                        <th style="width:100px;">Tanggal</th>
+                        <th style="min-width:140px;">Proyek</th>
+                        <th style="min-width:130px;">Kategori Biaya</th>
+                        <th>Keterangan Pengeluaran</th>
+                        <th class="text-center" style="width:70px;">Bukti</th>
+                        <th style="width:100px;">Verifikasi</th>
+                        <th class="text-right" style="min-width:140px;">Nominal (Rp)</th>
+                        <th class="text-center" style="width:110px;">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100">
+                <tbody>
                     @forelse ($budgets as $budget)
-                        <tr class="hover:bg-slate-50">
-                            <td class="px-6 py-4">{{ $budget->date->format('d M Y') }}</td>
-                            <td class="px-6 py-4 font-medium text-blue-600">
-                                <a href="{{ route('projects.show', $budget->project) }}">{{ $budget->project->project_code }}</a>
+                        @php
+                            // Overbudget check per project
+                            $isOver = $budget->project && $budget->project->budget > 0
+                                && ($budget->project->budgets()->where('status', 'approved')->sum('amount') > $budget->project->budget);
+
+                            $approvalVariant = match ($budget->status) {
+                                'approved' => 'success',
+                                'pending'  => 'warning',
+                                'rejected' => 'danger',
+                                default    => 'neutral',
+                            };
+                            $approvalLabel = match ($budget->status) {
+                                'approved' => 'Disetujui',
+                                'pending'  => 'Pending',
+                                'rejected' => 'Ditolak',
+                                default    => ucfirst($budget->status ?? 'Approved'),
+                            };
+
+                            $rowStyle = $isOver ? 'background:#fffbfb;' : '';
+                        @endphp
+                        <tr style="{{ $rowStyle }}">
+                            <td>
+                                <span class="font-code text-xs font-semibold px-1.5 py-0.5 rounded"
+                                      style="background:#f1f5f9; color:#475569; border:1px solid #e2e8f0;">
+                                    {{ $budget->formatted_voucher }}
+                                </span>
                             </td>
-                            <td class="px-6 py-4">
-                                <span class="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-700">{{ $budget->category }}</span>
+                            <td class="tabular text-xs text-slate-600">
+                                {{ $budget->date?->format('d M Y') ?? '—' }}
                             </td>
-                            <td class="px-6 py-4">{{ $budget->description }}</td>
-                            <td class="px-6 py-4 text-right font-bold text-slate-800">Rp {{ number_format($budget->amount, 0, ',', '.') }}</td>
-                            <td class="px-6 py-4 text-right space-x-2">
-                                <a href="{{ route('budgets.edit', $budget) }}" class="text-blue-600 hover:underline">Edit</a>
-                                <form action="{{ route('budgets.destroy', $budget) }}" method="POST" class="inline" onsubmit="return confirm('Hapus catatan biaya ini?');">
-                                    @csrf @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:underline">Hapus</button>
-                                </form>
+                            <td>
+                                <a href="{{ route('projects.show', $budget->project) }}"
+                                   class="font-code text-xs font-semibold text-slate-800 hover:text-blue-600">
+                                    {{ $budget->project->project_code }}
+                                </a>
+                                @if ($isOver)
+                                    <span class="ml-1 inline-block text-[10px] font-bold text-red-600" title="Total realisasi proyek melebihi pagu">
+                                        [Over]
+                                    </span>
+                                @endif
+                            </td>
+                            <td>
+                                <x-badge variant="neutral">{{ $budget->category }}</x-badge>
+                            </td>
+                            <td>
+                                <a href="{{ route('budgets.show', $budget) }}"
+                                   class="text-xs font-medium text-slate-900 hover:text-blue-600 hover:underline">
+                                    {{ $budget->description }}
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                @if ($budget->receipt)
+                                    <a href="{{ asset('storage/' . $budget->receipt) }}" target="_blank"
+                                       class="inline-flex items-center justify-center rounded p-1 text-blue-600 hover:bg-blue-50"
+                                       title="Buka Dokumen Bukti / Struk">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/>
+                                        </svg>
+                                    </a>
+                                @else
+                                    <span class="text-slate-300 text-xs">—</span>
+                                @endif
+                            </td>
+                            <td>
+                                <x-badge :variant="$approvalVariant">{{ $approvalLabel }}</x-badge>
+                            </td>
+                            <td class="text-right tabular font-bold text-slate-900">
+                                Rp {{ number_format($budget->amount, 0, ',', '.') }}
+                            </td>
+                            <td class="text-center">
+                                <div class="flex items-center justify-center gap-2">
+                                    <a href="{{ route('budgets.show', $budget) }}"
+                                       class="rounded px-1.5 py-0.5 text-xs font-medium text-blue-600 hover:bg-blue-50 transition">
+                                        Detail
+                                    </a>
+                                    <a href="{{ route('budgets.edit', $budget) }}"
+                                       class="rounded px-1.5 py-0.5 text-xs font-medium text-amber-600 hover:bg-amber-50 transition">
+                                        Edit
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-10 text-center text-slate-500">Belum ada data pengeluaran biaya.</td>
+                            <td colspan="9" class="py-12 text-center text-xs text-slate-400">
+                                Belum ada catatan pengeluaran kas yang sesuai filter.
+                                <br>
+                                <a href="{{ route('budgets.create') }}"
+                                   class="mt-2 inline-flex items-center gap-1 rounded px-3 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 transition">
+                                    + Catat Pengeluaran Pertama
+                                </a>
+                            </td>
                         </tr>
                     @endforelse
                 </tbody>
+                @if ($budgets->isNotEmpty())
+                    <tfoot>
+                        <tr class="font-semibold text-xs text-slate-800" style="background:#f8fafc; border-top:1px solid #e2e8f0;">
+                            <td colspan="7" class="text-right uppercase tracking-wider text-[11px] text-slate-500">
+                                Total Pengeluaran (Halaman Ini):
+                            </td>
+                            <td class="text-right tabular font-bold text-slate-900">
+                                Rp {{ number_format($budgets->sum('amount'), 0, ',', '.') }}
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                @endif
             </table>
         </div>
-        <div class="border-t border-slate-100 px-6 py-4">
-            {{ $budgets->links() }}
-        </div>
+
+        @if ($budgets->hasPages())
+            <div class="px-4 py-3" style="border-top:1px solid #f1f5f9;">
+                {{ $budgets->links() }}
+            </div>
+        @endif
     </div>
 @endsection
