@@ -40,13 +40,20 @@ class ScheduleDashboardController extends Controller
     public function timeline(Request $request)
     {
         $projectId = $request->integer('project_id');
+        $statusFilter = $request->input('status');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
         $projects = Project::orderBy('name')->get(['id', 'project_code', 'name']);
 
         $schedules = ProjectSchedule::with(['project', 'latestProgress'])
             ->when($projectId, fn($q) => $q->where('project_id', $projectId))
+            ->when($startDate, fn($q) => $q->where('start_date', '>=', $startDate))
+            ->when($endDate, fn($q) => $q->where('end_date', '<=', $endDate))
+            ->when($statusFilter, fn($q) => $q->byStatus($statusFilter))
             ->orderBy('start_date')
             ->get();
 
-        return view('schedules.timeline', compact('projects', 'projectId', 'schedules'));
+        return view('schedules.timeline', compact('projects', 'projectId', 'schedules', 'statusFilter', 'startDate', 'endDate'));
     }
 }

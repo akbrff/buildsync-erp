@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Jadwal Proyek')
+@section('title', 'Jadwal Proyek — Daftar Tahapan')
 
 @section('breadcrumbs')
 <x-breadcrumb :links="[
     ['label' => 'Dashboard',      'href' => route('dashboard')],
     ['label' => 'Jadwal Proyek',  'href' => route('schedules.index')],
-    ['label' => 'Daftar Jadwal',  'href' => '#'],
+    ['label' => 'Daftar Tahapan', 'href' => '#'],
 ]"/>
 @endsection
 
@@ -17,12 +17,12 @@
         ['label' => 'Daftar Jadwal',    'route' => 'schedules.index',
          'active_routes' => ['schedules.index'],
          'icon' => '<path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M4 6h16M4 10h16M4 14h16M4 18h7&quot;/>'],
+        ['label' => 'Monitoring & Keterlambatan', 'route' => 'schedules.monitoring',
+         'active_routes' => ['schedules.monitoring'],
+         'icon' => '<path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z&quot;/>'],
         ['label' => 'Timeline / Gantt', 'route' => 'schedules.timeline',
          'active_routes' => ['schedules.timeline'],
          'icon' => '<path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z&quot;/>'],
-        ['label' => 'Monitoring',       'route' => 'schedules.monitoring',
-         'active_routes' => ['schedules.monitoring'],
-         'icon' => '<path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z&quot;/>'],
         ['label' => 'Ringkasan KPI',    'route' => 'schedules.dashboard',
          'active_routes' => ['schedules.dashboard'],
          'icon' => '<path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z&quot;/>'],
@@ -31,7 +31,7 @@
     {{-- ── Page Header ────────────────────────────────────────── --}}
     <x-page-header class="mt-4"
         title="Daftar Jadwal Pekerjaan"
-        subtitle="Kelola tahapan pekerjaan dan alokasi bobot untuk setiap proyek.">
+        subtitle="Kelola tahapan pekerjaan, bobot kontribusi, dan progres fisik untuk setiap proyek konstruksi.">
         <a href="{{ route('schedules.create', $projectId ? ['project_id' => $projectId] : []) }}"
            class="inline-flex items-center gap-1.5 rounded px-3 font-semibold text-white transition-colors"
            style="height:2.25rem; font-size:.8125rem; background:#2563eb; border:1px solid #1d4ed8;"
@@ -43,17 +43,36 @@
         </a>
     </x-page-header>
 
-    {{-- ── Filter Bar ─────────────────────────────────────────── --}}
-    <div class="mb-3">
+    {{-- ── Filter Bar Presisi ─────────────────────────────────── --}}
+    <div class="mb-4">
         <x-filter-bar action="{{ route('schedules.index') }}">
+            {{-- Dropdown Proyek --}}
             <select name="project_id" class="erp-input" style="width:220px;" onchange="this.form.submit()">
-                <option value="">— Semua proyek —</option>
+                <option value="">— Semua Proyek —</option>
                 @foreach ($projects as $project)
                     <option value="{{ $project->id }}" @selected($projectId === $project->id)>
                         {{ $project->project_code }} – {{ $project->name }}
                     </option>
                 @endforeach
             </select>
+
+            {{-- Filter Status --}}
+            <select name="status" class="erp-input" style="width:160px;" onchange="this.form.submit()">
+                <option value="">— Semua Status —</option>
+                <option value="Terlambat" @selected(($statusFilter ?? '') === 'Terlambat')>Terlambat</option>
+                <option value="Berlangsung" @selected(($statusFilter ?? '') === 'Berlangsung')>Berlangsung</option>
+                <option value="Belum Dimulai" @selected(($statusFilter ?? '') === 'Belum Dimulai')>Belum Dimulai</option>
+                <option value="Selesai" @selected(($statusFilter ?? '') === 'Selesai')>Selesai</option>
+            </select>
+
+            {{-- Rentang Tanggal --}}
+            <div class="flex items-center gap-1.5">
+                <input type="date" name="start_date" value="{{ $startDate ?? request('start_date') }}"
+                       class="erp-input tabular" style="width:135px;" title="Tanggal Mulai">
+                <span class="text-xs text-slate-400">s/d</span>
+                <input type="date" name="end_date" value="{{ $endDate ?? request('end_date') }}"
+                       class="erp-input tabular" style="width:135px;" title="Tanggal Selesai">
+            </div>
         </x-filter-bar>
     </div>
 
@@ -65,52 +84,94 @@
             <table class="erp-table w-full text-left">
                 <thead>
                     <tr>
-                        <th>Proyek</th>
+                        <th style="width:110px;">Kode Proyek</th>
                         <th>Nama Pekerjaan</th>
-                        <th>Mulai</th>
-                        <th>Target Selesai</th>
-                        <th class="text-right">Bobot</th>
-                        <th class="text-center">Aksi</th>
+                        <th style="min-width:150px;">Target Jadwal</th>
+                        <th class="text-right" style="width:70px;">Durasi</th>
+                        <th class="text-right" style="width:85px;">Bobot</th>
+                        <th style="min-width:160px;">Progres Aktual</th>
+                        <th style="width:110px;">Status</th>
+                        <th class="text-center" style="width:130px;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($schedules as $schedule)
+                        @php
+                            $start = \Carbon\Carbon::parse($schedule->start_date);
+                            $end = \Carbon\Carbon::parse($schedule->end_date);
+                            $duration = max(1, $start->diffInDays($end));
+                            $currentProg = (float) $schedule->current_progress;
+
+                            $statusVariant = match ($schedule->status) {
+                                'Selesai'     => 'success',
+                                'Terlambat'   => 'danger',
+                                'Berlangsung' => 'info',
+                                default       => 'neutral',
+                            };
+                        @endphp
                         <tr>
                             <td>
-                                <span class="font-code text-xs font-semibold"
-                                      style="color:#475569;">
+                                <a href="{{ route('projects.show', $schedule->project) }}"
+                                   class="font-code text-xs font-semibold text-slate-700 hover:text-blue-600">
                                     {{ $schedule->project->project_code }}
-                                </span>
+                                </a>
                             </td>
-                            <td class="font-medium" style="color:#0f172a;">{{ $schedule->name }}</td>
-                            <td class="tabular" style="color:#475569;">{{ $schedule->start_date->format('d M Y') }}</td>
-                            <td class="tabular" style="color:#475569;">{{ $schedule->end_date->format('d M Y') }}</td>
-                            <td class="text-right tabular font-semibold" style="color:#0f172a;">
+                            <td>
+                                <a href="{{ route('schedules.show', $schedule) }}"
+                                   class="text-xs font-semibold text-blue-600 hover:underline">
+                                    {{ $schedule->name }}
+                                </a>
+                                @if ($schedule->description)
+                                    <p class="truncate text-[11px] text-slate-400 max-w-xs">{{ $schedule->description }}</p>
+                                @endif
+                            </td>
+                            <td class="tabular text-xs text-slate-600">
+                                {{ $start->format('d M') }} – {{ $end->format('d M Y') }}
+                            </td>
+                            <td class="text-right tabular text-xs text-slate-600">
+                                {{ $duration }}h
+                            </td>
+                            <td class="text-right tabular font-semibold text-slate-900">
                                 {{ number_format($schedule->weight, 2, ',', '.') }}%
                             </td>
+                            <td>
+                                <div class="flex items-center gap-2">
+                                    <div class="relative h-2 flex-1 overflow-hidden rounded-full" style="background:#f1f5f9; min-width:70px;">
+                                        <div class="h-full rounded-full transition-all"
+                                             style="width:{{ min(100, $currentProg) }}%;
+                                                    background:{{ $currentProg >= 100 ? '#10b981' : ($schedule->status === 'Terlambat' ? '#ef4444' : '#2563eb') }};"></div>
+                                    </div>
+                                    <span class="shrink-0 text-xs font-bold tabular w-10 text-right text-slate-900">
+                                        {{ number_format($currentProg, 0) }}%
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <x-badge :variant="$statusVariant">{{ $schedule->status }}</x-badge>
+                            </td>
                             <td class="text-center">
-                                <div class="flex items-center justify-center gap-3">
+                                <div class="flex items-center justify-center gap-2">
                                     <a href="{{ route('schedules.show', $schedule) }}"
-                                       class="text-xs font-medium transition-colors"
-                                       style="color:#2563eb;"
-                                       onmouseover="this.style.textDecoration='underline';"
-                                       onmouseout="this.style.textDecoration='none';">Detail</a>
+                                       class="rounded px-2 py-1 text-xs font-medium text-blue-600 hover:bg-blue-50 transition">
+                                        Detail
+                                    </a>
                                     <a href="{{ route('schedules.edit', $schedule) }}"
-                                       class="text-xs font-medium transition-colors"
-                                       style="color:#b45309;"
-                                       onmouseover="this.style.textDecoration='underline';"
-                                       onmouseout="this.style.textDecoration='none';">Edit</a>
+                                       class="rounded px-1.5 py-1 text-xs font-medium text-amber-600 hover:bg-amber-50 transition">
+                                        Edit
+                                    </a>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="py-10 text-center text-sm" style="color:#94a3b8;">
-                                Belum ada jadwal pekerjaan.
+                            <td colspan="8" class="py-12 text-center text-xs text-slate-400">
+                                Belum ada data jadwal pekerjaan yang ditemukan.
                                 @if (!$projectId)
-                                    <br><a href="{{ route('schedules.create') }}"
-                                           class="mt-1 inline-block text-xs font-medium"
-                                           style="color:#2563eb;">+ Tambah jadwal pertama</a>
+                                    <br>
+                                    <a href="{{ route('schedules.create') }}"
+                                       class="mt-2 inline-flex items-center gap-1 rounded px-3 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 transition">
+                                        + Tambah Jadwal Pertama
+                                    </a>
                                 @endif
                             </td>
                         </tr>

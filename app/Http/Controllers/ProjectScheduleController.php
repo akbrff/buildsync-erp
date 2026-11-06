@@ -15,9 +15,15 @@ class ProjectScheduleController extends Controller
     public function index(Request $request)
     {
         $projectId = $request->integer('project_id');
+        $statusFilter = $request->input('status');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
 
-        $schedules = ProjectSchedule::with('project')
+        $schedules = ProjectSchedule::with('project', 'latestProgress')
             ->when($projectId, fn ($query) => $query->where('project_id', $projectId))
+            ->when($startDate, fn ($query) => $query->where('start_date', '>=', $startDate))
+            ->when($endDate, fn ($query) => $query->where('end_date', '<=', $endDate))
+            ->when($statusFilter, fn ($query) => $query->byStatus($statusFilter))
             ->orderBy('project_id')
             ->orderBy('start_date')
             ->paginate(10)
@@ -25,7 +31,7 @@ class ProjectScheduleController extends Controller
 
         $projects = Project::orderBy('name')->get(['id', 'project_code', 'name']);
 
-        return view('schedules.index', compact('schedules', 'projects', 'projectId'));
+        return view('schedules.index', compact('schedules', 'projects', 'projectId', 'statusFilter', 'startDate', 'endDate'));
     }
 
     public function create(Request $request)
