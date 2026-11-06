@@ -18,7 +18,9 @@
         @php
             $activeRoutes = $tab['active_routes'] ?? [$tab['route']];
             $isActive     = Route::has($tab['route']) && request()->routeIs($activeRoutes);
-            $params       = $tab['params'] ?? [];
+            // Teruskan project_id secara otomatis jika ada di request untuk mempertahankan konteks proyek
+            $defaultParams = request()->filled('project_id') ? ['project_id' => request('project_id')] : [];
+            $params       = $tab['params'] ?? $defaultParams;
             $href         = Route::has($tab['route']) ? route($tab['route'], $params) : '#';
         @endphp
         <a href="{{ $href }}"

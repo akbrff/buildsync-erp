@@ -2,10 +2,10 @@
 
 @section('title', 'Manajemen Tenaga Kerja & Mandor')
 
-@section('breadcrumb')
-    <x-breadcrumb :items="[
-        ['label' => 'SDM & Manpower', 'url' => route('workers.index')],
-        ['label' => 'Daftar Tenaga Kerja'],
+@section('breadcrumbs')
+    <x-breadcrumb :links="[
+        ['label' => 'Dashboard', 'href' => route('dashboard')],
+        ['label' => 'SDM & Tenaga Kerja', 'href' => '#'],
     ]" />
 @endsection
 

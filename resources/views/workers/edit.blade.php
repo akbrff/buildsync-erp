@@ -2,11 +2,12 @@
 
 @section('title', 'Edit Tenaga Kerja: ' . $worker->name)
 
-@section('breadcrumb')
-    <x-breadcrumb :items="[
-        ['label' => 'SDM & Manpower', 'url' => route('workers.index')],
-        ['label' => $worker->worker_code, 'url' => route('workers.show', $worker)],
-        ['label' => 'Edit Biodata'],
+@section('breadcrumbs')
+    <x-breadcrumb :links="[
+        ['label' => 'Dashboard', 'href' => route('dashboard')],
+        ['label' => 'SDM & Tenaga Kerja', 'href' => route('workers.index')],
+        ['label' => $worker->worker_code, 'href' => route('workers.show', $worker)],
+        ['label' => 'Edit Biodata', 'href' => '#'],
     ]" />
 @endsection
 

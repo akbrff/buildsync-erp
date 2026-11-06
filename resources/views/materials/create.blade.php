@@ -2,10 +2,11 @@
 
 @section('title', 'Tambah Material Baru')
 
-@section('breadcrumb')
-    <x-breadcrumb :items="[
-        ['label' => 'Logistik & Gudang', 'url' => route('materials.index')],
-        ['label' => 'Tambah Material Baru'],
+@section('breadcrumbs')
+    <x-breadcrumb :links="[
+        ['label' => 'Dashboard', 'href' => route('dashboard')],
+        ['label' => 'Logistik & Material', 'href' => route('materials.index')],
+        ['label' => 'Tambah Material Baru', 'href' => '#'],
     ]" />
 @endsection
 

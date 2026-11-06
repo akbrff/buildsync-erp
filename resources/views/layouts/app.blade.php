@@ -220,6 +220,8 @@
                 <div class="flex items-center gap-1 text-sm">
                     @hasSection('breadcrumbs')
                         @yield('breadcrumbs')
+                    @elseif (View::hasSection('breadcrumb'))
+                        @yield('breadcrumb')
                     @else
                         <span class="font-semibold" style="color:#0f172a;">
                             @yield('title', 'Dashboard')

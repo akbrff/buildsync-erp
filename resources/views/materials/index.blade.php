@@ -2,10 +2,10 @@
 
 @section('title', 'Logistik & Inventaris Material')
 
-@section('breadcrumb')
-    <x-breadcrumb :items="[
-        ['label' => 'Logistik & Gudang', 'url' => route('materials.index')],
-        ['label' => 'Inventaris Material'],
+@section('breadcrumbs')
+    <x-breadcrumb :links="[
+        ['label' => 'Dashboard', 'href' => route('dashboard')],
+        ['label' => 'Logistik & Material', 'href' => '#'],
     ]" />
 @endsection
 
@@ -251,8 +251,8 @@
 </div>
 
 {{-- Quick Stock Mutation Modal --}}
-<div id="mutationModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="w-full max-w-md rounded-lg border border-slate-200 bg-white shadow-xl overflow-hidden" onclick="event.stopPropagation()">
+<div id="mutationModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/50 flex items-center justify-center p-4">
+    <div class="w-full max-w-md rounded-md border border-slate-200 bg-white shadow-sm overflow-hidden" onclick="event.stopPropagation()">
         {{-- Modal Header --}}
         <div class="border-b border-slate-200 px-4 py-3 bg-slate-50 flex items-center justify-between">
             <div>

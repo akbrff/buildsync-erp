@@ -2,10 +2,11 @@
 
 @section('title', 'Detail Material: ' . $material->code)
 
-@section('breadcrumb')
-    <x-breadcrumb :items="[
-        ['label' => 'Logistik & Gudang', 'url' => route('materials.index')],
-        ['label' => $material->code],
+@section('breadcrumbs')
+    <x-breadcrumb :links="[
+        ['label' => 'Dashboard', 'href' => route('dashboard')],
+        ['label' => 'Logistik & Material', 'href' => route('materials.index')],
+        ['label' => $material->code, 'href' => '#'],
     ]" />
 @endsection
 
