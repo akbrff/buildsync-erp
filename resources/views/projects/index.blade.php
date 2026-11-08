@@ -65,11 +65,15 @@
                                     {{ $project->project_code }}
                                 </span>
                             </td>
-                            <td class="font-medium" style="color:#0f172a;">
+                            <td class="text-[13px] font-medium text-slate-900">
                                 {{ $project->name }}
                             </td>
-                            <td class="text-xs" style="color:#475569;">
-                                {{ $project->location ?? '—' }}
+                            <td class="text-xs text-slate-600">
+                                @if($project->location)
+                                    {{ $project->location }}
+                                @else
+                                    <span class="text-slate-300 font-mono">-</span>
+                                @endif
                             </td>
                             <td class="tabular text-xs" style="color:#475569;">
                                 {{ $project->start_date->format('d M Y') }}

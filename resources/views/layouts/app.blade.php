@@ -78,13 +78,12 @@
     ];
 @endphp
 
-<div class="flex min-h-screen">
+<div class="min-h-screen h-screen flex overflow-hidden bg-slate-50">
 
     {{-- ═══════════════════════════════════════════════════════
-         SIDEBAR — Lebar tetap 240px, grup navigasi hierarkis
+         SIDEBAR — Lebar tetap 256px (w-64), locked fixed layout
          ═══════════════════════════════════════════════════════ --}}
-    <aside id="sidebar" class="hidden w-60 shrink-0 flex-col lg:flex"
-           style="background:#0f172a; border-right:1px solid #1e293b;">
+    <aside id="sidebar" class="hidden lg:flex fixed lg:static inset-y-0 left-0 z-30 w-64 min-w-[16rem] max-w-[16rem] h-screen shrink-0 flex-col bg-slate-900 overflow-y-auto border-r border-slate-800">
 
         {{-- Logo / App Name --}}
         <div class="px-5 py-4" style="border-bottom:1px solid #1e293b;">
@@ -125,25 +124,13 @@
 
                         @if (Route::has($item['route']))
                             <a href="{{ route($item['route']) }}"
-                               class="sidebar-link mb-0.5 flex items-center gap-2.5 rounded px-2 py-1.5 text-[13px] font-medium"
-                               style="{{ $isActive
-                                   ? 'background:#1e3a8a; color:#eff6ff;'
-                                   : 'color:#94a3b8;' }}"
-                               onmouseover="if(!this.dataset.active){ this.style.background='#1e293b'; this.style.color='#e2e8f0'; }"
-                               onmouseout="if(!this.dataset.active){ this.style.background=''; this.style.color='#94a3b8'; }"
-                               {{ $isActive ? 'data-active=1' : '' }}>
+                               class="sidebar-link mb-0.5 flex items-center gap-2.5 rounded px-2.5 py-1.5 text-[13px] {{ $isActive ? 'bg-slate-800 text-white font-medium' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50' }}">
                                 <svg xmlns="http://www.w3.org/2000/svg"
                                      class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24"
                                      stroke="currentColor">
                                     {!! $item['icon'] !!}
                                 </svg>
                                 <span>{{ $item['label'] }}</span>
-
-                                @if ($isActive)
-                                    {{-- Active indicator --}}
-                                    <span class="ml-auto h-1.5 w-1.5 rounded-full"
-                                          style="background:#3b82f6;"></span>
-                                @endif
                             </a>
                         @else
                             <span class="mb-0.5 flex items-center gap-2.5 rounded px-2 py-1.5 text-[13px] cursor-not-allowed"
@@ -163,9 +150,8 @@
         </nav>
 
         {{-- ── User Footer Card ───────────────────────────────── --}}
-        <div class="shrink-0 px-3 py-3" style="border-top:1px solid #1e293b;">
-            <div class="flex items-center gap-2.5 rounded px-2 py-2"
-                 style="background:#1e293b;">
+        <div class="mt-auto shrink-0 px-3 py-3 border-t border-slate-800">
+            <div class="flex items-center gap-2.5 rounded px-2 py-2 bg-slate-800/80">
                 {{-- Avatar --}}
                 <div class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[11px] font-bold"
                      style="background:#1d4ed8; color:#eff6ff;">
@@ -202,16 +188,15 @@
     {{-- ═══════════════════════════════════════════════════════
          MAIN CONTENT AREA
          ═══════════════════════════════════════════════════════ --}}
-    <div class="flex min-w-0 flex-1 flex-col">
+    <div class="flex-1 flex flex-col h-screen min-w-0 overflow-y-auto">
 
         {{-- Top Header --}}
-        <header class="flex shrink-0 items-center justify-between px-5 py-3"
-                style="background:#fff; border-bottom:1px solid #e2e8f0; height:52px;">
+        <header class="sticky top-0 z-10 flex shrink-0 items-center justify-between px-5 py-3 bg-white border-b border-slate-200"
+                style="height:52px;">
             <div class="flex items-center gap-3">
                 {{-- Mobile menu toggle --}}
                 <button type="button"
-                        class="lg:hidden rounded px-2 py-1 text-xs font-medium"
-                        style="border:1px solid #e2e8f0; color:#475569;"
+                        class="lg:hidden rounded px-2 py-1 text-xs font-medium border border-slate-200 text-slate-600 hover:bg-slate-50"
                         onclick="document.getElementById('sidebar').classList.toggle('hidden'); document.getElementById('sidebar').classList.toggle('flex');">
                     Menu
                 </button>
@@ -223,27 +208,23 @@
                     @elseif (View::hasSection('breadcrumb'))
                         @yield('breadcrumb')
                     @else
-                        <span class="font-semibold" style="color:#0f172a;">
+                        <span class="font-semibold text-slate-900">
                             @yield('title', 'Dashboard')
                         </span>
                     @endif
                 </div>
             </div>
 
-            {{-- Right side: user chip --}}
+            {{-- Right side: current date --}}
             <div class="flex items-center gap-2">
-                <span class="text-xs font-medium" style="color:#475569;">
-                    {{ Auth::user()->name ?? 'Tamu' }}
+                <span class="text-xs text-slate-500 tabular">
+                    {{ now()->translatedFormat('d M Y') }}
                 </span>
-                <div class="flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-bold"
-                     style="background:#eff6ff; color:#2563eb;">
-                    {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 1)) }}
-                </div>
             </div>
         </header>
 
         {{-- Page Content --}}
-        <main class="flex-1 overflow-y-auto p-5">
+        <main class="flex-1 min-w-0 p-6">
             @yield('content')
         </main>
     </div>
@@ -270,5 +251,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 </script>
+@stack('scripts')
 </body>
 </html>

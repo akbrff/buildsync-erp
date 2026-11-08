@@ -10,17 +10,13 @@
 @endsection
 
 @section('content')
-<div class="space-y-4">
     {{-- Page Header --}}
     <x-page-header
         title="Logistik & Inventaris Material"
         subtitle="Monitoring stok fisik gudang, batas reorder point material, dan valuasi aset konstruksi secara real-time.">
         <x-slot:actions>
             <a href="{{ route('materials.create') }}"
-               class="inline-flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-semibold text-white shadow-xs transition-colors"
-               style="background-color: var(--erp-navy); border: 1px solid var(--erp-navy);"
-               onmouseover="this.style.backgroundColor='#1e293b';"
-               onmouseout="this.style.backgroundColor='var(--erp-navy)';">
+               class="inline-flex items-center gap-1.5 rounded bg-blue-600 px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-blue-700 transition-colors shadow-2xs">
                 <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
@@ -33,7 +29,7 @@
     <x-flash-alert />
 
     {{-- Ringkasan KPI Inventaris --}}
-    <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
+    <div class="grid grid-cols-2 gap-4 lg:grid-cols-4 mb-6">
         <x-stat-card
             label="Total Jenis Material"
             :value="$totalMaterials"
@@ -77,7 +73,7 @@
     {{-- Filter Bar & Table Panel --}}
     <div class="rounded-md border border-slate-200 bg-white shadow-xs">
         {{-- Toolbar: Filter & Search --}}
-        <div class="border-b border-slate-200 p-3 bg-slate-50/50">
+        <div class="border-b border-slate-200 p-4 sm:p-5 bg-slate-50/50">
             <x-filter-bar
                 action="{{ route('materials.index') }}"
                 :searchable="true"
@@ -136,7 +132,7 @@
 
                             {{-- Nama Material --}}
                             <td>
-                                <div class="font-medium text-slate-900 leading-snug">
+                                <div class="text-[13px] font-medium text-slate-900 leading-snug">
                                     {{ $material->name }}
                                 </div>
                                 <div class="text-[11px] text-slate-500">
@@ -156,7 +152,7 @@
                             </td>
 
                             {{-- Stok Fisik --}}
-                            <td class="text-right tabular font-bold whitespace-nowrap {{ $isCritical ? 'text-red-700' : ($isWarning ? 'text-amber-700' : 'text-slate-800') }}">
+                            <td class="text-right tabular font-medium text-slate-900 whitespace-nowrap">
                                 {{ number_format($material->stock, 0, ',', '.') }} <span class="text-[11px] font-normal text-slate-500">{{ $material->unit }}</span>
                             </td>
 
@@ -178,7 +174,7 @@
 
                             {{-- Aksi --}}
                             <td class="text-right whitespace-nowrap">
-                                <div class="flex items-center justify-end gap-1.5">
+                                <div class="flex items-center justify-end gap-2">
                                     {{-- Quick Mutasi Trigger Button --}}
                                     <button type="button"
                                             onclick="openMutationModal('{{ $material->id }}', '{{ addslashes($material->name) }}', '{{ $material->code }}', '{{ $material->stock }}', '{{ $material->unit }}')"
@@ -209,7 +205,7 @@
 
                                     <form action="{{ route('materials.destroy', $material) }}"
                                           method="POST"
-                                          onsubmit="return confirm('Apakah Anda yakin ingin menghapus material [{{ $material->code }}] {{ $material->name }}?');"
+                                          onsubmit="return confirm('Yakin ingin menghapus material ini?');"
                                           class="inline">
                                         @csrf
                                         @method('DELETE')
@@ -248,7 +244,6 @@
             </div>
         @endif
     </div>
-</div>
 
 {{-- Quick Stock Mutation Modal --}}
 <div id="mutationModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/50 flex items-center justify-center p-4">

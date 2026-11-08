@@ -11,14 +11,14 @@
 @endsection
 
 @section('content')
-<div class="max-w-4xl space-y-4">
+<div class="max-w-4xl">
     {{-- Page Header --}}
     <x-page-header
         title="Registrasi Tenaga Kerja Baru"
         subtitle="Daftarkan profil pekerja, tentukan jabatan atau spesialisasi, tarif upah harian, serta status keaktifan.">
         <x-slot:actions>
             <a href="{{ route('workers.index') }}"
-               class="rounded border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors shadow-2xs">
+               class="inline-flex items-center gap-1.5 rounded border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors shadow-2xs">
                 &larr; Batal & Kembali
             </a>
         </x-slot:actions>
@@ -30,7 +30,7 @@
     {{-- Form Container --}}
     <div class="rounded-md border border-slate-200 bg-white shadow-xs overflow-hidden">
         <div class="border-b border-slate-200 px-5 py-3 bg-slate-50">
-            <h3 class="text-xs font-semibold text-slate-800 uppercase tracking-wider">Formulir Data Tenaga Kerja Konstruksi</h3>
+            <h3 class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Formulir Data Tenaga Kerja Konstruksi</h3>
         </div>
 
         <form action="{{ route('workers.store') }}" method="POST" class="p-5">

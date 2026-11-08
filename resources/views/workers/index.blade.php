@@ -10,17 +10,13 @@
 @endsection
 
 @section('content')
-<div class="space-y-4">
     {{-- Page Header --}}
     <x-page-header
         title="Manajemen SDM & Tenaga Kerja"
         subtitle="Alokasi mandor lapangan, tukang spesialis, helper proyek, serta kontrol tarif upah harian.">
         <x-slot:actions>
             <a href="{{ route('workers.create') }}"
-               class="inline-flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-semibold text-white shadow-xs transition-colors"
-               style="background-color: var(--erp-navy); border: 1px solid var(--erp-navy);"
-               onmouseover="this.style.backgroundColor='#1e293b';"
-               onmouseout="this.style.backgroundColor='var(--erp-navy)';">
+               class="inline-flex items-center gap-1.5 rounded bg-blue-600 px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-blue-700 transition-colors shadow-2xs">
                 <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
@@ -33,7 +29,7 @@
     <x-flash-alert />
 
     {{-- Ringkasan KPI SDM --}}
-    <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
+    <div class="grid grid-cols-2 gap-4 lg:grid-cols-4 mb-6">
         <x-stat-card
             label="Total Pekerja Terdaftar"
             :value="$totalWorkers"
@@ -73,7 +69,7 @@
     {{-- Filter Bar & Table Panel --}}
     <div class="rounded-md border border-slate-200 bg-white shadow-xs">
         {{-- Toolbar: Filter & Search --}}
-        <div class="border-b border-slate-200 p-3 bg-slate-50/50">
+        <div class="border-b border-slate-200 p-4 sm:p-5 bg-slate-50/50">
             <x-filter-bar
                 action="{{ route('workers.index') }}"
                 :searchable="true"
@@ -123,7 +119,7 @@
 
                             {{-- Nama Pekerja --}}
                             <td>
-                                <div class="font-semibold text-slate-900 leading-snug">
+                                <div class="text-[13px] font-medium text-slate-900 leading-snug">
                                     {{ $worker->name }}
                                 </div>
                                 @if($worker->notes)
@@ -150,12 +146,12 @@
                                         {{ $worker->phone }}
                                     </span>
                                 @else
-                                    <span class="text-slate-400 italic text-[11px]">-</span>
+                                    <span class="text-slate-300 font-mono">-</span>
                                 @endif
                             </td>
 
                             {{-- Upah Harian --}}
-                            <td class="text-right tabular font-bold text-slate-800 whitespace-nowrap">
+                            <td class="text-right tabular font-bold text-slate-900 whitespace-nowrap">
                                 Rp {{ number_format($worker->daily_rate, 0, ',', '.') }}
                             </td>
 
@@ -170,7 +166,7 @@
 
                             {{-- Aksi --}}
                             <td class="text-right whitespace-nowrap">
-                                <div class="flex items-center justify-end gap-1">
+                                <div class="flex items-center justify-end gap-2">
                                     <a href="{{ route('workers.show', $worker) }}"
                                        class="rounded p-1 text-slate-500 hover:bg-slate-100 hover:text-slate-800 transition-colors"
                                        title="Detail Pekerja">
@@ -190,7 +186,7 @@
 
                                     <form action="{{ route('workers.destroy', $worker) }}"
                                           method="POST"
-                                          onsubmit="return confirm('Apakah Anda yakin ingin menghapus data tenaga kerja [{{ $worker->worker_code }}] {{ $worker->name }}?');"
+                                          onsubmit="return confirm('Yakin ingin menghapus data tenaga kerja ini?');"
                                           class="inline">
                                         @csrf
                                         @method('DELETE')
@@ -229,5 +225,4 @@
             </div>
         @endif
     </div>
-</div>
 @endsection

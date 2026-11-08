@@ -1,67 +1,57 @@
 @props([
-    'label'   => '',       // Label di atas (sub-teks deskriptor)
-    'value'   => '',       // Nilai utama (angka / teks besar)
-    'note'    => null,     // Teks kecil / keterangan di bawah value
-    'variant' => 'default', // default | success | warning | danger | info
-    'icon'    => null,     // SVG path string opsional
-    'suffix'  => null,     // Satuan / unit di kanan value (misal: "%" atau "proyek")
+    'label'        => '',       // Label di atas (sub-teks deskriptor)
+    'value'        => '',       // Nilai utama (angka / teks besar)
+    'note'         => null,     // Teks kecil / keterangan di bawah value
+    'subtext'      => null,     // Alias untuk note
+    'subtextColor' => null,
+    'variant'      => 'default', // default | success | warning | danger | info | neutral
+    'color'        => null,     // Alias untuk warna varian
+    'icon'         => null,     // SVG path string opsional
+    'suffix'       => null,     // Satuan / unit di kanan value (misal: "%" atau "proyek")
+    'unit'         => null,     // Alias untuk suffix
+    'badge'        => null,     // Opsional badge teks
+    'badgeVariant' => 'neutral',
 ])
 
 @php
-// Token warna per varian value
-$valueStyle = match ($variant) {
-    'success' => 'color:#15803d;',
-    'warning' => 'color:#b45309;',
-    'danger'  => 'color:#b91c1c;',
-    'info'    => 'color:#2563eb;',
-    default   => 'color:#0f172a;',
-};
-
-// Accent bar di sisi kiri kartu
-$accentStyle = match ($variant) {
-    'success' => 'background:#22c55e;',
-    'warning' => 'background:#f59e0b;',
-    'danger'  => 'background:#ef4444;',
-    'info'    => 'background:#3b82f6;',
-    default   => 'background:#e2e8f0;',
-};
+    $displaySuffix = $suffix ?? $unit;
+    $displayNote   = $note ?? $subtext;
 @endphp
 
-<div {{ $attributes->merge(['class' => 'relative overflow-hidden rounded-md']) }}
-     style="background:#fff; border:1px solid #e2e8f0;">
-    {{-- Accent bar kiri --}}
-    <div class="absolute inset-y-0 left-0 w-0.5 rounded-l-md" style="{{ $accentStyle }}"></div>
-
-    <div class="px-4 py-3 pl-5">
-        {{-- Label (descriptor) --}}
-        <p class="text-[11px] font-medium uppercase tracking-wider truncate"
-           style="color:#64748b; letter-spacing:.05em;">{{ $label }}</p>
+<div {{ $attributes->merge(['class' => 'rounded-md border border-slate-200 bg-white']) }}>
+    <div class="p-5">
+        {{-- Label (descriptor) & Optional Badge --}}
+        <div class="flex items-center justify-between gap-1 mb-1">
+            <p class="text-[11px] font-medium uppercase tracking-wider text-slate-500 truncate">{{ $label }}</p>
+            @if ($badge)
+                <x-badge :variant="$badgeVariant" size="xs" :dot="true">{{ $badge }}</x-badge>
+            @endif
+        </div>
 
         {{-- Value row --}}
         <div class="mt-1 flex items-baseline gap-1.5">
             @if ($icon)
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0" fill="none"
-                     viewBox="0 0 24 24" stroke="currentColor" style="{{ $valueStyle }} opacity:.6;">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0 text-slate-400" fill="none"
+                     viewBox="0 0 24 24" stroke="currentColor">
                     {!! $icon !!}
                 </svg>
             @endif
-            <span class="text-2xl font-bold leading-none tabular"
-                  style="{{ $valueStyle }} font-variant-numeric:tabular-nums;">
+            <span class="text-2xl font-bold tracking-tight text-slate-900 tabular">
                 {{ $value }}
             </span>
-            @if ($suffix)
-                <span class="text-xs font-medium" style="color:#94a3b8;">{{ $suffix }}</span>
+            @if ($displaySuffix)
+                <span class="text-xs font-medium text-slate-500">{{ $displaySuffix }}</span>
             @endif
         </div>
 
         {{-- Note / sub info --}}
-        @if ($note)
-            <p class="mt-1.5 truncate text-[11px]" style="color:#94a3b8;">{{ $note }}</p>
+        @if ($displayNote)
+            <p class="mt-2 mb-1 truncate text-[11px] text-slate-500">{{ $displayNote }}</p>
         @endif
 
         {{-- Slot untuk konten tambahan (progress bar, dll) --}}
         @if ($slot->isNotEmpty())
-            <div class="mt-2">{{ $slot }}</div>
+            <div class="mt-1.5">{{ $slot }}</div>
         @endif
     </div>
 </div>

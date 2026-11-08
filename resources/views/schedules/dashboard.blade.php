@@ -37,7 +37,7 @@
     </x-page-header>
 
     {{-- ── 4 KPI Utama ───────────────────────────────────────── --}}
-    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 mb-5">
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-6">
         <x-stat-card
             label="Total Proyek Berjadwal"
             :value="$totalProjects"
@@ -56,7 +56,7 @@
             suffix="%"
             :variant="$overallProgress >= 80 ? 'success' : ($overallProgress >= 40 ? 'info' : 'warning')"
             :note="$incompleteProjectsCount > 0 ? $incompleteProjectsCount . ' proyek belum final (bobot < 100%)' : 'Semua proyek sudah final'">
-            <div class="mt-2 h-1.5 overflow-hidden rounded-full" style="background:#e2e8f0;">
+            <div class="h-1.5 overflow-hidden rounded-full" style="background:#e2e8f0;">
                 <div class="h-full rounded-full transition-all"
                      style="width:{{ min(100, $overallProgress) }}%; background:#2563eb;"></div>
             </div>
@@ -71,7 +71,7 @@
     </div>
 
     {{-- ── Status Distribution Cards ─────────────────────────── --}}
-    <div class="grid gap-3 sm:grid-cols-3">
+    <div class="grid gap-4 sm:grid-cols-3">
         <x-stat-card
             label="Pekerjaan Telah Rampung"
             :value="$completed"

@@ -11,7 +11,6 @@
 @endsection
 
 @section('content')
-<div class="space-y-4">
     {{-- Page Header --}}
     <x-page-header
         title="{{ $worker->name }}"
@@ -41,7 +40,7 @@
             </a>
             <form action="{{ route('workers.destroy', $worker) }}"
                   method="POST"
-                  onsubmit="return confirm('Apakah Anda yakin ingin menghapus data tenaga kerja [{{ $worker->worker_code }}] {{ $worker->name }}?');"
+                  onsubmit="return confirm('Yakin ingin menghapus data tenaga kerja ini?');"
                   class="inline">
                 @csrf
                 @method('DELETE')
@@ -57,7 +56,7 @@
     <x-flash-alert />
 
     {{-- Ringkasan 4 Kartu Metrik SDM --}}
-    <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
+    <div class="grid grid-cols-2 gap-4 lg:grid-cols-4 mb-6">
         <x-stat-card
             label="Tarif Upah Harian"
             :value="'Rp ' . number_format($worker->daily_rate, 0, ',', '.')"
@@ -94,21 +93,21 @@
         {{-- Detail Profil (2 Cols) --}}
         <div class="space-y-4 lg:col-span-2">
             <div class="rounded-md border border-slate-200 bg-white shadow-xs overflow-hidden">
-                <div class="border-b border-slate-200 px-4 py-2.5 bg-slate-50 flex items-center justify-between">
-                    <h3 class="text-xs font-semibold text-slate-800 uppercase tracking-wider">Biodata & Informasi Kepegawaian</h3>
-                    <span class="text-[11px] text-slate-400">ID: #{{ $worker->id }}</span>
+                <div class="border-b border-slate-200 px-5 py-3 bg-slate-50 flex items-center justify-between">
+                    <h3 class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Biodata & Informasi Kepegawaian</h3>
+                    <span class="text-[11px] text-slate-400 font-mono">ID #{{ $worker->id }}</span>
                 </div>
-                <div class="p-4">
+                <div class="p-5">
                     <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 text-xs">
-                        <div class="border-b border-slate-100 pb-2">
+                        <div class="border-b border-slate-100 pb-2.5">
                             <dt class="text-slate-400 font-medium uppercase text-[10px] tracking-wider">Nomor Induk Karyawan / Kode</dt>
                             <dd class="mt-0.5 font-code font-semibold text-slate-800 text-sm">{{ $worker->worker_code }}</dd>
                         </div>
-                        <div class="border-b border-slate-100 pb-2">
+                        <div class="border-b border-slate-100 pb-2.5">
                             <dt class="text-slate-400 font-medium uppercase text-[10px] tracking-wider">Nama Lengkap</dt>
                             <dd class="mt-0.5 font-semibold text-slate-800 text-sm">{{ $worker->name }}</dd>
                         </div>
-                        <div class="border-b border-slate-100 pb-2">
+                        <div class="border-b border-slate-100 pb-2.5">
                             <dt class="text-slate-400 font-medium uppercase text-[10px] tracking-wider">Jabatan / Spesialisasi Keahlian</dt>
                             <dd class="mt-0.5 font-medium text-slate-800">
                                 <span class="inline-flex items-center rounded border border-slate-200 bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-700">
@@ -116,19 +115,35 @@
                                 </span>
                             </dd>
                         </div>
-                        <div class="border-b border-slate-100 pb-2">
+                        <div class="border-b border-slate-100 pb-2.5">
                             <dt class="text-slate-400 font-medium uppercase text-[10px] tracking-wider">Kontak Telepon / WhatsApp</dt>
                             <dd class="mt-0.5 tabular font-medium text-slate-800">
-                                {{ $worker->phone ?: 'Tidak dicantumkan' }}
+                                @if($worker->phone)
+                                    {{ $worker->phone }}
+                                @else
+                                    <span class="text-slate-300 font-mono">-</span>
+                                @endif
                             </dd>
                         </div>
-                        <div class="border-b border-slate-100 pb-2">
+                        <div class="border-b border-slate-100 pb-2.5">
                             <dt class="text-slate-400 font-medium uppercase text-[10px] tracking-wider">Tanggal Terdaftar</dt>
-                            <dd class="mt-0.5 text-slate-600 tabular">{{ $worker->created_at ? $worker->created_at->format('d M Y, H:i') : '-' }}</dd>
+                            <dd class="mt-0.5 text-slate-600 tabular">
+                                @if($worker->created_at)
+                                    {{ $worker->created_at->format('d M Y, H:i') }}
+                                @else
+                                    <span class="text-slate-300 font-mono">-</span>
+                                @endif
+                            </dd>
                         </div>
-                        <div class="border-b border-slate-100 pb-2">
+                        <div class="border-b border-slate-100 pb-2.5">
                             <dt class="text-slate-400 font-medium uppercase text-[10px] tracking-wider">Pembaruan Terakhir</dt>
-                            <dd class="mt-0.5 text-slate-600 tabular">{{ $worker->updated_at ? $worker->updated_at->format('d M Y, H:i') : '-' }}</dd>
+                            <dd class="mt-0.5 text-slate-600 tabular">
+                                @if($worker->updated_at)
+                                    {{ $worker->updated_at->format('d M Y, H:i') }}
+                                @else
+                                    <span class="text-slate-300 font-mono">-</span>
+                                @endif
+                            </dd>
                         </div>
                     </dl>
                 </div>
@@ -138,19 +153,19 @@
         {{-- Catatan & Kualifikasi Lapangan (1 Col) --}}
         <div>
             <div class="rounded-md border border-slate-200 bg-white shadow-xs overflow-hidden">
-                <div class="border-b border-slate-200 px-4 py-2.5 bg-slate-50">
-                    <h3 class="text-xs font-semibold text-slate-800 uppercase tracking-wider">Catatan Kualifikasi & Sertifikasi</h3>
+                <div class="border-b border-slate-200 px-5 py-3 bg-slate-50">
+                    <h3 class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Catatan Kualifikasi & Sertifikasi</h3>
                 </div>
-                <div class="p-4">
+                <div class="p-5">
                     @if($worker->notes)
-                        <div class="rounded border border-slate-100 bg-slate-50/70 p-3 text-xs leading-relaxed text-slate-700 whitespace-pre-line">
+                        <div class="rounded border border-slate-100 bg-slate-50/70 p-3.5 text-xs leading-relaxed text-slate-700 whitespace-pre-line">
                             {{ $worker->notes }}
                         </div>
                     @else
                         <p class="text-xs text-slate-400 italic">Tidak ada catatan sertifikasi atau keterangan tambahan.</p>
                     @endif
 
-                    <div class="mt-4 pt-3 border-t border-slate-100">
+                    <div class="mt-4 pt-3.5 border-t border-slate-100">
                         <span class="text-[11px] text-slate-400 block mb-2 font-medium uppercase tracking-wider">Aksi Cepat</span>
                         <div class="flex flex-col gap-2">
                             <a href="{{ route('workers.edit', $worker) }}"
@@ -163,5 +178,4 @@
             </div>
         </div>
     </div>
-</div>
 @endsection

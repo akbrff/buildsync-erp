@@ -88,7 +88,7 @@
     {{-- ═══════════════════════════════════════════════════════════
          HEADER DETAIL PROYEK (Densitas Tinggi & Clean)
          ═══════════════════════════════════════════════════════════ --}}
-    <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div class="min-w-0">
             <div class="flex flex-wrap items-center gap-2">
                 <span class="font-code text-xs font-semibold px-2 py-0.5 rounded"
@@ -112,7 +112,7 @@
                 @endif
             </div>
 
-            <h1 class="mt-1 text-xl font-bold tracking-tight text-slate-900 truncate">
+            <h1 class="mt-1 text-lg font-semibold tracking-tight text-slate-900 truncate">
                 {{ $project->name }}
             </h1>
 
@@ -179,7 +179,7 @@
     {{-- ═══════════════════════════════════════════════════════════
          RINGKASAN KPI ATAS (4 Kartu Metrik Padat & Terukur)
          ═══════════════════════════════════════════════════════════ --}}
-    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 mb-5">
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-6">
         {{-- Card 1: Progres Fisik Real --}}
         <x-stat-card
             label="Progres Fisik Real"
@@ -187,7 +187,7 @@
             suffix="%"
             :variant="$overallProgress >= 100 ? 'success' : ($overallProgress > 0 ? 'info' : 'neutral')"
             :note="$project->is_weight_final ? 'Cakupan bobot final 100%' : 'Bobot tercakup ' . number_format($totalWeight, 1, ',', '.') . '% (belum final)'">
-            <div class="mt-2 h-1.5 overflow-hidden rounded-full" style="background:#e2e8f0;">
+            <div class="h-1.5 overflow-hidden rounded-full" style="background:#e2e8f0;">
                 <div class="h-full rounded-full transition-all"
                      style="width: {{ min(100, $overallProgress) }}%; background: #2563eb;"></div>
             </div>
@@ -199,7 +199,7 @@
             :value="'Rp ' . number_format($totalBudget, 0, ',', '.')"
             :variant="$totalActualCost > $totalBudget ? 'danger' : ($costPercentage > 85 ? 'warning' : 'info')"
             :note="'Realisasi: Rp ' . number_format($totalActualCost, 0, ',', '.') . ' (' . $costPercentage . '%)'">
-            <div class="mt-2 h-1.5 overflow-hidden rounded-full" style="background:#e2e8f0;">
+            <div class="h-1.5 overflow-hidden rounded-full" style="background:#e2e8f0;">
                 <div class="h-full rounded-full transition-all"
                      style="width: {{ min(100, $costPercentage) }}%; background: {{ $totalActualCost > $totalBudget ? '#ef4444' : '#10b981' }};"></div>
             </div>

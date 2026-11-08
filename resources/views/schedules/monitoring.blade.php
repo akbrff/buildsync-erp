@@ -65,7 +65,7 @@
     </x-page-header>
 
     {{-- ── 4 KPI Status Cards ────────────────────────────────── --}}
-    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 mb-4">
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-6">
         <x-stat-card
             label="Total Pekerjaan Dipantau"
             :value="$totalCount"
@@ -129,11 +129,11 @@
 
     {{-- ── Banner Progres Proyek Terpilih (Jika Ada) ──────────── --}}
     @if ($selectedProject)
-        <div class="mb-4 rounded-md p-3.5" style="background:#eff6ff; border:1px solid #bfdbfe;">
+        <div class="mb-4 rounded-md p-3.5 bg-slate-50 border border-slate-200">
             <div class="flex flex-wrap items-center justify-between gap-3">
                 <div class="min-w-0">
-                    <p class="text-xs font-semibold uppercase tracking-wider text-blue-700">Ringkasan Progres Proyek</p>
-                    <p class="mt-0.5 truncate text-sm font-bold text-slate-900">
+                    <p class="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Ringkasan Progres Proyek</p>
+                    <p class="mt-0.5 truncate text-sm font-semibold text-slate-900">
                         {{ $selectedProject->project_code }} — {{ $selectedProject->name }}
                     </p>
                 </div>
@@ -145,14 +145,14 @@
                     @else
                         <x-badge variant="success" :dot="true">Bobot Final 100%</x-badge>
                     @endif
-                    <span class="text-xl font-bold tabular text-blue-700">
+                    <span class="text-xl font-semibold tabular text-slate-900">
                         {{ number_format($selectedProject->overall_progress, 2, ',', '.') }}%
                     </span>
                 </div>
             </div>
-            <div class="mt-2.5 h-1.5 overflow-hidden rounded-full" style="background:#bfdbfe;">
-                <div class="h-full rounded-full transition-all"
-                     style="width:{{ min(100, $selectedProject->overall_progress) }}%; background:#2563eb;"></div>
+            <div class="mt-2.5 h-1.5 overflow-hidden rounded-full bg-slate-200">
+                <div class="h-full rounded-full transition-all bg-slate-800"
+                     style="width:{{ min(100, $selectedProject->overall_progress) }}%;"></div>
             </div>
         </div>
     @endif

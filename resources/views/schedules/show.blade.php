@@ -28,7 +28,7 @@
     <x-flash-alert/>
 
     {{-- ── Page Header Detail ─────────────────────────────────── --}}
-    <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div class="min-w-0">
             <div class="flex flex-wrap items-center gap-2">
                 <a href="{{ route('projects.show', $schedule->project) }}"
@@ -44,7 +44,7 @@
                 </span>
             </div>
 
-            <h1 class="mt-1 text-xl font-bold tracking-tight text-slate-900 truncate">
+            <h1 class="mt-1 text-lg font-semibold tracking-tight text-slate-900 truncate">
                 {{ $schedule->name }}
             </h1>
 
@@ -94,7 +94,7 @@
     </div>
 
     {{-- ── 3 Kartu Ringkasan Metrik ──────────────────────────── --}}
-    <div class="grid gap-3 sm:grid-cols-3 mb-4">
+    <div class="grid gap-4 sm:grid-cols-3 mb-6">
         {{-- Progres Terakhir --}}
         <x-stat-card
             label="Progres Terakhir"
@@ -126,26 +126,26 @@
     </div>
 
     {{-- ── Grid 2-Kolom: Informasi & Form Rekam Progres ───────── --}}
-    <div class="grid gap-4 lg:grid-cols-3 mb-5">
+    <div class="grid gap-5 lg:grid-cols-3 mb-6">
         {{-- Kolom Kiri: Detail Informasi --}}
-        <div class="rounded-md p-4" style="border:1px solid #e2e8f0; background:#fff;">
-            <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-800 mb-3">
+        <div class="rounded-md p-5 border border-slate-200 bg-white">
+            <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-600 mb-3">
                 Informasi Pekerjaan
             </h3>
             <dl class="space-y-2.5 text-xs">
-                <div class="flex justify-between py-1" style="border-bottom:1px solid #f8fafc;">
+                <div class="flex justify-between py-1 border-b border-slate-50">
                     <dt class="text-slate-500">Mulai Pelaksanaan</dt>
                     <dd class="font-medium tabular text-slate-900">{{ $schedule->start_date->format('d M Y') }}</dd>
                 </div>
-                <div class="flex justify-between py-1" style="border-bottom:1px solid #f8fafc;">
+                <div class="flex justify-between py-1 border-b border-slate-50">
                     <dt class="text-slate-500">Target Selesai</dt>
                     <dd class="font-medium tabular text-slate-900">{{ $schedule->end_date->format('d M Y') }}</dd>
                 </div>
-                <div class="flex justify-between py-1" style="border-bottom:1px solid #f8fafc;">
+                <div class="flex justify-between py-1 border-b border-slate-50">
                     <dt class="text-slate-500">Durasi Pekerjaan</dt>
                     <dd class="font-medium tabular text-slate-900">{{ $duration }} hari kalender</dd>
                 </div>
-                <div class="flex justify-between py-1" style="border-bottom:1px solid #f8fafc;">
+                <div class="flex justify-between py-1 border-b border-slate-50">
                     <dt class="text-slate-500">Kontribusi Progres</dt>
                     <dd class="font-bold tabular text-blue-700">
                         +{{ number_format(($schedule->weight * $currentProgress) / 100, 2, ',', '.') }}% fisik
@@ -153,7 +153,7 @@
                 </div>
                 <div class="pt-2">
                     <dt class="text-[11px] font-medium text-slate-500 mb-1">Deskripsi & Ruang Lingkup</dt>
-                    <dd class="rounded p-2 text-slate-700 leading-relaxed text-xs" style="background:#f8fafc; border:1px solid #f1f5f9;">
+                    <dd class="rounded p-2 text-slate-700 leading-relaxed text-xs bg-slate-50 border border-slate-100">
                         {{ $schedule->description ?: 'Tidak ada deskripsi rincian.' }}
                     </dd>
                 </div>
@@ -161,10 +161,10 @@
         </div>
 
         {{-- Kolom Kanan: Form Catat Progres Baru --}}
-        <div class="lg:col-span-2 rounded-md p-4" style="border:1px solid #e2e8f0; background:#fff;">
-            <div class="flex items-center justify-between pb-2.5 mb-3" style="border-bottom:1px solid #f1f5f9;">
+        <div class="lg:col-span-2 rounded-md p-5 border border-slate-200 bg-white">
+            <div class="flex items-center justify-between pb-2.5 mb-3 border-b border-slate-100">
                 <div>
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-800">
+                    <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-600">
                         Catat Update Progres Fisik
                     </h3>
                     <p class="text-[11px] text-slate-500">

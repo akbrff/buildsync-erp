@@ -11,7 +11,6 @@
 @endsection
 
 @section('content')
-<div class="space-y-4">
     {{-- Page Header --}}
     <x-page-header
         title="{{ $material->name }}"
@@ -43,7 +42,7 @@
             </a>
             <form action="{{ route('materials.destroy', $material) }}"
                   method="POST"
-                  onsubmit="return confirm('Apakah Anda yakin ingin menghapus material [{{ $material->code }}] {{ $material->name }}?');"
+                  onsubmit="return confirm('Yakin ingin menghapus material ini?');"
                   class="inline">
                 @csrf
                 @method('DELETE')
@@ -59,7 +58,7 @@
     <x-flash-alert />
 
     {{-- Ringkasan 4 Kartu Metrik --}}
-    <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
+    <div class="grid grid-cols-2 gap-4 lg:grid-cols-4 mb-6">
         <x-stat-card
             label="Stok Fisik Saat Ini"
             :value="number_format($material->stock, 0, ',', '.')"
@@ -98,44 +97,56 @@
         <div class="space-y-4 lg:col-span-2">
             {{-- Spesifikasi Lembar Teknis --}}
             <div class="rounded-md border border-slate-200 bg-white shadow-xs overflow-hidden">
-                <div class="border-b border-slate-200 px-4 py-2.5 bg-slate-50 flex items-center justify-between">
-                    <h3 class="text-xs font-semibold text-slate-800 uppercase tracking-wider">Spesifikasi Lembar Inventaris</h3>
-                    <span class="text-[11px] text-slate-400">ID: #{{ $material->id }}</span>
+                <div class="border-b border-slate-200 px-5 py-3 bg-slate-50 flex items-center justify-between">
+                    <h3 class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Spesifikasi Lembar Inventaris</h3>
+                    <span class="text-[11px] text-slate-400 font-mono">ID #{{ $material->id }}</span>
                 </div>
-                <div class="p-4">
+                <div class="p-5">
                     <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 text-xs">
-                        <div class="border-b border-slate-100 pb-2">
+                        <div class="border-b border-slate-100 pb-2.5">
                             <dt class="text-slate-400 font-medium uppercase text-[10px] tracking-wider">Kode SKU / Referensi</dt>
                             <dd class="mt-0.5 font-code font-semibold text-slate-800 text-sm">{{ $material->code }}</dd>
                         </div>
-                        <div class="border-b border-slate-100 pb-2">
+                        <div class="border-b border-slate-100 pb-2.5">
                             <dt class="text-slate-400 font-medium uppercase text-[10px] tracking-wider">Nama Resmi Material</dt>
                             <dd class="mt-0.5 font-semibold text-slate-800 text-sm">{{ $material->name }}</dd>
                         </div>
-                        <div class="border-b border-slate-100 pb-2">
+                        <div class="border-b border-slate-100 pb-2.5">
                             <dt class="text-slate-400 font-medium uppercase text-[10px] tracking-wider">Satuan Ukuran Standar</dt>
                             <dd class="mt-0.5 font-medium text-slate-700">{{ $material->unit }}</dd>
                         </div>
-                        <div class="border-b border-slate-100 pb-2">
+                        <div class="border-b border-slate-100 pb-2.5">
                             <dt class="text-slate-400 font-medium uppercase text-[10px] tracking-wider">Harga Satuan Pengadaan</dt>
                             <dd class="mt-0.5 tabular font-semibold text-slate-800">Rp {{ number_format($material->price, 0, ',', '.') }} / {{ $material->unit }}</dd>
                         </div>
-                        <div class="border-b border-slate-100 pb-2">
+                        <div class="border-b border-slate-100 pb-2.5">
                             <dt class="text-slate-400 font-medium uppercase text-[10px] tracking-wider">Tanggal Ditambahkan</dt>
-                            <dd class="mt-0.5 text-slate-600 tabular">{{ $material->created_at ? $material->created_at->format('d M Y, H:i') : '-' }}</dd>
+                            <dd class="mt-0.5 text-slate-600 tabular">
+                                @if($material->created_at)
+                                    {{ $material->created_at->format('d M Y, H:i') }}
+                                @else
+                                    <span class="text-slate-300 font-mono">-</span>
+                                @endif
+                            </dd>
                         </div>
-                        <div class="border-b border-slate-100 pb-2">
+                        <div class="border-b border-slate-100 pb-2.5">
                             <dt class="text-slate-400 font-medium uppercase text-[10px] tracking-wider">Pembaruan Terakhir</dt>
-                            <dd class="mt-0.5 text-slate-600 tabular">{{ $material->updated_at ? $material->updated_at->format('d M Y, H:i') : '-' }}</dd>
+                            <dd class="mt-0.5 text-slate-600 tabular">
+                                @if($material->updated_at)
+                                    {{ $material->updated_at->format('d M Y, H:i') }}
+                                @else
+                                    <span class="text-slate-300 font-mono">-</span>
+                                @endif
+                            </dd>
                         </div>
                     </dl>
                 </div>
             </div>
 
             {{-- Meter Tingkat Ketersediaan Stok --}}
-            <div class="rounded-md border border-slate-200 bg-white p-4 shadow-xs">
+            <div class="rounded-md border border-slate-200 bg-white p-5 shadow-xs">
                 <div class="flex items-center justify-between mb-2">
-                    <h4 class="text-xs font-semibold text-slate-800">Indikator Buffer Stok Fisik vs Ambang Reorder</h4>
+                    <h4 class="text-xs font-semibold uppercase tracking-wider text-slate-600">Indikator Buffer Stok Fisik vs Ambang Reorder</h4>
                     <span class="text-xs tabular font-bold text-slate-700">
                         {{ $material->stock }} / {{ $material->min_stock }} {{ $material->unit }}
                     </span>
@@ -144,7 +155,6 @@
                 @php
                     $targetMax = max($material->min_stock * 2, $material->stock, 1);
                     $stockPercent = min(100, round(($material->stock / $targetMax) * 100));
-                    $minPercent   = min(100, round(($material->min_stock / $targetMax) * 100));
                 @endphp
 
                 <div class="relative w-full h-3 rounded bg-slate-100 overflow-hidden border border-slate-200">
@@ -152,7 +162,7 @@
                          style="width: {{ $stockPercent }}%;"></div>
                 </div>
 
-                <div class="flex items-center justify-between mt-2 text-[11px] text-slate-500">
+                <div class="flex items-center justify-between mt-2.5 text-[11px] text-slate-500">
                     <span class="flex items-center gap-1">
                         <span class="inline-block h-2 w-2 rounded-full bg-red-400"></span>
                         Ambang Kritis (≤ {{ $material->min_stock }} {{ $material->unit }})
@@ -172,25 +182,25 @@
         {{-- Kolom Kanan: Form Cepat Mutasi Stok Fisik (1 Col) --}}
         <div>
             <div class="rounded-md border border-slate-200 bg-white shadow-xs overflow-hidden">
-                <div class="border-b border-slate-200 px-4 py-2.5 bg-slate-50">
-                    <h3 class="text-xs font-semibold text-slate-800 uppercase tracking-wider">Catat Mutasi Masuk / Keluar</h3>
+                <div class="border-b border-slate-200 px-5 py-3 bg-slate-50">
+                    <h3 class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Catat Mutasi Masuk / Keluar</h3>
                     <p class="text-[11px] text-slate-500 mt-0.5">Tambah stok kiriman suplier atau kurangi untuk proyek.</p>
                 </div>
 
-                <form method="POST" action="{{ route('materials.adjust', $material) }}" class="p-4 space-y-3.5">
+                <form method="POST" action="{{ route('materials.adjust', $material) }}" class="p-5 space-y-3.5">
                     @csrf
 
                     <div>
                         <label class="erp-label mb-1.5 block">Tipe Mutasi</label>
                         <div class="grid grid-cols-2 gap-2">
-                            <label class="flex items-center gap-2 rounded border border-slate-200 p-2 cursor-pointer hover:bg-slate-50 transition-colors">
+                            <label class="flex items-center gap-2 rounded border border-slate-200 p-2.5 cursor-pointer hover:bg-slate-50 transition-colors">
                                 <input type="radio" name="type" value="in" checked class="text-emerald-600 focus:ring-emerald-500">
                                 <div>
                                     <span class="text-xs font-semibold text-slate-800 block">Masuk (+)</span>
                                     <span class="text-[10px] text-slate-500">Penerimaan</span>
                                 </div>
                             </label>
-                            <label class="flex items-center gap-2 rounded border border-slate-200 p-2 cursor-pointer hover:bg-slate-50 transition-colors">
+                            <label class="flex items-center gap-2 rounded border border-slate-200 p-2.5 cursor-pointer hover:bg-slate-50 transition-colors">
                                 <input type="radio" name="type" value="out" class="text-amber-600 focus:ring-amber-500">
                                 <div>
                                     <span class="text-xs font-semibold text-slate-800 block">Keluar (-)</span>
@@ -230,5 +240,4 @@
             </div>
         </div>
     </div>
-</div>
 @endsection

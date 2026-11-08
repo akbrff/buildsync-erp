@@ -41,7 +41,7 @@
             $criticalMaterials = $materials->filter(fn($m) => $m->stock <= $m->min_stock);
         @endphp
 
-        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 mb-5">
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-6">
             <x-stat-card
                 label="Total Proyek Terdaftar"
                 :value="$totalProjects"
@@ -59,7 +59,7 @@
                 :value="'Rp ' . number_format($globalActualCost, 0, ',', '.')"
                 :variant="$globalActualCost > $totalBudget ? 'danger' : 'info'"
                 :note="'Tingkat Serapan: ' . $globalSerapan . '%'">
-                <div class="mt-2 h-1.5 overflow-hidden rounded-full" style="background:#e2e8f0;">
+                <div class="h-1.5 overflow-hidden rounded-full" style="background:#e2e8f0;">
                     <div class="h-full rounded-full"
                          style="width:{{ min(100, $globalSerapan) }}%; background:{{ $globalActualCost > $totalBudget ? '#ef4444' : '#2563eb' }};"></div>
                 </div>
@@ -73,10 +73,10 @@
         </div>
 
         {{-- Tabel Peringatan Stok Material Menipis --}}
-        <div class="overflow-hidden rounded-md" style="border:1px solid #e2e8f0; background:#fff;">
-            <div class="flex items-center justify-between px-4 py-3" style="border-bottom:1px solid #f1f5f9;">
+        <div class="overflow-hidden rounded-md border border-slate-200 bg-white">
+            <div class="flex items-center justify-between px-5 py-3 border-b border-slate-100">
                 <div>
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-800">
+                    <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-600">
                         Peringatan Stok Material Menipis (Restock Alert)
                     </h3>
                     <p class="text-[11px] text-slate-500">
@@ -110,13 +110,13 @@
                                         {{ $material->code }}
                                     </span>
                                 </td>
-                                <td class="font-medium text-xs text-slate-900">
+                                <td class="text-[13px] font-medium text-slate-900">
                                     {{ $material->name }}
                                 </td>
                                 <td class="text-right tabular text-xs text-slate-700">
                                     Rp {{ number_format($material->price, 0, ',', '.') }} / {{ $material->unit }}
                                 </td>
-                                <td class="text-right tabular font-bold text-xs text-red-600">
+                                <td class="text-right tabular font-medium text-slate-900">
                                     {{ $material->stock }} {{ $material->unit }}
                                 </td>
                                 <td class="text-right tabular text-xs text-slate-500">
@@ -150,7 +150,7 @@
         @endphp
 
         {{-- Header Proyek Ringkas --}}
-        <div class="mb-4 rounded-md p-4" style="border:1px solid #e2e8f0; background:#fff;">
+        <div class="mb-6 rounded-md p-5 border border-slate-200 bg-white">
             <div class="flex flex-wrap items-center justify-between gap-3">
                 <div class="min-w-0">
                     <div class="flex items-center gap-2">
@@ -165,7 +165,7 @@
                             <span class="text-xs text-slate-500">📍 {{ $selectedProject->location }}</span>
                         @endif
                     </div>
-                    <h2 class="mt-1 text-lg font-bold text-slate-900 truncate">
+                    <h2 class="mt-1 text-lg font-semibold tracking-tight text-slate-900 truncate">
                         {{ $selectedProject->name }}
                     </h2>
                 </div>
@@ -189,7 +189,7 @@
         </div>
 
         {{-- 3 KPI Metrik Proyek Terpilih --}}
-        <div class="grid gap-3 sm:grid-cols-3 mb-4">
+        <div class="grid gap-4 sm:grid-cols-3 mb-6">
             <x-stat-card
                 label="Pagu Anggaran Kontrak"
                 :value="'Rp ' . number_format($projBudget, 0, ',', '.')"
@@ -201,7 +201,7 @@
                 :value="'Rp ' . number_format($totalActualCost, 0, ',', '.')"
                 :variant="$isOver ? 'danger' : 'info'"
                 :note="'Serapan Kas: ' . $projSerapan . '%'">
-                <div class="mt-2 h-1.5 overflow-hidden rounded-full" style="background:#e2e8f0;">
+                <div class="h-1.5 overflow-hidden rounded-full" style="background:#e2e8f0;">
                     <div class="h-full rounded-full"
                          style="width:{{ min(100, $projSerapan) }}%; background:{{ $isOver ? '#ef4444' : '#2563eb' }};"></div>
                 </div>
@@ -215,11 +215,11 @@
         </div>
 
         {{-- Grid 2-Kolom: Rincian Biaya per Kategori & Progres Fisik --}}
-        <div class="grid gap-4 md:grid-cols-2">
+        <div class="grid gap-5 md:grid-cols-2">
             {{-- Panel Kiri: Rincian Pengeluaran per Kategori --}}
-            <div class="overflow-hidden rounded-md" style="border:1px solid #e2e8f0; background:#fff;">
-                <div class="px-4 py-3" style="border-bottom:1px solid #f1f5f9;">
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-800">
+            <div class="overflow-hidden rounded-md border border-slate-200 bg-white">
+                <div class="px-5 py-3 border-b border-slate-100">
+                    <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-600">
                         Rincian Pengeluaran per Kategori
                     </h3>
                 </div>
@@ -272,16 +272,16 @@
             </div>
 
             {{-- Panel Kanan: Progres Fisik Pekerjaan --}}
-            <div class="overflow-hidden rounded-md" style="border:1px solid #e2e8f0; background:#fff;">
-                <div class="flex items-center justify-between px-4 py-3" style="border-bottom:1px solid #f1f5f9;">
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-800">
+            <div class="overflow-hidden rounded-md border border-slate-200 bg-white">
+                <div class="flex items-center justify-between px-5 py-3 border-b border-slate-100">
+                    <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-600">
                         Progres Fisik Tahapan Proyek
                     </h3>
                     <span class="text-xs font-bold tabular text-blue-700">
                         {{ number_format($selectedProject->overall_progress, 2, ',', '.') }}%
                     </span>
                 </div>
-                <div class="p-4">
+                <div class="p-5">
                     {{-- Mini Progress Bar Total --}}
                     <div class="mb-4">
                         <div class="flex justify-between text-xs text-slate-500 mb-1">

@@ -27,7 +27,7 @@
     </x-page-header>
 
     {{-- ── 4 KPI Finansial Atas ───────────────────────────────── --}}
-    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 mb-4">
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-6">
         {{-- Total Pagu --}}
         <x-stat-card
             label="Total Pagu Anggaran"
@@ -41,7 +41,7 @@
             :value="'Rp ' . number_format($totalActualCost, 0, ',', '.')"
             :variant="$totalActualCost > $totalPagu ? 'danger' : ($serapanPercent > 85 ? 'warning' : 'info')"
             :note="'Serapan Kas: ' . $serapanPercent . '% dari pagu'">
-            <div class="mt-2 h-1.5 overflow-hidden rounded-full" style="background:#e2e8f0;">
+            <div class="h-1.5 overflow-hidden rounded-full" style="background:#e2e8f0;">
                 <div class="h-full rounded-full transition-all"
                      style="width:{{ min(100, $serapanPercent) }}%; background:{{ $totalActualCost > $totalPagu ? '#ef4444' : '#2563eb' }};"></div>
             </div>
@@ -105,7 +105,7 @@
     <x-flash-alert/>
 
     {{-- ── Data Table ─────────────────────────────────────────── --}}
-    <div class="overflow-hidden rounded-md" style="border:1px solid #e2e8f0; background:#fff;">
+    <div class="overflow-hidden rounded-md border border-slate-200 bg-white">
         <div class="overflow-x-auto">
             <table class="erp-table w-full text-left">
                 <thead>
@@ -151,7 +151,11 @@
                                 </span>
                             </td>
                             <td class="tabular text-xs text-slate-600">
-                                {{ $budget->date?->format('d M Y') ?? '—' }}
+                                @if($budget->date)
+                                    {{ $budget->date->format('d M Y') }}
+                                @else
+                                    <span class="text-slate-300 font-mono">-</span>
+                                @endif
                             </td>
                             <td>
                                 <a href="{{ route('projects.show', $budget->project) }}"
@@ -169,7 +173,7 @@
                             </td>
                             <td>
                                 <a href="{{ route('budgets.show', $budget) }}"
-                                   class="text-xs font-medium text-slate-900 hover:text-blue-600 hover:underline">
+                                   class="text-[13px] font-medium text-slate-900 hover:text-blue-600 hover:underline">
                                     {{ $budget->description }}
                                 </a>
                             </td>
@@ -183,7 +187,7 @@
                                         </svg>
                                     </a>
                                 @else
-                                    <span class="text-slate-300 text-xs">—</span>
+                                    <span class="text-slate-300 font-mono">-</span>
                                 @endif
                             </td>
                             <td>
@@ -220,14 +224,14 @@
                 </tbody>
                 @if ($budgets->isNotEmpty())
                     <tfoot>
-                        <tr class="font-semibold text-xs text-slate-800" style="background:#f8fafc; border-top:1px solid #e2e8f0;">
-                            <td colspan="7" class="text-right uppercase tracking-wider text-[11px] text-slate-500">
+                        <tr class="font-semibold text-xs text-slate-800 border-t-2 border-slate-300 bg-slate-50">
+                            <td colspan="7" class="py-3 px-4 text-right uppercase tracking-wider text-[11px] text-slate-500">
                                 Total Pengeluaran (Halaman Ini):
                             </td>
-                            <td class="text-right tabular font-bold text-slate-900">
+                            <td class="py-3 px-4 text-right tabular font-bold text-slate-900">
                                 Rp {{ number_format($budgets->sum('amount'), 0, ',', '.') }}
                             </td>
-                            <td></td>
+                            <td class="py-3 px-4"></td>
                         </tr>
                     </tfoot>
                 @endif
@@ -235,7 +239,7 @@
         </div>
 
         @if ($budgets->hasPages())
-            <div class="px-4 py-3" style="border-top:1px solid #f1f5f9;">
+            <div class="px-4 py-3 border-t border-slate-100">
                 {{ $budgets->links() }}
             </div>
         @endif

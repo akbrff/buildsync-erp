@@ -11,14 +11,14 @@
 @endsection
 
 @section('content')
-<div class="max-w-4xl space-y-4">
+<div class="max-w-4xl">
     {{-- Page Header --}}
     <x-page-header
         title="Registrasi Item Material Baru"
         subtitle="Daftarkan SKU baru ke katalog logistik, tentukan satuan dan batas aman minimum reorder point.">
         <x-slot:actions>
             <a href="{{ route('materials.index') }}"
-               class="rounded border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors shadow-2xs">
+               class="inline-flex items-center gap-1.5 rounded border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors shadow-2xs">
                 &larr; Batal & Kembali
             </a>
         </x-slot:actions>
@@ -30,7 +30,7 @@
     {{-- Form Container --}}
     <div class="rounded-md border border-slate-200 bg-white shadow-xs overflow-hidden">
         <div class="border-b border-slate-200 px-5 py-3 bg-slate-50">
-            <h3 class="text-xs font-semibold text-slate-800 uppercase tracking-wider">Formulir Spesifikasi & Inventaris Material</h3>
+            <h3 class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Formulir Spesifikasi & Inventaris Material</h3>
         </div>
 
         <form method="POST" action="{{ route('materials.store') }}" class="p-5">
@@ -83,11 +83,7 @@
                 {{-- Harga Satuan --}}
                 <div>
                     <label for="price" class="erp-label mb-1 block">Harga Satuan Pengadaan (Rp) <span class="text-red-500">*</span></label>
-                    <div class="relative">
-                        <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-xs text-slate-400 font-medium">Rp</span>
-                        <input type="number" id="price" name="price" value="{{ old('price') }}" min="0" step="100" required
-                               class="erp-input pl-9 tabular font-medium" placeholder="68000">
-                    </div>
+                    <x-erp-currency-input name="price" id="price" :value="old('price')" required placeholder="Contoh: 68.000" />
                     <p class="mt-1 text-[11px] text-slate-400">Estimasi harga beli per satu satuan unit.</p>
                     @error('price')
                         <p class="mt-1 text-[11px] text-red-600">{{ $message }}</p>

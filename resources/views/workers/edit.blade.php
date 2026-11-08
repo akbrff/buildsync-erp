@@ -12,7 +12,7 @@
 @endsection
 
 @section('content')
-<div class="max-w-4xl space-y-4">
+<div class="max-w-4xl">
     {{-- Page Header --}}
     <x-page-header
         title="Perbarui Data Tenaga Kerja"
@@ -24,7 +24,7 @@
         </x-slot:badges>
         <x-slot:actions>
             <a href="{{ route('workers.show', $worker) }}"
-               class="rounded border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors shadow-2xs">
+               class="inline-flex items-center gap-1.5 rounded border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors shadow-2xs">
                 &larr; Batal & Kembali
             </a>
         </x-slot:actions>
@@ -36,7 +36,7 @@
     {{-- Form Container --}}
     <div class="rounded-md border border-slate-200 bg-white shadow-xs overflow-hidden">
         <div class="border-b border-slate-200 px-5 py-3 bg-slate-50 flex items-center justify-between">
-            <h3 class="text-xs font-semibold text-slate-800 uppercase tracking-wider">Perubahan Biodata & Tarif Upah</h3>
+            <h3 class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Perubahan Biodata & Tarif Upah</h3>
             <span class="text-xs text-slate-400">ID #{{ $worker->id }}</span>
         </div>
 

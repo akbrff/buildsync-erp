@@ -79,14 +79,7 @@
         <label for="daily_rate" class="erp-label mb-1 block">
             Tarif Upah Harian (Rp) <span class="text-red-500">*</span>
         </label>
-        <div class="relative">
-            <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-xs text-slate-400 font-medium">Rp</span>
-            <input id="daily_rate" name="daily_rate" type="number" min="0" step="1000"
-                   value="{{ old('daily_rate', $worker?->daily_rate ? (int)$worker->daily_rate : '') }}"
-                   required
-                   class="erp-input pl-9 tabular font-bold"
-                   placeholder="150000">
-        </div>
+        <x-erp-currency-input name="daily_rate" id="daily_rate" :value="old('daily_rate', $worker?->daily_rate ? (int)$worker->daily_rate : '')" required placeholder="Contoh: 150.000" />
         <p class="mt-1 text-[11px] text-slate-400">Standar upah kerja 1 shift / 8 jam per hari.</p>
         @error('daily_rate')
             <p class="mt-1 text-[11px] text-red-600">{{ $message }}</p>

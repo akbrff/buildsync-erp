@@ -25,7 +25,7 @@
 
     <x-flash-alert/>
 
-    <div class="max-w-3xl rounded-md p-5" style="border:1px solid #e2e8f0; background:#fff;">
+    <div class="max-w-4xl rounded-md p-5" style="border:1px solid #e2e8f0; background:#fff;">
         <form method="POST" action="{{ route('budgets.update', $budget) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
@@ -66,13 +66,7 @@
                 {{-- Nominal Pengeluaran --}}
                 <div>
                     <label for="amount" class="erp-label">Nominal Pengeluaran (Rp) <span class="text-red-500">*</span></label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-2.5 text-xs font-semibold text-slate-500 pointer-events-none">
-                            Rp
-                        </span>
-                        <input id="amount" type="number" min="1" step="0.01" name="amount" value="{{ old('amount', $budget->amount) }}"
-                               class="erp-input tabular font-semibold pl-9 @error('amount') erp-input-error @enderror">
-                    </div>
+                    <x-erp-currency-input name="amount" id="amount" :value="old('amount', $budget->amount)" required placeholder="Contoh: 4.000.000" />
                     @error('amount')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                 </div>
 
