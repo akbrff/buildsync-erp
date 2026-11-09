@@ -37,6 +37,12 @@ class Project extends Model
         return $this->hasMany(Budget::class);
     }
 
+    public function purchaseOrders(): HasMany { return $this->hasMany(PurchaseOrder::class); }
+
+    public function workerAssignments(): HasMany { return $this->hasMany(WorkerAssignment::class); }
+
+    public function cashFlows(): HasMany { return $this->hasMany(CashFlow::class); }
+
     /**
      * Menghitung progres keseluruhan proyek (skala 0-100).
      * Jika total bobot belum 100, progres dihitung proporsional terhadap 100.

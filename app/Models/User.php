@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'worker_id',
     ];
 
     /**
@@ -38,6 +40,16 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
+    public function worker(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Worker::class);
+    }
+
+    public function hasRole(string ...$roles): bool
+    {
+        return $this->role === 'superadmin' || in_array($this->role, $roles, true);
+    }
+
     protected function casts(): array
     {
         return [

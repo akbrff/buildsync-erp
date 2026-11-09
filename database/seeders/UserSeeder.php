@@ -15,6 +15,7 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Administrator',
                 'password' => Hash::make('password'),
+                'role' => 'superadmin',
             ]
         );
     }

@@ -36,10 +36,28 @@
             'group' => 'Logistik & SDM',
             'items' => [
                 [
+                    'label' => 'Supplier & Pengadaan',
+                    'route' => 'procurement.index',
+                    'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" d="M3 7h18M5 7l1 13h12l1-13M9 7V4h6v3"/>',
+                    'active_routes' => ['procurement.*', 'purchase-orders.*', 'suppliers.*'],
+                ],
+                [
                     'label' => 'Material & Inventaris',
                     'route' => 'materials.index',
                     'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>',
                     'active_routes' => ['materials.*'],
+                ],
+                [
+                    'label' => 'Riwayat Mutasi Stok',
+                    'route' => 'inventory.transactions',
+                    'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 12h16M4 17h16"/>',
+                    'active_routes' => ['inventory.*'],
+                ],
+                [
+                    'label' => 'Penugasan & Kehadiran',
+                    'route' => 'workforce.index',
+                    'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" d="M16 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>',
+                    'active_routes' => ['workforce.*'],
                 ],
                 [
                     'label' => 'Tenaga Kerja',
@@ -50,8 +68,25 @@
             ],
         ],
         [
+            'group' => 'Administrasi',
+            'items' => [
+                [
+                    'label' => 'Hak Akses Pengguna',
+                    'route' => 'users.roles.index',
+                    'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M16 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>',
+                    'active_routes' => ['users.*'],
+                ],
+            ],
+        ],
+        [
             'group' => 'Keuangan & Analitik',
             'items' => [
+                [
+                    'label' => 'Arus Kas',
+                    'route' => 'finance.index',
+                    'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M3 7h18M5 7l1 13h12l1-13"/>',
+                    'active_routes' => ['finance.*'],
+                ],
                 [
                     'label' => 'Anggaran & Biaya',
                     'route' => 'budgets.index',
@@ -67,6 +102,26 @@
             ],
         ],
     ];
+
+    // Menu ditampilkan sesuai role, sementara otorisasi utama tetap di middleware route.
+    $allowedMenuRoutes = match (Auth::user()->role ?? null) {
+        'project_manager' => ['projects.index', 'schedules.index', 'workers.index', 'workforce.index', 'reports.index'],
+        'logistics' => ['procurement.index', 'materials.index', 'inventory.transactions'],
+        'finance' => ['finance.index', 'budgets.index', 'workforce.index', 'reports.index'],
+        'field_staff' => ['workforce.index'],
+        'superadmin' => null,
+        default => [],
+    };
+
+    if ($allowedMenuRoutes !== null) {
+        $menuCategories = array_values(array_filter(array_map(function ($category) use ($allowedMenuRoutes) {
+            $category['items'] = array_values(array_filter(
+                $category['items'],
+                fn ($item) => in_array($item['route'], $allowedMenuRoutes, true)
+            ));
+            return $category;
+        }, $menuCategories), fn ($category) => count($category['items']) > 0));
+    }
 @endphp
 
 <div class="min-h-screen h-screen flex overflow-hidden bg-[#F8FBFD]">

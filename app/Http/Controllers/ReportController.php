@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\Material;
 use App\Models\Budget;
+use App\Models\CashFlow;
+use App\Models\WorkerAttendance;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
@@ -12,31 +14,39 @@ class ReportController extends Controller
     public function index(Request $request)
     {
         $projectId = $request->integer('project_id');
-        
         $projects = Project::orderBy('name')->get(['id', 'project_code', 'name']);
-        
-        // Ambil data proyek yang dipilih (atau null jika belum ada)
-        $selectedProject = $projectId ? Project::with(['schedules.latestProgress', 'budgets'])->find($projectId) : null;
+        $selectedProject = $projectId
+            ? Project::with(['schedules.latestProgress', 'budgets'])->find($projectId)
+            : null;
 
-        // Statistik Global (Jika tidak memilih proyek)
         $totalProjects = Project::count();
         $totalBudget = Project::sum('budget');
-        
-        // Statistik Khusus Proyek (Jika memilih proyek)
-        $totalActualCost = 0;
-        $costByCategory = [];
-        if ($selectedProject) {
-            $totalActualCost = $selectedProject->budgets->sum('amount');
-            $costByCategory = $selectedProject->budgets->groupBy('category')->map->sum('amount');
+
+        $approvedBudgets = Budget::where('status', 'approved')
+            ->when($projectId, fn ($query) => $query->where('project_id', $projectId))
+            ->get();
+        $cashOutflows = CashFlow::where('type', 'out')
+            ->when($projectId, fn ($query) => $query->where('project_id', $projectId))
+            ->get();
+
+        $totalActualCost = (float) $approvedBudgets->sum('amount') + (float) $cashOutflows->sum('amount');
+        $costByCategory = $approvedBudgets->groupBy('category')->map->sum('amount');
+
+        foreach ($cashOutflows->groupBy('category') as $category => $rows) {
+            $costByCategory->put($category, (float) ($costByCategory->get($category, 0)) + (float) $rows->sum('amount'));
         }
 
-        // Data Material (Global)
         $materials = Material::orderBy('stock', 'asc')->get();
+        $laborActual = (float) WorkerAttendance::where('status', 'paid')
+            ->when($projectId, fn ($query) => $query->where('project_id', $projectId))
+            ->sum('amount');
+        $supplierPayments = (float) CashFlow::where('category', 'Pembayaran Supplier')
+            ->when($projectId, fn ($query) => $query->where('project_id', $projectId))
+            ->sum('amount');
 
         return view('reports.index', compact(
-            'projects', 'projectId', 'selectedProject', 
-            'totalProjects', 'totalBudget', 
-            'totalActualCost', 'costByCategory', 'materials'
+            'projects', 'projectId', 'selectedProject', 'totalProjects', 'totalBudget',
+            'totalActualCost', 'costByCategory', 'materials', 'laborActual', 'supplierPayments'
         ));
     }
 }

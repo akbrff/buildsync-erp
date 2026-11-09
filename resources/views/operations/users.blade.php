@@ -1,0 +1,7 @@
+@extends('layouts.app')
+@section('title','Manajemen Hak Akses')
+@section('breadcrumbs')<x-breadcrumb :links="[['label'=>'Dashboard','href'=>route('dashboard')],['label'=>'Hak Akses','href'=>'#']]"/>@endsection
+@section('content')
+<x-page-header title="Manajemen Pengguna & Hak Akses" subtitle="Tetapkan peran pengguna sesuai tanggung jawab operasional BuildSync ERP."/><x-flash-alert/>
+<div class="rounded-md border border-slate-200 bg-white overflow-x-auto"><table class="erp-table"><thead><tr><th>Nama</th><th>Email</th><th>Role Saat Ini</th><th>Ubah Role</th></tr></thead><tbody>@foreach($users as $u)<tr><td>{{ $u->name }}</td><td>{{ $u->email }}</td><td>{{ str_replace('_',' ',ucfirst($u->role)) }}</td><td><form method="POST" action="{{ route('users.role.update',$u) }}" class="flex gap-2">@csrf @method('PATCH')<select class="erp-input" name="role">@foreach(['superadmin'=>'Superadmin','project_manager'=>'Project Manager','logistics'=>'Logistics','finance'=>'Finance','field_staff'=>'Field Staff'] as $key=>$label)<option value="{{ $key }}" @selected($u->role===$key)>{{ $label }}</option>@endforeach</select><select class="erp-input" name="worker_id"><option value="">Tautkan pekerja (khusus Field Staff)</option>@foreach($workers as $worker)<option value="{{ $worker->id }}" @selected($u->worker_id==$worker->id)>{{ $worker->worker_code }} - {{ $worker->name }}</option>@endforeach</select><button class="rounded bg-blue-600 px-3 py-1.5 text-xs text-white">Simpan</button></form></td></tr>@endforeach</tbody></table></div>{{ $users->links() }}
+@endsection
