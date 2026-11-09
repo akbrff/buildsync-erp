@@ -149,6 +149,12 @@
             $isOver = $totalActualCost > $projBudget;
         @endphp
 
+        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 mb-4">
+            <x-stat-card label="Upah Aktual Dibayar" :value="'Rp ' . number_format($laborActual, 0, ',', '.')"/>
+            <x-stat-card label="Pembayaran Supplier" :value="'Rp ' . number_format($supplierPayments, 0, ',', '.')"/>
+            <x-stat-card label="Total Biaya Aktual" :value="'Rp ' . number_format($totalActualCost, 0, ',', '.')"/>
+        </div>
+
         {{-- Header Proyek Ringkas --}}
         <div class="mb-6 rounded-md p-5 border border-slate-200 bg-white">
             <div class="flex flex-wrap items-center justify-between gap-3">

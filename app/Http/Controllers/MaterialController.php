@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Material;
+use App\Models\StockTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -67,7 +68,16 @@ class MaterialController extends Controller
     public function store(Request $request)
     {
         $validated = $this->validateMaterial($request);
-        Material::create($validated);
+        $material = Material::create($validated);
+
+        if ($material->stock > 0) {
+            StockTransaction::create([
+                'material_id' => $material->id, 'user_id' => $request->user()->id,
+                'type' => 'in', 'quantity' => $material->stock, 'stock_before' => 0,
+                'stock_after' => $material->stock, 'source' => 'opening_balance',
+                'notes' => 'Saldo awal saat material didaftarkan', 'occurred_at' => now(),
+            ]);
+        }
 
         return redirect()->route('materials.index')->with('success', 'Material baru berhasil ditambahkan ke inventaris.');
     }
@@ -95,6 +105,8 @@ class MaterialController extends Controller
     public function update(Request $request, Material $material)
     {
         $validated = $this->validateMaterial($request, $material);
+        // Perubahan stok wajib melalui mutasi agar histori inventaris tetap akurat.
+        $validated['stock'] = $material->stock;
         $material->update($validated);
 
         return redirect()->route('materials.index')->with('success', 'Data material ' . $material->code . ' berhasil diperbarui.');
@@ -102,6 +114,10 @@ class MaterialController extends Controller
 
     public function destroy(Material $material)
     {
+        if ($material->stockTransactions()->exists() || $material->purchaseOrderItems()->exists()) {
+            return back()->with('error', 'Material memiliki riwayat transaksi dan tidak dapat dihapus.');
+        }
+
         $code = $material->code;
         $material->delete();
 
@@ -111,25 +127,43 @@ class MaterialController extends Controller
     public function adjustStock(Request $request, Material $material)
     {
         $validated = $request->validate([
-            'type'   => ['required', 'in:in,out'],
+            'type' => ['required', 'in:in,out'],
             'amount' => ['required', 'integer', 'min:1'],
-            'notes'  => ['nullable', 'string', 'max:255'],
+            'notes' => ['nullable', 'string', 'max:255'],
         ]);
 
-        $amount = (int) $validated['amount'];
+        $quantity = (int) $validated['amount'];
+        $success = DB::transaction(function () use ($request, $material, $validated, $quantity) {
+            $locked = Material::query()->lockForUpdate()->findOrFail($material->id);
+            $before = (int) $locked->stock;
 
-        if ($validated['type'] === 'in') {
-            $material->increment('stock', $amount);
-            $msg = "Penerimaan material {$material->name} (+{$amount} {$material->unit}) berhasil dicatat. Stok saat ini: {$material->stock} {$material->unit}.";
-        } else {
-            if ($material->stock < $amount) {
-                return back()->with('error', "Gagal mengeluarkan material! Stok fisik hanya tersisa {$material->stock} {$material->unit}, permintaan: {$amount} {$material->unit}.");
+            if ($validated['type'] === 'out' && $before < $quantity) {
+                return false;
             }
-            $material->decrement('stock', $amount);
-            $msg = "Pengeluaran material {$material->name} (-{$amount} {$material->unit}) untuk proyek berhasil dicatat. Stok tersisa: {$material->stock} {$material->unit}.";
+
+            $after = $before + ($validated['type'] === 'in' ? $quantity : -$quantity);
+            $locked->update(['stock' => $after]);
+
+            StockTransaction::create([
+                'material_id' => $locked->id,
+                'user_id' => $request->user()->id,
+                'type' => $validated['type'],
+                'quantity' => $quantity,
+                'stock_before' => $before,
+                'stock_after' => $after,
+                'source' => 'manual',
+                'notes' => $validated['notes'] ?? null,
+                'occurred_at' => now(),
+            ]);
+
+            return true;
+        });
+
+        if (! $success) {
+            return back()->with('error', "Gagal mengeluarkan material! Stok fisik hanya tersisa {$material->stock} {$material->unit}, permintaan: {$quantity} {$material->unit}.");
         }
 
-        return back()->with('success', $msg);
+        return back()->with('success', 'Mutasi stok dan histori inventaris berhasil dicatat.');
     }
 
     private function validateMaterial(Request $request, ?Material $material = null): array
