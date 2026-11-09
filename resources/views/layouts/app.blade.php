@@ -259,8 +259,20 @@
 
                 {{-- Header Sapaan/Judul Utama (Kombinasi font tipis dan tebal) --}}
                 @if (request()->routeIs('dashboard'))
+                    @php
+                        $hour = now()->timezone('Asia/Jakarta')->format('H');
+                        if ($hour >= 5 && $hour < 11) {
+                            $greeting = 'Selamat Pagi';
+                        } elseif ($hour >= 11 && $hour < 15) {
+                            $greeting = 'Selamat Siang';
+                        } elseif ($hour >= 15 && $hour < 18) {
+                            $greeting = 'Selamat Sore';
+                        } else {
+                            $greeting = 'Selamat Malam';
+                        }
+                    @endphp
                     <h1 class="text-2xl tracking-tight">
-                        <span class="font-light text-[#7F7F7F]">Selamat Pagi,</span>
+                        <span class="font-light text-[#7F7F7F]">{{ $greeting }},</span>
                         <span class="font-bold text-[#2C3E50]">{{ Auth::user()->name ?? 'Administrator' }}</span>
                     </h1>
                 @else
