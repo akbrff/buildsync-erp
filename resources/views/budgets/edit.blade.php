@@ -66,7 +66,7 @@
                 {{-- Nominal Pengeluaran --}}
                 <div>
                     <label for="amount" class="erp-label">Nominal Pengeluaran (Rp) <span class="text-red-500">*</span></label>
-                    <x-erp-currency-input name="amount" id="amount" :value="old('amount', $budget->amount)" required placeholder="Contoh: 4.000.000" />
+                    <x-erp-currency-input name="amount" id="amount" :value="old('amount', $budget->amount)" required placeholder="4.000.000" />
                     @error('amount')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                 </div>
 

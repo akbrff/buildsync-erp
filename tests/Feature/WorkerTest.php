@@ -111,4 +111,61 @@ class WorkerTest extends TestCase
         $this->get(route('workers.show', $worker))->assertStatus(200)->assertSee('Budi Santoso');
         $this->get(route('workers.edit', $worker))->assertStatus(200);
     }
+
+    public function test_worker_can_be_stored_with_formatted_phone(): void
+    {
+        $response = $this->post(route('workers.store'), $this->validData([
+            'worker_code' => 'WRK-002',
+            'phone' => '0858-1234-1234',
+        ]));
+
+        $response->assertRedirect(route('workers.index'));
+        $this->assertDatabaseHas('workers', [
+            'worker_code' => 'WRK-002',
+            'phone' => '0858-1234-1234',
+        ]);
+    }
+
+    public function test_worker_formatted_phone_attribute(): void
+    {
+        $worker1 = new Worker(['phone' => '085812341234']);
+        $this->assertEquals('0858-1234-1234', $worker1->formatted_phone);
+
+        $worker2 = new Worker(['phone' => '0812345678901']);
+        $this->assertEquals('0812-3456-78901', $worker2->formatted_phone);
+
+        $worker3 = new Worker(['phone' => '0812-3456-7890']);
+        $this->assertEquals('0812-3456-7890', $worker3->formatted_phone);
+
+        $worker4 = new Worker(['phone' => null]);
+        $this->assertNull($worker4->formatted_phone);
+    }
+
+    public function test_worker_edit_page_formats_stored_phone(): void
+    {
+        $this->withoutVite();
+        $worker = Worker::create($this->validData([
+            'phone' => '085812341234',
+        ]));
+
+        $response = $this->get(route('workers.edit', $worker));
+        $response->assertStatus(200);
+        $response->assertSee('value="0858-1234-1234"', false);
+    }
+
+    public function test_worker_can_be_searched_by_phone(): void
+    {
+        $this->withoutVite();
+        Worker::create($this->validData([
+            'phone' => '0858-1234-1234',
+        ]));
+
+        // Search with hyphens
+        $response1 = $this->get(route('workers.index', ['q' => '0858-1234']));
+        $response1->assertStatus(200)->assertSee('0858-1234-1234');
+
+        // Search with raw digits
+        $response2 = $this->get(route('workers.index', ['q' => '08581234']));
+        $response2->assertStatus(200)->assertSee('0858-1234-1234');
+    }
 }

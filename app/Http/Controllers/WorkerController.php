@@ -24,11 +24,18 @@ class WorkerController extends Controller
         $query = Worker::query();
 
         if ($request->filled('q')) {
-            $term = '%' . $request->input('q') . '%';
-            $query->where(function ($q) use ($term) {
+            $rawTerm = $request->input('q');
+            $term = '%' . $rawTerm . '%';
+            $digitsOnly = preg_replace('/\D/', '', $rawTerm);
+
+            $query->where(function ($q) use ($term, $digitsOnly) {
                 $q->where('worker_code', 'like', $term)
                   ->orWhere('name', 'like', $term)
                   ->orWhere('phone', 'like', $term);
+
+                if (!empty($digitsOnly) && strlen($digitsOnly) >= 3) {
+                    $q->orWhereRaw("REPLACE(phone, '-', '') LIKE ?", ['%' . $digitsOnly . '%']);
+                }
             });
         }
 

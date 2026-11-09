@@ -54,7 +54,7 @@
 
     <div class="md:col-span-2">
         <label for="budget" class="erp-label">Pagu Anggaran / Nilai Kontrak (Rp) <span class="text-red-500">*</span></label>
-        <x-erp-currency-input name="budget" id="budget" :value="old('budget', $project?->budget)" required placeholder="Contoh: 500.000.000" />
+        <x-erp-currency-input name="budget" id="budget" :value="old('budget', $project?->budget)" required placeholder="500.000.000" />
         @error('budget')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
     </div>
 

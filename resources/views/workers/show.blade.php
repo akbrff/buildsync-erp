@@ -119,7 +119,7 @@
                             <dt class="text-slate-400 font-medium uppercase text-[10px] tracking-wider">Kontak Telepon / WhatsApp</dt>
                             <dd class="mt-0.5 tabular font-medium text-slate-800">
                                 @if($worker->phone)
-                                    {{ $worker->phone }}
+                                    {{ $worker->formatted_phone ?? $worker->phone }}
                                 @else
                                     <span class="text-slate-300 font-mono">-</span>
                                 @endif

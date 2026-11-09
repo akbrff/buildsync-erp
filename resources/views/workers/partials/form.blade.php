@@ -65,8 +65,11 @@
             Nomor Telepon / WhatsApp
         </label>
         <input id="phone" name="phone" type="text"
-               value="{{ old('phone', $worker?->phone) }}"
-               class="erp-input tabular"
+               inputmode="numeric"
+               maxlength="16"
+               autocomplete="tel"
+               value="{{ old('phone', $worker?->formatted_phone ?? $worker?->phone) }}"
+               class="erp-input tabular font-medium @error('phone') erp-input-error @enderror"
                placeholder="Contoh: 0812-3456-7890">
         <p class="mt-1 text-[11px] text-slate-400">Nomor aktif untuk koordinasi penugasan.</p>
         @error('phone')
@@ -79,7 +82,7 @@
         <label for="daily_rate" class="erp-label mb-1 block">
             Tarif Upah Harian (Rp) <span class="text-red-500">*</span>
         </label>
-        <x-erp-currency-input name="daily_rate" id="daily_rate" :value="old('daily_rate', $worker?->daily_rate ? (int)$worker->daily_rate : '')" required placeholder="Contoh: 150.000" />
+        <x-erp-currency-input name="daily_rate" id="daily_rate" :value="old('daily_rate', $worker?->daily_rate ? (int)$worker->daily_rate : '')" required placeholder="150.000" />
         <p class="mt-1 text-[11px] text-slate-400">Standar upah kerja 1 shift / 8 jam per hari.</p>
         @error('daily_rate')
             <p class="mt-1 text-[11px] text-red-600">{{ $message }}</p>
@@ -119,3 +122,98 @@
         @enderror
     </div>
 </div>
+
+@once
+<script>
+(function() {
+    function formatPhoneNumber(val) {
+        if (!val) return '';
+        // Hapus semua karakter non-angka
+        let digits = String(val).replace(/\D/g, '');
+
+        // Jika nomor dipaste dengan format internasional +62 atau 62 (panjang >= 10), normalisasi ke 0
+        if (digits.startsWith('62') && digits.length >= 10) {
+            digits = '0' + digits.slice(2);
+        }
+
+        // Batasi maksimal 13 digit angka
+        digits = digits.slice(0, 13);
+
+        if (digits.length <= 4) {
+            return digits;
+        } else if (digits.length <= 8) {
+            return digits.slice(0, 4) + '-' + digits.slice(4);
+        } else {
+            return digits.slice(0, 4) + '-' + digits.slice(4, 8) + '-' + digits.slice(8);
+        }
+    }
+
+    function handlePhoneInput(input) {
+        const originalValue = input.value;
+        const cursorPosition = input.selectionStart || originalValue.length;
+
+        // Hitung berapa digit angka murni sebelum kursor
+        const digitsBeforeCursor = originalValue.slice(0, cursorPosition).replace(/\D/g, '').length;
+
+        const formatted = formatPhoneNumber(originalValue);
+        input.value = formatted;
+
+        // Hitung ulang posisi kursor agar tidak melompat ke akhir input
+        let newPos = 0;
+        let countedDigits = 0;
+        for (let i = 0; i < formatted.length; i++) {
+            if (/\d/.test(formatted[i])) {
+                countedDigits++;
+            }
+            if (countedDigits === digitsBeforeCursor) {
+                newPos = i + 1;
+                break;
+            }
+        }
+        if (digitsBeforeCursor === 0) newPos = 0;
+        if (digitsBeforeCursor >= formatted.replace(/\D/g, '').length) newPos = formatted.length;
+
+        input.setSelectionRange(newPos, newPos);
+    }
+
+    function initPhoneMask() {
+        const phoneInput = document.getElementById('phone');
+        if (!phoneInput) return;
+
+        // Pastikan saat load (edit page) nomor telepon langsung terformat
+        if (phoneInput.value) {
+            phoneInput.value = formatPhoneNumber(phoneInput.value);
+        }
+
+        phoneInput.addEventListener('input', function() {
+            handlePhoneInput(this);
+        });
+
+        phoneInput.addEventListener('keydown', function(e) {
+            // Ketika menekan backspace tepat setelah tanda hubung '-', hapus juga digit sebelumnya
+            if (e.key === 'Backspace' && this.selectionStart === this.selectionEnd) {
+                const pos = this.selectionStart;
+                if (pos > 0 && this.value[pos - 1] === '-') {
+                    e.preventDefault();
+                    const val = this.value;
+                    this.value = val.slice(0, pos - 2) + val.slice(pos);
+                    handlePhoneInput(this);
+                }
+            }
+        });
+
+        phoneInput.addEventListener('paste', function() {
+            setTimeout(() => {
+                handlePhoneInput(this);
+            }, 0);
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initPhoneMask);
+    } else {
+        initPhoneMask();
+    }
+})();
+</script>
+@endonce

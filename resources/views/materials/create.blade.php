@@ -83,7 +83,7 @@
                 {{-- Harga Satuan --}}
                 <div>
                     <label for="price" class="erp-label mb-1 block">Harga Satuan Pengadaan (Rp) <span class="text-red-500">*</span></label>
-                    <x-erp-currency-input name="price" id="price" :value="old('price')" required placeholder="Contoh: 68.000" />
+                    <x-erp-currency-input name="price" id="price" :value="old('price')" required placeholder="68.000" />
                     <p class="mt-1 text-[11px] text-slate-400">Estimasi harga beli per satu satuan unit.</p>
                     @error('price')
                         <p class="mt-1 text-[11px] text-red-600">{{ $message }}</p>
