@@ -144,6 +144,7 @@
                             $end      = \Carbon\Carbon::parse($schedule->end_date)->startOfDay();
                             $duration = max(1, $start->diffInDays($end));
                             $prog     = (float) $schedule->current_progress;
+                            $progress = number_format($prog, 0);
 
                             // Hitung posisi offset dan lebar proporsional bar
                             $offsetDays   = $minDate ? max(0, $minDate->diffInDays($start, false)) : 0;
@@ -190,18 +191,18 @@
                                 <x-badge :variant="$statusVariant">{{ $schedule->status }}</x-badge>
                             </td>
                             <td class="py-2.5">
-                                {{-- Gantt Timeline Track Container --}}
-                                <div class="relative h-6 w-full rounded" style="background:#f8fafc; border:1px solid #e2e8f0;">
-                                    {{-- Bar Waktu Proporsional --}}
-                                    <div class="absolute top-1 bottom-1 rounded overflow-hidden flex items-center"
-                                         style="left:{{ $leftPercent }}%; width:{{ $widthPercent }}%; background:#e2e8f0; border:1px solid #cbd5e1;">
-                                        {{-- Realisasi Progres Fill --}}
-                                        <div class="h-full transition-all"
-                                             style="width:{{ min(100, $prog) }}%; background:{{ $solidBarColor }};"></div>
-                                        <span class="absolute left-1.5 text-[10px] font-bold tabular text-slate-800 drop-shadow-sm whitespace-nowrap">
-                                            {{ number_format($prog, 0) }}%
-                                        </span>
+                                <div class="flex items-center gap-3">
+                                    {{-- Gantt Timeline Track Container --}}
+                                    <div class="relative h-6 flex-1 rounded" style="background:#f8fafc; border:1px solid #e2e8f0;">
+                                        {{-- Bar Waktu Proporsional --}}
+                                        <div class="absolute top-1 bottom-1 rounded overflow-hidden"
+                                             style="left:{{ $leftPercent }}%; width:{{ $widthPercent }}%; background:#e2e8f0; border:1px solid #cbd5e1;">
+                                            {{-- Realisasi Progres Fill --}}
+                                            <div class="h-full transition-all"
+                                                 style="width:{{ min(100, $prog) }}%; background:{{ $solidBarColor }};"></div>
+                                        </div>
                                     </div>
+                                    <span class="text-[12px] font-medium text-slate-600 tabular">{{ $progress }}%</span>
                                 </div>
                             </td>
                         </tr>

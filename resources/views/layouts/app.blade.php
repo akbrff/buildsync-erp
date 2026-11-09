@@ -9,34 +9,22 @@
 <body class="antialiased" style="background:#f8fafc; color:#0f172a;">
 @php
     /**
-     * Grouped sidebar menu:
-     * 4 kategori fungsional, masing-masing dengan items.
-     * Modul "Jadwal" dikonsolidasi — sub-navigasi via tabs di dalam halaman.
+     * Linear Workspace Sidebar Navigation Groups
      */
-    $menuGroups = [
-        [
-            'group' => 'Ringkasan',
-            'items' => [
-                [
-                    'label' => 'Dashboard',
-                    'route' => 'dashboard',
-                    'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l9-9 9 9M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/>',
-                ],
-            ],
-        ],
+    $menuCategories = [
         [
             'group' => 'Operasional Proyek',
             'items' => [
                 [
                     'label' => 'Proyek',
                     'route' => 'projects.index',
-                    'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>',
+                    'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>',
                     'active_routes' => ['projects.*'],
                 ],
                 [
                     'label' => 'Jadwal Proyek',
                     'route' => 'schedules.index',
-                    'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>',
+                    'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>',
                     'active_routes' => ['schedules.*'],
                 ],
             ],
@@ -47,13 +35,13 @@
                 [
                     'label' => 'Material & Inventaris',
                     'route' => 'materials.index',
-                    'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>',
+                    'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>',
                     'active_routes' => ['materials.*'],
                 ],
                 [
                     'label' => 'Tenaga Kerja',
                     'route' => 'workers.index',
-                    'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a4 4 0 00-4-4h-1M9 20H4v-2a4 4 0 014-4h1m4 0a4 4 0 110-8 4 4 0 010 8zm6-4a3 3 0 11-6 0 3 3 0 016 0zM5 8a3 3 0 11-6 0 3 3 0 016 0z"/>',
+                    'icon'  => '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path>',
                     'active_routes' => ['workers.*'],
                 ],
             ],
@@ -64,13 +52,13 @@
                 [
                     'label' => 'Anggaran & Biaya',
                     'route' => 'budgets.index',
-                    'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>',
+                    'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>',
                     'active_routes' => ['budgets.*'],
                 ],
                 [
                     'label' => 'Laporan',
                     'route' => 'reports.index',
-                    'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>',
+                    'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>',
                     'active_routes' => ['reports.*'],
                 ],
             ],
@@ -81,102 +69,107 @@
 <div class="min-h-screen h-screen flex overflow-hidden bg-slate-50">
 
     {{-- ═══════════════════════════════════════════════════════
-         SIDEBAR — Lebar tetap 256px (w-64), locked fixed layout
+         SIDEBAR — Linear Workspace Sidebar (w-60 / 15rem)
          ═══════════════════════════════════════════════════════ --}}
-    <aside id="sidebar" class="hidden lg:flex fixed lg:static inset-y-0 left-0 z-30 w-64 min-w-[16rem] max-w-[16rem] h-screen shrink-0 flex-col bg-slate-900 overflow-y-auto border-r border-slate-800">
+    <aside id="sidebar" class="hidden lg:flex fixed lg:static inset-y-0 left-0 z-30 w-60 min-w-[15rem] max-w-[15rem] h-screen shrink-0 flex-col bg-slate-900 border-r border-slate-800 select-none overflow-y-auto">
 
-        {{-- Logo / App Name --}}
-        <div class="px-5 py-4" style="border-bottom:1px solid #1e293b;">
-            <div class="flex items-center gap-2.5">
-                {{-- App icon –– konstruksi (hard-hat / bangunan) --}}
-                <div class="flex h-8 w-8 items-center justify-center rounded"
-                     style="background:#2563eb;">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none"
-                         viewBox="0 0 24 24" stroke="currentColor">
+        {{-- Header Workspace Ringkas (1 Baris ala Linear) --}}
+        <div class="px-3.5 py-3.5 flex items-center justify-between">
+            <div class="flex items-center min-w-0">
+                <div class="w-5 h-5 rounded-[5px] bg-blue-600 text-white flex items-center justify-center shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                     </svg>
                 </div>
-                <div>
-                    <p class="text-sm font-semibold leading-tight text-white">BuildSync ERP</p>
-                    <p class="text-[10px] leading-tight" style="color:#64748b;">Sistem Manajemen Konstruksi</p>
-                </div>
+                <span class="text-[13px] font-semibold text-white tracking-tight ml-2 truncate">BuildSync ERP</span>
             </div>
         </div>
 
-        {{-- Navigation Groups --}}
-        <nav class="flex-1 overflow-y-auto px-3 py-3">
-            @foreach ($menuGroups as $group)
-                <div class="mb-4">
-                    {{-- Group label --}}
-                    <p class="mb-1 px-2 text-[10px] font-semibold uppercase tracking-widest"
-                       style="color:#475569;">
-                        {{ $group['group'] }}
-                    </p>
+        {{-- Navigation Menu --}}
+        <nav class="flex-1 overflow-y-auto py-1">
+            {{-- Dashboard (Item Utama langsung di bawah Header Workspace) --}}
+            @php
+                $isDashboardActive = Route::has('dashboard') && request()->routeIs('dashboard');
+            @endphp
+            <div class="px-2.5 mb-3">
+                <a href="{{ route('dashboard') }}"
+                   class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-[13px] transition-colors {{ $isDashboardActive ? 'bg-slate-800/90 text-white font-medium' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200 font-normal' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="w-4 h-4 shrink-0 stroke-[1.75] {{ $isDashboardActive ? 'text-white' : 'text-slate-400' }}"
+                         fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l9-9 9 9M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/>
+                    </svg>
+                    <span>Dashboard</span>
+                </a>
+            </div>
 
-                    @foreach ($group['items'] as $item)
-                        @php
-                            // Tentukan apakah link ini "aktif"
-                            $activeRoutes = $item['active_routes'] ?? [$item['route']];
-                            $isActive     = Route::has($item['route'])
-                                            && request()->routeIs($activeRoutes);
-                        @endphp
+            {{-- Kategori Menu (Title Case + Collapsible Chevron) --}}
+            @foreach ($menuCategories as $cat)
+                <div class="sidebar-group mb-1">
+                    <button type="button"
+                            class="w-full px-2.5 py-1 text-[12px] font-medium text-slate-400 hover:text-slate-200 flex items-center gap-1 cursor-pointer transition-colors mt-4 mb-0.5 group focus:outline-none text-left"
+                            onclick="toggleSidebarGroup(this)"
+                            aria-expanded="true">
+                        <span>{{ $cat['group'] }}</span>
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             class="w-3 h-3 text-slate-500 transition-transform duration-150 group-hover:text-slate-400 shrink-0"
+                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
 
-                        @if (Route::has($item['route']))
-                            <a href="{{ route($item['route']) }}"
-                               class="sidebar-link mb-0.5 flex items-center gap-2.5 rounded px-2.5 py-1.5 text-[13px] {{ $isActive ? 'bg-slate-800 text-white font-medium' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50' }}">
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                     class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24"
-                                     stroke="currentColor">
-                                    {!! $item['icon'] !!}
-                                </svg>
-                                <span>{{ $item['label'] }}</span>
-                            </a>
-                        @else
-                            <span class="mb-0.5 flex items-center gap-2.5 rounded px-2 py-1.5 text-[13px] cursor-not-allowed"
-                                  style="color:#334155;">
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                     class="h-4 w-4 shrink-0 opacity-40" fill="none" viewBox="0 0 24 24"
-                                     stroke="currentColor">
-                                    {!! $item['icon'] !!}
-                                </svg>
-                                {{ $item['label'] }}
-                                <span class="ml-auto text-[10px]" style="color:#334155;">(segera)</span>
-                            </span>
-                        @endif
-                    @endforeach
+                    <div class="space-y-0.5 px-2.5">
+                        @foreach ($cat['items'] as $item)
+                            @php
+                                $activeRoutes = $item['active_routes'] ?? [$item['route']];
+                                $isActive     = Route::has($item['route']) && request()->routeIs($activeRoutes);
+                            @endphp
+
+                            @if (Route::has($item['route']))
+                                <a href="{{ route($item['route']) }}"
+                                   class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-[13px] transition-colors {{ $isActive ? 'bg-slate-800/90 text-white font-medium' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200 font-normal' }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
+                                         class="w-4 h-4 shrink-0 {{ $isActive ? 'text-white' : 'text-slate-400' }}">
+                                        {!! $item['icon'] !!}
+                                    </svg>
+                                    <span class="truncate">{{ $item['label'] }}</span>
+                                </a>
+                            @else
+                                <span class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-[13px] text-slate-600 cursor-not-allowed">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
+                                         class="w-4 h-4 shrink-0 text-slate-600 opacity-50">
+                                        {!! $item['icon'] !!}
+                                    </svg>
+                                    <span class="truncate">{{ $item['label'] }}</span>
+                                    <span class="ml-auto text-[10px] text-slate-600">(segera)</span>
+                                </span>
+                            @endif
+                        @endforeach
+                    </div>
                 </div>
             @endforeach
         </nav>
 
-        {{-- ── User Footer Card ───────────────────────────────── --}}
-        <div class="mt-auto shrink-0 px-3 py-3 border-t border-slate-800">
-            <div class="flex items-center gap-2.5 rounded px-2 py-2 bg-slate-800/80">
-                {{-- Avatar --}}
-                <div class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[11px] font-bold"
-                     style="background:#1d4ed8; color:#eff6ff;">
-                    {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 1)) }}
-                </div>
-                <div class="min-w-0 flex-1">
-                    <p class="truncate text-[12px] font-medium leading-tight text-white">
+        {{-- Footer User & Logout (Minimalis Menyatu) --}}
+        <div class="mt-auto shrink-0 p-2.5 border-t border-slate-800/80">
+            <div class="flex items-center justify-between gap-2 px-1 py-0.5">
+                <div class="flex items-center gap-2 min-w-0 flex-1">
+                    <div class="w-6 h-6 rounded-full bg-blue-600 text-white text-[11px] font-semibold flex items-center justify-center shrink-0 select-none">
+                        {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 1)) }}
+                    </div>
+                    <span class="text-[12px] font-medium text-slate-200 truncate">
                         {{ Auth::user()->name ?? 'Pengguna' }}
-                    </p>
-                    <p class="truncate text-[10px] leading-tight" style="color:#64748b;">
-                        {{ Auth::user()->email ?? '' }}
-                    </p>
+                    </span>
                 </div>
-                {{-- Logout button --}}
                 <form method="POST" action="{{ route('logout') }}" class="shrink-0">
                     @csrf
                     <button type="submit"
-                            title="Keluar"
-                            class="flex items-center justify-center rounded p-1 transition-colors"
-                            style="color:#64748b;"
-                            onmouseover="this.style.color='#ef4444'; this.style.background='rgba(239,68,68,.1)';"
-                            onmouseout="this.style.color='#64748b'; this.style.background='';">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                            title="Keluar / Logout"
+                            class="text-slate-400 hover:text-red-400 p-1 rounded hover:bg-slate-800 transition-colors flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 stroke-[1.75]" fill="none"
                              viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            <path stroke-linecap="round" stroke-linejoin="round"
                                   d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                         </svg>
                     </button>
@@ -235,6 +228,19 @@
      onclick="document.getElementById('sidebar').classList.add('hidden'); document.getElementById('sidebar').classList.remove('flex'); this.classList.add('hidden');"></div>
 
 <script>
+// Toggle collapsible group di sidebar (Linear Style)
+function toggleSidebarGroup(btn) {
+    const list = btn.nextElementSibling;
+    const chevron = btn.querySelector('svg');
+    if (!list) return;
+
+    const isHidden = list.classList.toggle('hidden');
+    if (chevron) {
+        chevron.classList.toggle('-rotate-90', isHidden);
+    }
+    btn.setAttribute('aria-expanded', isHidden ? 'false' : 'true');
+}
+
 // Mobile sidebar: tampilkan backdrop saat sidebar dibuka
 document.addEventListener('DOMContentLoaded', function () {
     const btn      = document.querySelector('[onclick*="sidebar"]');
