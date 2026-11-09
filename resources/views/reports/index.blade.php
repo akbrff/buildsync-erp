@@ -35,7 +35,7 @@
              TAMPILAN GLOBAL (Seluruh Proyek)
              ═══════════════════════════════════════════════════════ --}}
         @php
-            $globalActualCost = (float) \App\Models\Budget::where('status', '!=', 'rejected')->sum('amount');
+            $globalActualCost = (float) \App\Models\Budget::where('status', 'approved')->sum('amount') + (float) \App\Models\CashFlow::where('type', 'out')->sum('amount');
             $globalMargin = $totalBudget - $globalActualCost;
             $globalSerapan = $totalBudget > 0 ? round(($globalActualCost / $totalBudget) * 100, 1) : 0;
             $criticalMaterials = $materials->filter(fn($m) => $m->stock <= $m->min_stock);
@@ -83,10 +83,11 @@
                         Item material konstruksi yang kuantitasnya telah berada di bawah batas minimum pengamanan.
                     </p>
                 </div>
-                <a href="{{ route('materials.index') }}"
-                   class="text-xs font-semibold text-[#136F9A] hover:underline">
-                    Kelola Katalog &rarr;
-                </a>
+                @if (auth()->user()->hasRole('logistics'))
+                    <a href="{{ route('materials.index') }}" class="text-xs font-semibold text-[#136F9A] hover:underline">
+                        Kelola Katalog &rarr;
+                    </a>
+                @endif
             </div>
 
             <div class="overflow-x-auto">
@@ -176,10 +177,11 @@
                     </h2>
                 </div>
                 <div class="flex items-center gap-2">
-                    <a href="{{ route('projects.show', $selectedProject) }}"
-                       class="inline-flex items-center gap-1 rounded px-3 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 transition">
-                        Buka Detail Proyek &rarr;
-                    </a>
+                    @if (auth()->user()->hasRole('project_manager'))
+                        <a href="{{ route('projects.show', $selectedProject) }}" class="btn-primary">
+                            Buka Detail Proyek &rarr;
+                        </a>
+                    @endif
                 </div>
             </div>
 

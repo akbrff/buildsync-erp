@@ -38,7 +38,7 @@
                 [
                     'label' => 'Supplier & Pengadaan',
                     'route' => 'procurement.index',
-                    'icon'  => '<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M3 7h18M5 7l1 13h12l1-13M9 7V4h6v3\"/>',
+                    'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" d="M3 7h18M5 7l1 13h12l1-13M9 7V4h6v3"/>',
                     'active_routes' => ['procurement.*', 'purchase-orders.*', 'suppliers.*'],
                 ],
                 [
@@ -50,13 +50,13 @@
                 [
                     'label' => 'Riwayat Mutasi Stok',
                     'route' => 'inventory.transactions',
-                    'icon'  => '<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M4 7h16M4 12h16M4 17h16\"/>',
+                    'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 12h16M4 17h16"/>',
                     'active_routes' => ['inventory.*'],
                 ],
                 [
                     'label' => 'Penugasan & Kehadiran',
                     'route' => 'workforce.index',
-                    'icon'  => '<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M16 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2\"/>',
+                    'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" d="M16 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>',
                     'active_routes' => ['workforce.*'],
                 ],
                 [
@@ -73,7 +73,7 @@
                 [
                     'label' => 'Hak Akses Pengguna',
                     'route' => 'users.roles.index',
-                    'icon' => '<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M16 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2\"/>',
+                    'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M16 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>',
                     'active_routes' => ['users.*'],
                 ],
             ],
@@ -84,7 +84,7 @@
                 [
                     'label' => 'Arus Kas',
                     'route' => 'finance.index',
-                    'icon' => '<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M3 7h18M5 7l1 13h12l1-13\"/>',
+                    'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M3 7h18M5 7l1 13h12l1-13"/>',
                     'active_routes' => ['finance.*'],
                 ],
                 [
