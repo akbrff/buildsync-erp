@@ -9,10 +9,10 @@
     @if (session($type))
         @php
             $style = match ($type) {
-                'success' => 'background:#f0fdf4; color:#15803d; border-color:#bbf7d0;',
-                'error'   => 'background:#fef2f2; color:#b91c1c; border-color:#fecaca;',
-                'warning' => 'background:#fffbeb; color:#b45309; border-color:#fde68a;',
-                'info'    => 'background:#eff6ff; color:#1d4ed8; border-color:#bfdbfe;',
+                'success' => 'background:rgba(39, 177, 174, 0.12); color:#27B1AE; border-color:rgba(39, 177, 174, 0.3);',
+                'error'   => 'background:rgba(237, 113, 50, 0.12); color:#ED7132; border-color:rgba(237, 113, 50, 0.3);',
+                'warning' => 'background:rgba(237, 113, 50, 0.12); color:#ED7132; border-color:rgba(237, 113, 50, 0.3);',
+                'info'    => 'background:rgba(19, 111, 154, 0.12); color:#136F9A; border-color:rgba(19, 111, 154, 0.3);',
             };
             $icon = match ($type) {
                 'success' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>',
@@ -21,23 +21,23 @@
                 'info'    => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>',
             };
         @endphp
-        <div class="mb-4 flex items-start gap-2.5 rounded-md px-3.5 py-2.5"
+        <div class="mb-5 flex items-start gap-2.5 rounded-xl px-4 py-3 shadow-xs"
              style="border:1px solid; {{ $style }} font-size:.8125rem; line-height:1.4;">
             <svg xmlns="http://www.w3.org/2000/svg" class="mt-0.5 h-4 w-4 shrink-0"
                  fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 {!! $icon !!}
             </svg>
-            <span>{{ session($type) }}</span>
+            <span class="font-medium">{{ session($type) }}</span>
         </div>
     @endif
 @endforeach
 
 {{-- Validation errors summary --}}
 @if ($errors->any())
-    <div class="mb-4 rounded-md px-3.5 py-2.5"
-         style="background:#fef2f2; border:1px solid #fecaca; color:#b91c1c; font-size:.8125rem;">
-        <p class="font-semibold">Data tidak valid — periksa kembali:</p>
-        <ul class="mt-1.5 list-inside list-disc space-y-0.5">
+    <div class="mb-5 rounded-xl px-4 py-3 shadow-xs"
+         style="background:rgba(237, 113, 50, 0.12); border:1px solid rgba(237, 113, 50, 0.3); color:#ED7132; font-size:.8125rem;">
+        <p class="font-bold">Data tidak valid — periksa kembali:</p>
+        <ul class="mt-1.5 list-inside list-disc space-y-0.5 text-xs">
             @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
             @endforeach

@@ -60,7 +60,7 @@
         <label for="description" class="erp-label">Deskripsi Rincian Pekerjaan</label>
         <textarea id="description" name="description" rows="3"
                   placeholder="Keterangan spesifikasi teknis, metode kerja, atau deliverable tahapan ini."
-                  class="w-full rounded-md border border-slate-300 p-2.5 text-xs text-slate-800 transition focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600 @error('description') erp-input-error @enderror">{{ old('description', $schedule?->description) }}</textarea>
+                  class="w-full rounded-lg border border-slate-300 p-2.5 text-xs text-[#2C3E50] transition focus:border-[#136F9A] focus:outline-none focus:ring-1 focus:ring-[#136F9A] @error('description') erp-input-error @enderror">{{ old('description', $schedule?->description) }}</textarea>
         @error('description')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
     </div>
 </div>

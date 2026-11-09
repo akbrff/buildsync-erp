@@ -9,135 +9,154 @@
 @endsection
 
 @section('content')
-    {{-- ── 1. 4 KPI Stat Cards ──────────────────────────────── --}}
-    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-6">
+    {{-- ── 1. 4 KPI Stat Cards (Open KPI Strip) ─────────────── --}}
+    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-6">
         <x-stat-card
             label="Total Proyek"
             :value="$totalProjects"
-            suffix="proyek"/>
+            suffix="proyek"
+            variant="neutral"
+            note="Keseluruhan proyek"/>
 
         <x-stat-card
             label="Sedang Berjalan"
             :value="$ongoingProjects"
             suffix="proyek"
-            variant="info"/>
+            variant="info"
+            note="Aktif di lapangan"/>
 
         <x-stat-card
             label="Selesai"
             :value="$completedProjects"
             suffix="proyek"
-            variant="success"/>
+            variant="success"
+            note="Serah terima final"/>
 
         <x-stat-card
             label="Ditunda"
             :value="$onHoldProjects"
             suffix="proyek"
-            :variant="$onHoldProjects > 0 ? 'warning' : 'neutral'"/>
+            :variant="$onHoldProjects > 0 ? 'warning' : 'neutral'"
+            :note="$onHoldProjects > 0 ? 'Perlu penyesuaian' : 'Tidak ada kendala'"/>
     </div>
 
-    {{-- ── 2. Baris Grafik Utama (Tren Biaya & Distribusi Kategori) ── --}}
-    <div class="grid gap-5 lg:grid-cols-3 mb-6 items-stretch">
+    {{-- ── 2. Baris Grafik Utama & Dark Accent Summary Card ───── --}}
+    <div class="grid gap-6 lg:grid-cols-3 mb-6 items-stretch">
         {{-- Grafik Kiri: Tren Realisasi Anggaran vs Pagu (2/3 width) --}}
-        <div class="lg:col-span-2 flex flex-col overflow-hidden rounded-md border border-slate-200 bg-white">
-            <div class="flex flex-wrap items-center justify-between gap-2 px-5 py-3 border-b border-slate-100">
+        <div class="lg:col-span-2 flex flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_2px_12px_rgba(44,62,80,0.04)]">
+            <div class="flex flex-wrap items-center justify-between gap-2 px-6 py-4 border-b border-slate-100">
                 <div>
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-600">
+                    <h3 class="text-[15px] font-bold text-[#2C3E50]">
                         Tren Realisasi Anggaran vs Pagu
                     </h3>
-                    <p class="text-[11px] text-slate-500 mt-0.5">
+                    <p class="text-xs text-[#7F7F7F] mt-0.5">
                         Perbandingan alokasi rencana dan pengeluaran kas aktual (6 bulan terakhir)
                     </p>
                 </div>
-                <div class="flex items-center gap-3 text-xs">
-                    <span class="inline-flex items-center gap-1.5 text-slate-600">
-                        <span class="h-2 w-3 rounded-xs bg-slate-800"></span>
-                        <span class="text-[11px]">Pagu Rencana</span>
+                <div class="flex items-center gap-4 text-xs">
+                    <span class="inline-flex items-center gap-1.5 text-[#7F7F7F]">
+                        <span class="h-2.5 w-3 rounded-xs bg-[#2C3E50]"></span>
+                        <span class="text-[11px] font-semibold text-[#2C3E50]">Pagu Rencana</span>
                     </span>
-                    <span class="inline-flex items-center gap-1.5 text-slate-600">
-                        <span class="h-2 w-3 rounded-xs bg-blue-600"></span>
-                        <span class="text-[11px]">Realisasi Kas</span>
+                    <span class="inline-flex items-center gap-1.5 text-[#7F7F7F]">
+                        <span class="h-2.5 w-3 rounded-xs bg-[#ED7132]"></span>
+                        <span class="text-[11px] font-semibold text-[#ED7132]">Realisasi Kas</span>
                     </span>
                 </div>
             </div>
-            <div class="p-5 flex-1 flex flex-col justify-center">
+            <div class="p-6 flex-1 flex flex-col justify-center">
                 <div class="relative w-full h-64">
                     <canvas id="budgetTrendChart"></canvas>
                 </div>
             </div>
         </div>
 
-        {{-- Grafik Kanan: Distribusi Alokasi Biaya (1/3 width) --}}
-        <div class="flex flex-col overflow-hidden rounded-md border border-slate-200 bg-white">
-            <div class="flex items-center justify-between px-5 py-3 border-b border-slate-100">
-                <div>
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-600">
-                        Distribusi Alokasi Biaya
-                    </h3>
-                    <p class="text-[11px] text-slate-500 mt-0.5">
-                        Komposisi pengeluaran kas per kategori
-                    </p>
+        {{-- Dark Accent Summary Card (1/3 width, kanan grafik utama) --}}
+        <div class="flex flex-col justify-between overflow-hidden rounded-2xl bg-[#2C3E50] text-white p-6 shadow-[0_2px_12px_rgba(44,62,80,0.04)]">
+            <div>
+                <div class="flex items-center justify-between gap-2">
+                    <div>
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-300">
+                            Total Realisasi Kas
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-0.5">Pengeluaran kas aktual proyek</p>
+                    </div>
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-[#27B1AE]/20 text-[#27B1AE]">
+                        Terkini
+                    </span>
                 </div>
-                <span class="text-[11px] font-semibold tabular text-slate-700">
-                    Rp {{ number_format($totalExpense, 0, ',', '.') }}
-                </span>
+
+                {{-- Prominent metric in Turquoise --}}
+                <div class="mt-4 mb-3">
+                    <div class="text-[#27B1AE] text-3xl font-extrabold tabular-nums tracking-tight">
+                        Rp {{ number_format($totalExpense, 0, ',', '.') }}
+                    </div>
+                    <p class="text-[11px] text-slate-300 mt-1">Akumulasi pengeluaran seluruh kegiatan</p>
+                </div>
             </div>
-            <div class="p-5 flex-1 flex flex-col items-center justify-center">
+
+            {{-- Visual Distribusi / Donut Chart --}}
+            <div class="my-2 flex-1 flex flex-col items-center justify-center">
                 @if ($totalExpense > 0)
-                    <div class="relative w-full h-44 flex items-center justify-center">
+                    <div class="relative w-full h-36 flex items-center justify-center">
                         <canvas id="costDistributionChart"></canvas>
                     </div>
-                    {{-- Clean Enterprise Legend --}}
-                    <div class="w-full mt-3 space-y-1.5 pt-2 border-t border-slate-100 text-xs">
-                        @php
-                            $catColors = [
-                                'Material'          => 'bg-blue-600',
-                                'Upah Tenaga Kerja' => 'bg-slate-900',
-                                'Sewa Alat'         => 'bg-emerald-600',
-                                'Operasional'       => 'bg-slate-400',
-                            ];
-                        @endphp
-                        @foreach ($costDistribution as $cat => $val)
-                            @php
-                                $percent = $totalExpense > 0 ? round(($val / $totalExpense) * 100, 1) : 0;
-                                $color = $catColors[$cat] ?? 'bg-amber-500';
-                            @endphp
-                            <div class="flex items-center justify-between text-[11px]">
-                                <span class="flex items-center gap-1.5 text-slate-600">
-                                    <span class="h-2 w-2 rounded-full {{ $color }}"></span>
-                                    <span class="truncate max-w-[120px]">{{ $cat }}</span>
-                                </span>
-                                <span class="tabular font-medium text-slate-900">
-                                    Rp {{ number_format($val, 0, ',', '.') }}
-                                    <span class="text-slate-400 font-normal text-[10px]">({{ $percent }}%)</span>
-                                </span>
-                            </div>
-                        @endforeach
-                    </div>
                 @else
-                    <div class="py-12 text-center text-xs text-slate-400">
-                        <svg class="h-8 w-8 text-slate-300 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
-                        </svg>
-                        <p class="font-medium text-slate-600">Belum ada transaksi pengeluaran kas.</p>
-                        <p class="text-[11px] text-slate-400 mt-0.5">Catatan pengeluaran disinkronkan dari modul Keuangan.</p>
+                    <div class="py-8 text-center text-xs text-slate-400">
+                        <p class="font-medium text-slate-300">Belum ada transaksi pengeluaran kas.</p>
+                        <p class="text-[11px] text-slate-400 mt-1">Data sinkron otomatis dari modul Keuangan.</p>
                     </div>
                 @endif
             </div>
+
+            {{-- Legend Breakdown --}}
+            @if ($totalExpense > 0)
+                <div class="w-full pt-3 border-t border-slate-700/60 space-y-1.5 text-xs">
+                    @php
+                        $catColors = [
+                            'Material'          => 'bg-[#ED7132]',
+                            'Upah Tenaga Kerja' => 'bg-[#27B1AE]',
+                            'Sewa Alat'         => 'bg-[#136F9A]',
+                            'Operasional'       => 'bg-slate-300',
+                        ];
+                    @endphp
+                    @foreach ($costDistribution as $cat => $val)
+                        @php
+                            $percent = $totalExpense > 0 ? round(($val / $totalExpense) * 100, 1) : 0;
+                            $color = $catColors[$cat] ?? 'bg-amber-400';
+                        @endphp
+                        <div class="flex items-center justify-between text-[11px]">
+                            <span class="flex items-center gap-1.5 text-slate-300">
+                                <span class="h-2 w-2 rounded-full {{ $color }}"></span>
+                                <span class="truncate max-w-[120px]">{{ $cat }}</span>
+                            </span>
+                            <span class="tabular font-semibold text-white">
+                                Rp {{ number_format($val, 0, ',', '.') }}
+                                <span class="text-slate-400 font-normal text-[10px]">({{ $percent }}%)</span>
+                            </span>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
         </div>
     </div>
 
     {{-- ── 3. Tabel Progres Proyek & Panel Stok Material ────── --}}
-    <div class="grid gap-5 lg:grid-cols-3 items-stretch">
+    <div class="grid gap-6 lg:grid-cols-3 items-stretch">
         {{-- ── Tabel Progres Proyek (2/3 width) ──────────── --}}
-        <div class="lg:col-span-2 flex flex-col overflow-hidden rounded-md border border-slate-200 bg-white">
+        <div class="lg:col-span-2 flex flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_2px_12px_rgba(44,62,80,0.04)]">
             {{-- Card header --}}
-            <div class="flex items-center justify-between px-5 py-3 border-b border-slate-100">
-                <p class="text-xs font-semibold uppercase tracking-wider text-slate-600">
-                    Progres Proyek Terbaru
-                </p>
+            <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+                <div>
+                    <h3 class="text-[15px] font-bold text-[#2C3E50]">
+                        Progres Proyek Terbaru
+                    </h3>
+                    <p class="text-xs text-[#7F7F7F] mt-0.5">
+                        Monitoring capaian fisik proyek konstruksi berjalan
+                    </p>
+                </div>
                 <a href="{{ route('projects.index') }}"
-                   class="text-[11px] font-medium text-blue-600 hover:underline transition-colors">
+                   class="text-xs font-semibold text-[#136F9A] hover:underline transition-colors">
                     Lihat semua →
                 </a>
             </div>
@@ -173,13 +192,13 @@
                             @endphp
                             <tr>
                                 <td>
-                                    <span class="font-code text-xs font-semibold text-slate-500">
+                                    <span class="font-code text-xs font-semibold text-[#7F7F7F]">
                                         {{ $project->project_code }}
                                     </span>
                                 </td>
                                 <td>
                                     <a href="{{ route('projects.show', $project) }}"
-                                       class="text-[13px] font-medium text-slate-900 hover:text-blue-600 transition-colors">
+                                       class="text-[13px] font-semibold text-[#2C3E50] hover:text-[#136F9A] transition-colors">
                                         {{ $project->name }}
                                     </a>
                                 </td>
@@ -187,12 +206,12 @@
                                     <x-badge :variant="$statusVariant">{{ $statusLabel }}</x-badge>
                                 </td>
                                 <td>
-                                    <div class="flex items-center gap-2">
-                                        <div class="relative h-1.5 flex-1 overflow-hidden rounded-full bg-slate-100 min-w-[70px]">
-                                            <div class="absolute inset-y-0 left-0 rounded-full bg-slate-800"
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="relative h-2 flex-1 overflow-hidden rounded-full bg-slate-100 min-w-[70px]">
+                                            <div class="absolute inset-y-0 left-0 rounded-full bg-[#136F9A]"
                                                  style="width:{{ $project->overall_progress }}%;"></div>
                                         </div>
-                                        <span class="shrink-0 text-xs font-semibold tabular w-10 text-right text-slate-900">
+                                        <span class="shrink-0 text-xs font-bold tabular w-10 text-right text-[#2C3E50]">
                                             {{ number_format($project->overall_progress, 0) }}%
                                         </span>
                                     </div>
@@ -200,11 +219,11 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="py-8 text-center text-xs text-slate-400">
+                                <td colspan="4" class="py-8 text-center text-xs text-[#7F7F7F]">
                                     Belum ada data proyek.
                                     <br>
                                     <a href="{{ route('projects.create') }}"
-                                       class="mt-1 inline-block font-medium text-blue-600 hover:underline">
+                                       class="mt-1.5 inline-block font-semibold text-[#136F9A] hover:underline">
                                         + Buat proyek pertama
                                     </a>
                                 </td>
@@ -216,26 +235,31 @@
         </div>
 
         {{-- ── Panel Status Stok Material (1/3 width) ──── --}}
-        <div class="flex flex-col overflow-hidden rounded-md border border-slate-200 bg-white">
-            <div class="flex items-center justify-between px-5 py-3 border-b border-slate-100">
-                <p class="text-xs font-semibold uppercase tracking-wider text-slate-600">
-                    Status Stok Material
-                </p>
+        <div class="flex flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_2px_12px_rgba(44,62,80,0.04)]">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+                <div>
+                    <h3 class="text-[15px] font-bold text-[#2C3E50]">
+                        Status Stok Material
+                    </h3>
+                    <p class="text-xs text-[#7F7F7F] mt-0.5">
+                        Ketersediaan material di gudang
+                    </p>
+                </div>
                 <a href="{{ route('materials.index') }}"
-                   class="text-[11px] font-medium text-blue-600 hover:underline transition-colors">
+                   class="text-xs font-semibold text-[#136F9A] hover:underline transition-colors">
                     Kelola →
                 </a>
             </div>
 
-            <ul class="flex-1 divide-y divide-slate-100">
+            <ul class="flex-1 divide-y divide-[#EEF4F8]">
                 @forelse ($materials as $material)
                     @php $isLow = $material->stock <= $material->min_stock; @endphp
-                    <li class="flex items-center justify-between gap-3 px-4 py-2.5 hover:bg-slate-50 transition-colors">
+                    <li class="flex items-center justify-between gap-3 px-6 py-3 hover:bg-[#F8FBFD] transition-colors">
                         <div class="min-w-0">
-                            <p class="truncate text-[13px] font-medium text-slate-900">
+                            <p class="truncate text-[13px] font-semibold text-[#2C3E50]">
                                 {{ $material->name }}
                             </p>
-                            <p class="text-[11px] text-slate-400 tabular">
+                            <p class="text-[11px] text-[#7F7F7F] tabular mt-0.5">
                                 {{ $material->stock }} {{ $material->unit }}
                             </p>
                         </div>
@@ -246,7 +270,7 @@
                         @endif
                     </li>
                 @empty
-                    <li class="px-4 py-8 text-center text-xs text-slate-400">
+                    <li class="px-6 py-8 text-center text-xs text-[#7F7F7F]">
                         Belum ada data material.
                     </li>
                 @endforelse
@@ -261,14 +285,20 @@
 document.addEventListener('DOMContentLoaded', function () {
     if (typeof Chart === 'undefined') return;
 
-    // ── Global Chart.js Defaults (Anti-Slop Enterprise Styling) ──
-    Chart.defaults.font.family = "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+    // ── Global Chart.js Defaults (StarAdmin Soft-UI Typography & Colors) ──
+    Chart.defaults.font.family = "'Plus Jakarta Sans', 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
     Chart.defaults.font.size   = 11;
-    Chart.defaults.color       = '#64748b';
+    Chart.defaults.color       = '#7F7F7F';
 
     // 1. Chart Tren Anggaran vs Realisasi (Combo Bar & Line)
     const trendCtx = document.getElementById('budgetTrendChart');
     if (trendCtx) {
+        const ctx = trendCtx.getContext('2d');
+        // Orange Gradient for Realisasi Kas
+        const orangeGrad = ctx.createLinearGradient(0, 0, 0, 260);
+        orangeGrad.addColorStop(0, '#ED7132');
+        orangeGrad.addColorStop(1, 'rgba(237, 113, 50, 0.4)');
+
         new Chart(trendCtx, {
             type: 'bar',
             data: {
@@ -278,24 +308,24 @@ document.addEventListener('DOMContentLoaded', function () {
                         type: 'line',
                         label: 'Pagu Rencana',
                         data: @json($trendBudgets),
-                        borderColor: '#0f172a',
-                        backgroundColor: '#0f172a',
-                        borderWidth: 2,
-                        borderDash: [4, 4],
-                        pointRadius: 3,
-                        pointBackgroundColor: '#0f172a',
+                        borderColor: '#2C3E50',
+                        backgroundColor: '#2C3E50',
+                        borderWidth: 2.5,
+                        borderDash: [5, 4],
+                        pointRadius: 3.5,
+                        pointBackgroundColor: '#2C3E50',
                         pointHoverRadius: 5,
-                        tension: 0.2,
+                        tension: 0.25,
                         order: 1
                     },
                     {
                         type: 'bar',
                         label: 'Realisasi Kas',
                         data: @json($trendActuals),
-                        backgroundColor: '#2563eb',
-                        hoverBackgroundColor: '#1d4ed8',
-                        borderRadius: 3,
-                        maxBarThickness: 32,
+                        backgroundColor: orangeGrad,
+                        hoverBackgroundColor: '#ED7132',
+                        borderRadius: 6,
+                        maxBarThickness: 34,
                         order: 2
                     }
                 ]
@@ -305,16 +335,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        display: false // Handled cleanly via HTML header badges
+                        display: false
                     },
                     tooltip: {
-                        backgroundColor: '#0f172a',
-                        titleColor: '#ffffff',
-                        bodyColor: '#f8fafc',
-                        titleFont: { size: 12, weight: '600' },
+                        backgroundColor: '#2C3E50',
+                        titleColor: '#FFFFFF',
+                        bodyColor: '#F8FBFD',
+                        titleFont: { size: 12, weight: '700' },
                         bodyFont: { size: 12 },
                         padding: 10,
-                        cornerRadius: 4,
+                        cornerRadius: 8,
                         callbacks: {
                             label: function (context) {
                                 const val = context.parsed.y || 0;
@@ -330,19 +360,19 @@ document.addEventListener('DOMContentLoaded', function () {
                             drawBorder: false
                         },
                         ticks: {
-                            color: '#64748b'
+                            color: '#7F7F7F'
                         }
                     },
                     y: {
                         border: {
-                            dash: [3, 3]
+                            dash: [4, 4]
                         },
                         grid: {
-                            color: '#f1f5f9',
+                            color: '#EEF4F8',
                             drawBorder: false
                         },
                         ticks: {
-                            color: '#64748b',
+                            color: '#7F7F7F',
                             callback: function (value) {
                                 if (value >= 1000000000) return 'Rp ' + (value / 1000000000).toFixed(1) + 'M';
                                 if (value >= 1000000) return 'Rp ' + (value / 1000000).toFixed(0) + 'Jt';
@@ -356,12 +386,13 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 2. Chart Distribusi Biaya (Doughnut)
+    // 2. Chart Distribusi Biaya (Doughnut in Dark Accent Card)
     const distCtx = document.getElementById('costDistributionChart');
     if (distCtx) {
         const costData = @json(array_values($costDistribution));
         const costLabels = @json(array_keys($costDistribution));
-        const colorPalette = ['#2563eb', '#0f172a', '#10b981', '#94a3b8', '#f59e0b'];
+        // StarAdmin Palette: Orange, Turquoise, Primary Blue, Muted Light Blue
+        const colorPalette = ['#ED7132', '#27B1AE', '#136F9A', '#9EACB9', '#F8FBFD'];
 
         new Chart(distCtx, {
             type: 'doughnut',
@@ -371,24 +402,24 @@ document.addEventListener('DOMContentLoaded', function () {
                     data: costData,
                     backgroundColor: colorPalette.slice(0, costLabels.length),
                     borderWidth: 2,
-                    borderColor: '#ffffff',
-                    hoverOffset: 3
+                    borderColor: '#2C3E50',
+                    hoverOffset: 4
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                cutout: '72%',
+                cutout: '70%',
                 plugins: {
                     legend: {
-                        display: false // Handled cleanly via HTML below
+                        display: false
                     },
                     tooltip: {
-                        backgroundColor: '#0f172a',
-                        titleColor: '#ffffff',
-                        bodyColor: '#f8fafc',
+                        backgroundColor: '#1a252f',
+                        titleColor: '#FFFFFF',
+                        bodyColor: '#27B1AE',
                         padding: 10,
-                        cornerRadius: 4,
+                        cornerRadius: 8,
                         callbacks: {
                             label: function (context) {
                                 const val = context.raw || 0;

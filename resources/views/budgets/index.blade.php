@@ -16,9 +16,7 @@
         title="Realisasi Anggaran & Kas Proyek"
         subtitle="Pencatatan pengeluaran riil, approval kas proyek, kontrol pagu biaya, dan dokumen bukti pembayaran.">
         <a href="{{ route('budgets.create', $projectId ? ['project_id' => $projectId] : []) }}"
-           class="inline-flex items-center gap-1.5 rounded px-3 font-semibold text-white transition-colors"
-           style="height:2.25rem; font-size:.8125rem; background:#2563eb; border:1px solid #1d4ed8;"
-           onmouseover="this.style.background='#1d4ed8';" onmouseout="this.style.background='#2563eb';">
+           class="btn-primary">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
             </svg>
@@ -105,7 +103,7 @@
     <x-flash-alert/>
 
     {{-- ── Data Table ─────────────────────────────────────────── --}}
-    <div class="overflow-hidden rounded-md border border-slate-200 bg-white">
+    <div class="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_2px_12px_rgba(44,62,80,0.04)]">
         <div class="overflow-x-auto">
             <table class="erp-table w-full text-left">
                 <thead>

@@ -49,9 +49,7 @@
         title="Timeline &amp; Gantt Chart"
         subtitle="Visualisasi jadwal tahapan pekerjaan dengan alur waktu proporsional berbasis grid 1px solid.">
         <a href="{{ route('schedules.create', $projectId ? ['project_id' => $projectId] : []) }}"
-           class="inline-flex items-center gap-1.5 rounded px-3 font-semibold text-white transition-colors"
-           style="height:2.25rem; font-size:.8125rem; background:#2563eb; border:1px solid #1d4ed8;"
-           onmouseover="this.style.background='#1d4ed8';" onmouseout="this.style.background='#2563eb';">
+           class="btn-primary">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
             </svg>
@@ -123,7 +121,7 @@
     @endif
 
     {{-- ── Visualisasi Gantt Table (Clean 1px Border Grid) ───── --}}
-    <div class="overflow-hidden rounded-md" style="border:1px solid #e2e8f0; background:#fff;">
+    <div class="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_2px_12px_rgba(44,62,80,0.04)]">
         <div class="overflow-x-auto">
             <table class="erp-table w-full text-left" style="min-width:960px;">
                 <thead>

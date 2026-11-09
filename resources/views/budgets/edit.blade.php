@@ -16,16 +16,14 @@
         title="Edit Pengeluaran: {{ $budget->formatted_voucher }}"
         subtitle="Perbarui nominal, kategori, verifikasi kas, atau dokumen bukti pengeluaran proyek {{ $budget->project->project_code }}.">
         <a href="{{ route('budgets.show', $budget) }}"
-           class="inline-flex items-center gap-1.5 rounded px-3 font-medium transition-colors"
-           style="height:2.25rem; font-size:.8125rem; border:1px solid #e2e8f0; background:#fff; color:#475569;"
-           onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='#fff';">
+           class="btn-secondary">
             &larr; Kembali ke Detail
         </a>
     </x-page-header>
 
     <x-flash-alert/>
 
-    <div class="max-w-4xl rounded-md p-5" style="border:1px solid #e2e8f0; background:#fff;">
+    <div class="max-w-4xl rounded-2xl p-6 border border-slate-100 bg-white shadow-[0_2px_12px_rgba(44,62,80,0.04)]">
         <form method="POST" action="{{ route('budgets.update', $budget) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
@@ -102,22 +100,18 @@
                 <div class="sm:col-span-2">
                     <label for="description" class="erp-label">Uraian / Keterangan Pengeluaran <span class="text-red-500">*</span></label>
                     <textarea id="description" name="description" rows="2"
-                              class="w-full rounded-md border border-slate-300 p-2.5 text-xs text-slate-800 transition focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600 @error('description') erp-input-error @enderror">{{ old('description', $budget->description) }}</textarea>
+                              class="w-full rounded-lg border border-slate-300 p-2.5 text-xs text-[#2C3E50] transition focus:border-[#136F9A] focus:outline-none focus:ring-1 focus:ring-[#136F9A] @error('description') erp-input-error @enderror">{{ old('description', $budget->description) }}</textarea>
                     @error('description')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                 </div>
             </div>
 
-            <div class="mt-6 flex items-center justify-end gap-2.5 pt-4" style="border-top:1px solid #f1f5f9;">
+            <div class="mt-6 flex items-center justify-end gap-2.5 pt-4 border-t border-[#EEF4F8]">
                 <a href="{{ route('budgets.show', $budget) }}"
-                   class="inline-flex items-center justify-center rounded px-3.5 font-medium transition-colors"
-                   style="height:2.25rem; font-size:.8125rem; border:1px solid #cbd5e1; background:#fff; color:#475569;"
-                   onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='#fff';">
+                   class="btn-secondary">
                     Batal
                 </a>
                 <button type="submit"
-                        class="inline-flex items-center justify-center rounded px-4 font-semibold text-white transition-colors"
-                        style="height:2.25rem; font-size:.8125rem; background:#2563eb; border:1px solid #1d4ed8;"
-                        onmouseover="this.style.background='#1d4ed8';" onmouseout="this.style.background='#2563eb';">
+                        class="btn-primary">
                     Perbarui Pengeluaran Kas
                 </button>
             </div>

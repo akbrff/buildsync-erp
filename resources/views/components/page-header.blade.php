@@ -17,17 +17,17 @@
     @endphp
     <div class="min-w-0 flex-1">
         @if ($hasBadges)
-            <div class="mb-1.5 flex flex-wrap items-center gap-2">
+            <div class="mb-2 flex flex-wrap items-center gap-2">
                 {{ $badges }}
             </div>
         @endif
-        <h2 class="text-lg font-semibold tracking-tight text-slate-900">{{ $title }}</h2>
+        <h2 class="text-xl font-bold tracking-tight text-[#2C3E50]">{{ $title }}</h2>
         @if ($subtitle)
-            <p class="mt-0.5 text-xs text-slate-500">{{ $subtitle }}</p>
+            <p class="mt-1 text-xs text-[#7F7F7F]">{{ $subtitle }}</p>
         @endif
     </div>
     @if ($hasActions || $hasSlot)
-        <div class="flex shrink-0 items-center gap-2">
+        <div class="flex shrink-0 items-center gap-2.5">
             {{ $hasActions ? $actions : $slot }}
         </div>
     @endif

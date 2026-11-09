@@ -15,31 +15,25 @@
         title="Tambah Proyek Baru"
         subtitle="Daftarkan proyek konstruksi baru dan tentukan pagu kontrak awal.">
         <a href="{{ route('projects.index') }}"
-           class="inline-flex items-center gap-1.5 rounded px-3 font-medium transition-colors"
-           style="height:2.25rem; font-size:.8125rem; border:1px solid #e2e8f0; background:#fff; color:#475569;"
-           onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='#fff';">
+           class="btn-secondary">
             &larr; Kembali
         </a>
     </x-page-header>
 
     <x-flash-alert/>
 
-    <div class="max-w-4xl rounded-md p-5" style="border:1px solid #e2e8f0; background:#fff;">
+    <div class="max-w-4xl rounded-2xl p-6 border border-slate-100 bg-white shadow-[0_2px_12px_rgba(44,62,80,0.04)]">
         <form action="{{ route('projects.store') }}" method="POST">
             @csrf
             @include('projects.partials.form', ['project' => null])
 
-            <div class="mt-6 flex items-center justify-end gap-2.5 pt-4" style="border-top:1px solid #f1f5f9;">
+            <div class="mt-6 flex items-center justify-end gap-2.5 pt-4 border-t border-[#EEF4F8]">
                 <a href="{{ route('projects.index') }}"
-                   class="inline-flex items-center justify-center rounded px-3.5 font-medium transition-colors"
-                   style="height:2.25rem; font-size:.8125rem; border:1px solid #cbd5e1; background:#fff; color:#475569;"
-                   onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='#fff';">
+                   class="btn-secondary">
                     Batal
                 </a>
                 <button type="submit"
-                        class="inline-flex items-center justify-center rounded px-4 font-semibold text-white transition-colors"
-                        style="height:2.25rem; font-size:.8125rem; background:#2563eb; border:1px solid #1d4ed8;"
-                        onmouseover="this.style.background='#1d4ed8';" onmouseout="this.style.background='#2563eb';">
+                        class="btn-primary">
                     Simpan Proyek
                 </button>
             </div>

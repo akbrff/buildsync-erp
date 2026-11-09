@@ -58,7 +58,7 @@
             :note="$incompleteProjectsCount > 0 ? $incompleteProjectsCount . ' proyek belum final (bobot < 100%)' : 'Semua proyek sudah final'">
             <div class="h-1.5 overflow-hidden rounded-full" style="background:#e2e8f0;">
                 <div class="h-full rounded-full transition-all"
-                     style="width:{{ min(100, $overallProgress) }}%; background:#2563eb;"></div>
+                     style="width:{{ min(100, $overallProgress) }}%; background:#136F9A;"></div>
             </div>
         </x-stat-card>
 

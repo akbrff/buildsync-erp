@@ -73,18 +73,18 @@
         </div>
 
         {{-- Tabel Peringatan Stok Material Menipis --}}
-        <div class="overflow-hidden rounded-md border border-slate-200 bg-white">
-            <div class="flex items-center justify-between px-5 py-3 border-b border-slate-100">
+        <div class="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_2px_12px_rgba(44,62,80,0.04)]">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
                 <div>
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-600">
+                    <h3 class="text-[15px] font-bold text-[#2C3E50]">
                         Peringatan Stok Material Menipis (Restock Alert)
                     </h3>
-                    <p class="text-[11px] text-slate-500">
+                    <p class="text-xs text-[#7F7F7F] mt-0.5">
                         Item material konstruksi yang kuantitasnya telah berada di bawah batas minimum pengamanan.
                     </p>
                 </div>
                 <a href="{{ route('materials.index') }}"
-                   class="text-xs font-medium text-blue-600 hover:underline">
+                   class="text-xs font-semibold text-[#136F9A] hover:underline">
                     Kelola Katalog &rarr;
                 </a>
             </div>
@@ -217,9 +217,9 @@
         {{-- Grid 2-Kolom: Rincian Biaya per Kategori & Progres Fisik --}}
         <div class="grid gap-5 md:grid-cols-2">
             {{-- Panel Kiri: Rincian Pengeluaran per Kategori --}}
-            <div class="overflow-hidden rounded-md border border-slate-200 bg-white">
-                <div class="px-5 py-3 border-b border-slate-100">
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-600">
+            <div class="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_2px_12px_rgba(44,62,80,0.04)]">
+                <div class="px-6 py-4 border-b border-slate-100">
+                    <h3 class="text-[15px] font-bold text-[#2C3E50]">
                         Rincian Pengeluaran per Kategori
                     </h3>
                 </div>
@@ -272,12 +272,12 @@
             </div>
 
             {{-- Panel Kanan: Progres Fisik Pekerjaan --}}
-            <div class="overflow-hidden rounded-md border border-slate-200 bg-white">
-                <div class="flex items-center justify-between px-5 py-3 border-b border-slate-100">
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-600">
+            <div class="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_2px_12px_rgba(44,62,80,0.04)]">
+                <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+                    <h3 class="text-[15px] font-bold text-[#2C3E50]">
                         Progres Fisik Tahapan Proyek
                     </h3>
-                    <span class="text-xs font-bold tabular text-blue-700">
+                    <span class="text-xs font-bold tabular text-[#136F9A]">
                         {{ number_format($selectedProject->overall_progress, 2, ',', '.') }}%
                     </span>
                 </div>

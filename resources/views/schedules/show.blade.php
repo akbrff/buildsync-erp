@@ -60,17 +60,13 @@
         {{-- Action Buttons --}}
         <div class="flex items-center gap-2 shrink-0">
             <a href="{{ route('schedules.index', ['project_id' => $schedule->project_id]) }}"
-               class="inline-flex items-center gap-1.5 rounded px-3 font-medium transition-colors"
-               style="height:2.125rem; font-size:.8125rem; border:1px solid #cbd5e1; background:#fff; color:#475569;"
-               onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='#fff';">
+               class="btn-secondary">
                 &larr; Daftar Jadwal
             </a>
 
             <a href="{{ route('schedules.edit', $schedule) }}"
-               class="inline-flex items-center gap-1.5 rounded px-3 font-medium transition-colors"
-               style="height:2.125rem; font-size:.8125rem; border:1px solid #cbd5e1; background:#fff; color:#475569;"
-               onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='#fff';">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+               class="btn-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#7F7F7F]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                 </svg>
                 Edit
@@ -82,9 +78,7 @@
                 @method('DELETE')
                 <button type="submit"
                         title="Hapus Jadwal"
-                        class="inline-flex items-center justify-center rounded px-2.5 font-medium transition-colors"
-                        style="height:2.125rem; font-size:.8125rem; border:1px solid #fecaca; background:#fef2f2; color:#b91c1c;"
-                        onmouseover="this.style.background='#fee2e2';" onmouseout="this.style.background='#fef2f2';">
+                        class="inline-flex items-center justify-center rounded-lg px-2.5 h-8 font-medium transition-colors bg-[#ED7132]/15 text-[#ED7132] border border-[#ED7132]/25 hover:bg-[#ED7132]/25">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                     </svg>
@@ -128,8 +122,8 @@
     {{-- ── Grid 2-Kolom: Informasi & Form Rekam Progres ───────── --}}
     <div class="grid gap-5 lg:grid-cols-3 mb-6">
         {{-- Kolom Kiri: Detail Informasi --}}
-        <div class="rounded-md p-5 border border-slate-200 bg-white">
-            <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-600 mb-3">
+        <div class="rounded-2xl p-6 border border-slate-100 bg-white shadow-[0_2px_12px_rgba(44,62,80,0.04)]">
+            <h3 class="text-[15px] font-bold text-[#2C3E50] mb-3">
                 Informasi Pekerjaan
             </h3>
             <dl class="space-y-2.5 text-xs">
@@ -161,18 +155,18 @@
         </div>
 
         {{-- Kolom Kanan: Form Catat Progres Baru --}}
-        <div class="lg:col-span-2 rounded-md p-5 border border-slate-200 bg-white">
-            <div class="flex items-center justify-between pb-2.5 mb-3 border-b border-slate-100">
+        <div class="lg:col-span-2 rounded-2xl p-6 border border-slate-100 bg-white shadow-[0_2px_12px_rgba(44,62,80,0.04)]">
+            <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
                 <div>
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-600">
+                    <h3 class="text-[15px] font-bold text-[#2C3E50]">
                         Catat Update Progres Fisik
                     </h3>
-                    <p class="text-[11px] text-slate-500">
+                    <p class="text-xs text-[#7F7F7F] mt-0.5">
                         Laporkan kemajuan persentase pekerjaan berkala.
                     </p>
                 </div>
-                <span class="text-xs text-slate-500">
-                    Progres saat ini: <strong class="tabular text-blue-600">{{ number_format($currentProgress, 2, ',', '.') }}%</strong>
+                <span class="text-xs text-[#7F7F7F]">
+                    Progres saat ini: <strong class="tabular text-[#136F9A]">{{ number_format($currentProgress, 2, ',', '.') }}%</strong>
                 </span>
             </div>
 
@@ -217,11 +211,9 @@
                     </div>
                 </div>
 
-                <div class="mt-3 flex justify-end">
+                <div class="mt-4 flex justify-end">
                     <button type="submit"
-                            class="inline-flex items-center gap-1.5 rounded px-4 font-semibold text-white transition-colors"
-                            style="height:2.125rem; font-size:.8125rem; background:#2563eb; border:1px solid #1d4ed8;"
-                            onmouseover="this.style.background='#1d4ed8';" onmouseout="this.style.background='#2563eb';">
+                            class="btn-primary">
                         Simpan Catatan Progres
                     </button>
                 </div>
@@ -230,12 +222,12 @@
     </div>
 
     {{-- ── Tabel Riwayat Progres ───────────────────────────────── --}}
-    <div class="overflow-hidden rounded-md" style="border:1px solid #e2e8f0; background:#fff;">
-        <div class="px-4 py-3" style="border-bottom:1px solid #f1f5f9;">
-            <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-800">
+    <div class="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_2px_12px_rgba(44,62,80,0.04)]">
+        <div class="px-6 py-4 border-b border-slate-100">
+            <h3 class="text-[15px] font-bold text-[#2C3E50]">
                 Riwayat Progres
             </h3>
-            <p class="text-[11px] text-slate-500">
+            <p class="text-xs text-[#7F7F7F] mt-0.5">
                 Log audit catatan persentase kemajuan pekerjaan dari waktu ke waktu.
             </p>
         </div>

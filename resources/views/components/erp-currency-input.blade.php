@@ -26,8 +26,8 @@
     $hasError = $errors->has($name);
 @endphp
 
-<div class="flex h-9 items-stretch rounded-md border {{ $hasError ? 'border-red-500 focus-within:border-red-500 focus-within:ring-1 focus-within:ring-red-500' : 'border-slate-300 focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600' }} bg-white overflow-hidden transition-colors {{ $class }}">
-    <span class="inline-flex items-center px-3 bg-slate-50 border-r border-slate-200 text-xs font-medium text-slate-500 select-none shrink-0" onclick="document.getElementById('{{ $id }}_display')?.focus()">
+<div class="flex h-9 items-stretch rounded-lg border {{ $hasError ? 'border-[#ED7132] focus-within:border-[#ED7132] focus-within:ring-1 focus-within:ring-[#ED7132]' : 'border-slate-300 focus-within:border-[#136F9A] focus-within:ring-1 focus-within:ring-[#136F9A]' }} bg-white overflow-hidden transition-colors {{ $class }}">
+    <span class="inline-flex items-center px-3 bg-[#F8FBFD] border-r border-[#EEF4F8] text-xs font-semibold text-[#7F7F7F] select-none shrink-0" onclick="document.getElementById('{{ $id }}_display')?.focus()">
         {{ $prefix }}
     </span>
     <input
@@ -35,7 +35,7 @@
         id="{{ $id }}_display"
         value="{{ $displayValue }}"
         placeholder="{{ $placeholder }}"
-        class="w-full px-3 py-2 text-[13px] text-slate-900 border-0 focus:ring-0 focus:outline-none tabular font-medium erp-currency-display bg-transparent"
+        class="w-full px-3 py-2 text-[13px] text-[#2C3E50] border-0 focus:ring-0 focus:outline-none tabular font-medium erp-currency-display bg-transparent"
         data-currency-target="{{ $id }}"
         autocomplete="off"
         inputmode="numeric"

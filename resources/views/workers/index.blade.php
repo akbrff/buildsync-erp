@@ -16,7 +16,7 @@
         subtitle="Alokasi mandor lapangan, tukang spesialis, helper proyek, serta kontrol tarif upah harian.">
         <x-slot:actions>
             <a href="{{ route('workers.create') }}"
-               class="inline-flex items-center gap-1.5 rounded bg-blue-600 px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-blue-700 transition-colors shadow-2xs">
+               class="btn-primary">
                 <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
@@ -67,9 +67,9 @@
     </div>
 
     {{-- Filter Bar & Table Panel --}}
-    <div class="rounded-md border border-slate-200 bg-white shadow-xs">
+    <div class="rounded-2xl border border-slate-100 bg-white shadow-[0_2px_12px_rgba(44,62,80,0.04)] overflow-hidden">
         {{-- Toolbar: Filter & Search --}}
-        <div class="border-b border-slate-200 p-4 sm:p-5 bg-slate-50/50">
+        <div class="border-b border-[#EEF4F8] p-4 sm:p-5 bg-[#F8FBFD]">
             <x-filter-bar
                 action="{{ route('workers.index') }}"
                 :searchable="true"

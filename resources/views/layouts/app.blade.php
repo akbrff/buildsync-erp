@@ -4,12 +4,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Dashboard') | {{ config('app.name') }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="antialiased" style="background:#f8fafc; color:#0f172a;">
+<body class="antialiased" style="background:#F8FBFD; color:#2C3E50;">
 @php
     /**
-     * Linear Workspace Sidebar Navigation Groups
+     * StarAdmin Soft-UI Navigation Groups
      */
     $menuCategories = [
         [
@@ -66,23 +69,23 @@
     ];
 @endphp
 
-<div class="min-h-screen h-screen flex overflow-hidden bg-slate-50">
+<div class="min-h-screen h-screen flex overflow-hidden bg-[#F8FBFD]">
 
     {{-- ═══════════════════════════════════════════════════════
-         SIDEBAR — Linear Workspace Sidebar (w-60 / 15rem)
+         SIDEBAR — StarAdmin Soft-UI Canvas Blended (w-60 / 15rem)
          ═══════════════════════════════════════════════════════ --}}
-    <aside id="sidebar" class="hidden lg:flex fixed lg:static inset-y-0 left-0 z-30 w-60 min-w-[15rem] max-w-[15rem] h-screen shrink-0 flex-col bg-slate-900 border-r border-slate-800 select-none overflow-y-auto">
+    <aside id="sidebar" class="hidden lg:flex fixed lg:static inset-y-0 left-0 z-30 w-60 min-w-[15rem] max-w-[15rem] h-screen shrink-0 flex-col bg-[#F8FBFD] border-r border-[#EEF4F8] select-none overflow-y-auto">
 
-        {{-- Header Workspace Ringkas (1 Baris ala Linear) --}}
-        <div class="px-3.5 py-3.5 flex items-center justify-between">
+        {{-- Header Workspace Ringkas --}}
+        <div class="px-5 py-5 flex items-center justify-between">
             <div class="flex items-center min-w-0">
-                <div class="w-5 h-5 rounded-[5px] bg-blue-600 text-white flex items-center justify-center shrink-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div class="w-6 h-6 rounded-md bg-[#136F9A] text-white flex items-center justify-center shrink-0 shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                     </svg>
                 </div>
-                <span class="text-[13px] font-semibold text-white tracking-tight ml-2 truncate">BuildSync ERP</span>
+                <span class="text-[14px] font-bold text-[#2C3E50] tracking-tight ml-2.5 truncate">BuildSync ERP</span>
             </div>
         </div>
 
@@ -92,11 +95,11 @@
             @php
                 $isDashboardActive = Route::has('dashboard') && request()->routeIs('dashboard');
             @endphp
-            <div class="px-2.5 mb-3">
+            <div class="mb-2">
                 <a href="{{ route('dashboard') }}"
-                   class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-[13px] transition-colors {{ $isDashboardActive ? 'bg-slate-800/90 text-white font-medium' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200 font-normal' }}">
+                   class="flex items-center gap-3 text-[13px] transition-all {{ $isDashboardActive ? 'rounded-r-full mr-4 py-2.5 px-5 bg-[#ED7132]/12 text-[#ED7132] font-bold shadow-xs' : 'text-[#7F7F7F] hover:text-[#2C3E50] font-medium py-2 px-5' }}">
                     <svg xmlns="http://www.w3.org/2000/svg"
-                         class="w-4 h-4 shrink-0 stroke-[1.75] {{ $isDashboardActive ? 'text-white' : 'text-slate-400' }}"
+                         class="w-4 h-4 shrink-0 stroke-[1.75] {{ $isDashboardActive ? 'text-[#ED7132]' : 'text-[#7F7F7F]' }}"
                          fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l9-9 9 9M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/>
                     </svg>
@@ -104,22 +107,22 @@
                 </a>
             </div>
 
-            {{-- Kategori Menu (Title Case + Collapsible Chevron) --}}
+            {{-- Kategori Menu (StarAdmin Category Labels + Collapsible Chevron) --}}
             @foreach ($menuCategories as $cat)
                 <div class="sidebar-group mb-1">
                     <button type="button"
-                            class="w-full px-2.5 py-1 text-[12px] font-medium text-slate-400 hover:text-slate-200 flex items-center gap-1 cursor-pointer transition-colors mt-4 mb-0.5 group focus:outline-none text-left"
+                            class="w-full px-5 py-1.5 text-[10px] font-bold uppercase tracking-widest text-[#7F7F7F] hover:text-[#2C3E50] flex items-center justify-between cursor-pointer transition-colors mt-4 mb-1 group focus:outline-none text-left"
                             onclick="toggleSidebarGroup(this)"
                             aria-expanded="true">
                         <span>{{ $cat['group'] }}</span>
                         <svg xmlns="http://www.w3.org/2000/svg"
-                             class="w-3 h-3 text-slate-500 transition-transform duration-150 group-hover:text-slate-400 shrink-0"
+                             class="w-3 h-3 text-[#7F7F7F] transition-transform duration-150 group-hover:text-[#2C3E50] shrink-0"
                              fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
 
-                    <div class="space-y-0.5 px-2.5">
+                    <div class="space-y-0.5">
                         @foreach ($cat['items'] as $item)
                             @php
                                 $activeRoutes = $item['active_routes'] ?? [$item['route']];
@@ -128,21 +131,21 @@
 
                             @if (Route::has($item['route']))
                                 <a href="{{ route($item['route']) }}"
-                                   class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-[13px] transition-colors {{ $isActive ? 'bg-slate-800/90 text-white font-medium' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200 font-normal' }}">
+                                   class="flex items-center gap-3 text-[13px] transition-all {{ $isActive ? 'rounded-r-full mr-4 py-2.5 px-5 bg-[#ED7132]/12 text-[#ED7132] font-bold shadow-xs' : 'text-[#7F7F7F] hover:text-[#2C3E50] font-medium py-2 px-5' }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
-                                         class="w-4 h-4 shrink-0 {{ $isActive ? 'text-white' : 'text-slate-400' }}">
+                                         class="w-4 h-4 shrink-0 {{ $isActive ? 'text-[#ED7132]' : 'text-[#7F7F7F]' }}">
                                         {!! $item['icon'] !!}
                                     </svg>
                                     <span class="truncate">{{ $item['label'] }}</span>
                                 </a>
                             @else
-                                <span class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-[13px] text-slate-600 cursor-not-allowed">
+                                <span class="flex items-center gap-3 text-[13px] py-2 px-5 text-slate-400 cursor-not-allowed">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
-                                         class="w-4 h-4 shrink-0 text-slate-600 opacity-50">
+                                         class="w-4 h-4 shrink-0 text-slate-400 opacity-50">
                                         {!! $item['icon'] !!}
                                     </svg>
                                     <span class="truncate">{{ $item['label'] }}</span>
-                                    <span class="ml-auto text-[10px] text-slate-600">(segera)</span>
+                                    <span class="ml-auto text-[10px] text-slate-400">(segera)</span>
                                 </span>
                             @endif
                         @endforeach
@@ -151,22 +154,27 @@
             @endforeach
         </nav>
 
-        {{-- Footer User & Logout (Minimalis Menyatu) --}}
-        <div class="mt-auto shrink-0 p-2.5 border-t border-slate-800/80">
-            <div class="flex items-center justify-between gap-2 px-1 py-0.5">
-                <div class="flex items-center gap-2 min-w-0 flex-1">
-                    <div class="w-6 h-6 rounded-full bg-blue-600 text-white text-[11px] font-semibold flex items-center justify-center shrink-0 select-none">
-                        {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 1)) }}
+        {{-- Footer User & Logout (StarAdmin Soft Profile Bar) --}}
+        <div class="mt-auto shrink-0 p-4 border-t border-[#EEF4F8]">
+            <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                    <div class="w-7 h-7 rounded-full bg-[#136F9A] text-white text-xs font-bold flex items-center justify-center shrink-0 select-none shadow-xs">
+                        {{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}
                     </div>
-                    <span class="text-[12px] font-medium text-slate-200 truncate">
-                        {{ Auth::user()->name ?? 'Pengguna' }}
-                    </span>
+                    <div class="min-w-0">
+                        <p class="text-[12px] font-semibold text-[#2C3E50] truncate leading-tight">
+                            {{ Auth::user()->name ?? 'Administrator' }}
+                        </p>
+                        <p class="text-[10px] text-[#7F7F7F] truncate">
+                            {{ Auth::user()->email ?? 'admin@buildsync.id' }}
+                        </p>
+                    </div>
                 </div>
                 <form method="POST" action="{{ route('logout') }}" class="shrink-0">
                     @csrf
                     <button type="submit"
                             title="Keluar / Logout"
-                            class="text-slate-400 hover:text-red-400 p-1 rounded hover:bg-slate-800 transition-colors flex items-center justify-center">
+                            class="text-[#7F7F7F] hover:text-[#ED7132] p-1.5 rounded-md hover:bg-white transition-colors flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 stroke-[1.75]" fill="none"
                              viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -183,41 +191,52 @@
          ═══════════════════════════════════════════════════════ --}}
     <div class="flex-1 flex flex-col h-screen min-w-0 overflow-y-auto">
 
-        {{-- Top Header --}}
-        <header class="sticky top-0 z-10 flex shrink-0 items-center justify-between px-5 py-3 bg-white border-b border-slate-200"
-                style="height:52px;">
+        {{-- Top Header (StarAdmin Soft Topbar) --}}
+        <header class="sticky top-0 z-10 flex shrink-0 items-center justify-between px-6 py-4 bg-[#F8FBFD] border-b border-[#EEF4F8]"
+                style="min-height:64px;">
             <div class="flex items-center gap-3">
                 {{-- Mobile menu toggle --}}
                 <button type="button"
-                        class="lg:hidden rounded px-2 py-1 text-xs font-medium border border-slate-200 text-slate-600 hover:bg-slate-50"
+                        class="lg:hidden rounded-lg px-2.5 py-1.5 text-xs font-medium border border-slate-200 bg-white text-[#2C3E50] hover:bg-slate-50"
                         onclick="document.getElementById('sidebar').classList.toggle('hidden'); document.getElementById('sidebar').classList.toggle('flex');">
                     Menu
                 </button>
 
-                {{-- Breadcrumbs (slot, disupply tiap view) --}}
-                <div class="flex items-center gap-1 text-sm">
-                    @hasSection('breadcrumbs')
-                        @yield('breadcrumbs')
-                    @elseif (View::hasSection('breadcrumb'))
-                        @yield('breadcrumb')
-                    @else
-                        <span class="font-semibold text-slate-900">
+                {{-- Header Sapaan/Judul Utama (Kombinasi font tipis dan tebal) --}}
+                @if (request()->routeIs('dashboard'))
+                    <h1 class="text-2xl tracking-tight">
+                        <span class="font-light text-[#7F7F7F]">Selamat Pagi,</span>
+                        <span class="font-bold text-[#2C3E50]">{{ Auth::user()->name ?? 'Administrator' }}</span>
+                    </h1>
+                @else
+                    <div class="flex flex-col">
+                        <div class="flex items-center gap-1.5 text-xs text-[#7F7F7F]">
+                            @hasSection('breadcrumbs')
+                                @yield('breadcrumbs')
+                            @elseif (View::hasSection('breadcrumb'))
+                                @yield('breadcrumb')
+                            @endif
+                        </div>
+                        <h1 class="text-xl font-bold tracking-tight text-[#2C3E50]">
                             @yield('title', 'Dashboard')
-                        </span>
-                    @endif
-                </div>
+                        </h1>
+                    </div>
+                @endif
             </div>
 
-            {{-- Right side: current date --}}
-            <div class="flex items-center gap-2">
-                <span class="text-xs text-slate-500 tabular">
-                    {{ now()->translatedFormat('d M Y') }}
-                </span>
+            {{-- Right side: Soft capsule pill badge/filter --}}
+            <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2 rounded-lg bg-white border border-slate-200/70 px-3 py-1.5 text-xs text-[#2C3E50] shadow-[0_1px_3px_rgba(44,62,80,0.03)]">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-[#7F7F7F]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    <span class="font-medium tabular">{{ now()->translatedFormat('d M Y') }}</span>
+                </div>
             </div>
         </header>
 
         {{-- Page Content --}}
-        <main class="flex-1 min-w-0 p-6">
+        <main class="flex-1 min-w-0 p-6 lg:p-8">
             @yield('content')
         </main>
     </div>
@@ -228,7 +247,7 @@
      onclick="document.getElementById('sidebar').classList.add('hidden'); document.getElementById('sidebar').classList.remove('flex'); this.classList.add('hidden');"></div>
 
 <script>
-// Toggle collapsible group di sidebar (Linear Style)
+// Toggle collapsible group di sidebar
 function toggleSidebarGroup(btn) {
     const list = btn.nextElementSibling;
     const chevron = btn.querySelector('svg');

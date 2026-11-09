@@ -30,11 +30,11 @@
 
         <x-slot:actions>
             <a href="{{ route('materials.index') }}"
-               class="rounded border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors shadow-2xs">
+               class="btn-secondary">
                 &larr; Kembali
             </a>
             <a href="{{ route('materials.edit', $material) }}"
-               class="inline-flex items-center gap-1.5 rounded bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-700 transition-colors shadow-2xs">
+               class="btn-primary">
                 <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>
@@ -47,7 +47,7 @@
                 @csrf
                 @method('DELETE')
                 <button type="submit"
-                        class="rounded border border-red-200 bg-white px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50 hover:border-red-300 transition-colors shadow-2xs">
+                        class="inline-flex items-center gap-1.5 rounded-lg border border-[#ED7132]/25 bg-[#ED7132]/15 px-3 py-2 text-xs font-semibold text-[#ED7132] hover:bg-[#ED7132]/25 transition-colors">
                     Hapus
                 </button>
             </form>
@@ -96,12 +96,12 @@
         {{-- Kolom Kiri: Spesifikasi & Meter Stok (2 Cols) --}}
         <div class="space-y-4 lg:col-span-2">
             {{-- Spesifikasi Lembar Teknis --}}
-            <div class="rounded-md border border-slate-200 bg-white shadow-xs overflow-hidden">
-                <div class="border-b border-slate-200 px-5 py-3 bg-slate-50 flex items-center justify-between">
-                    <h3 class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Spesifikasi Lembar Inventaris</h3>
-                    <span class="text-[11px] text-slate-400 font-mono">ID #{{ $material->id }}</span>
+            <div class="rounded-2xl border border-slate-100 bg-white shadow-[0_2px_12px_rgba(44,62,80,0.04)] overflow-hidden">
+                <div class="border-b border-[#EEF4F8] px-6 py-4 bg-[#F8FBFD] flex items-center justify-between">
+                    <h3 class="text-[15px] font-bold text-[#2C3E50]">Spesifikasi Lembar Inventaris</h3>
+                    <span class="text-xs text-[#7F7F7F] font-mono">ID #{{ $material->id }}</span>
                 </div>
-                <div class="p-5">
+                <div class="p-6">
                     <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 text-xs">
                         <div class="border-b border-slate-100 pb-2.5">
                             <dt class="text-slate-400 font-medium uppercase text-[10px] tracking-wider">Kode SKU / Referensi</dt>
@@ -144,9 +144,9 @@
             </div>
 
             {{-- Meter Tingkat Ketersediaan Stok --}}
-            <div class="rounded-md border border-slate-200 bg-white p-5 shadow-xs">
+            <div class="rounded-2xl border border-slate-100 bg-white p-6 shadow-[0_2px_12px_rgba(44,62,80,0.04)]">
                 <div class="flex items-center justify-between mb-2">
-                    <h4 class="text-xs font-semibold uppercase tracking-wider text-slate-600">Indikator Buffer Stok Fisik vs Ambang Reorder</h4>
+                    <h4 class="text-[15px] font-bold text-[#2C3E50]">Indikator Buffer Stok Fisik vs Ambang Reorder</h4>
                     <span class="text-xs tabular font-bold text-slate-700">
                         {{ $material->stock }} / {{ $material->min_stock }} {{ $material->unit }}
                     </span>
@@ -181,13 +181,13 @@
 
         {{-- Kolom Kanan: Form Cepat Mutasi Stok Fisik (1 Col) --}}
         <div>
-            <div class="rounded-md border border-slate-200 bg-white shadow-xs overflow-hidden">
-                <div class="border-b border-slate-200 px-5 py-3 bg-slate-50">
-                    <h3 class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Catat Mutasi Masuk / Keluar</h3>
-                    <p class="text-[11px] text-slate-500 mt-0.5">Tambah stok kiriman suplier atau kurangi untuk proyek.</p>
+            <div class="rounded-2xl border border-slate-100 bg-white shadow-[0_2px_12px_rgba(44,62,80,0.04)] overflow-hidden">
+                <div class="border-b border-[#EEF4F8] px-6 py-4 bg-[#F8FBFD]">
+                    <h3 class="text-[15px] font-bold text-[#2C3E50]">Catat Mutasi Masuk / Keluar</h3>
+                    <p class="text-xs text-[#7F7F7F] mt-0.5">Tambah stok kiriman suplier atau kurangi untuk proyek.</p>
                 </div>
 
-                <form method="POST" action="{{ route('materials.adjust', $material) }}" class="p-5 space-y-3.5">
+                <form method="POST" action="{{ route('materials.adjust', $material) }}" class="p-6 space-y-4">
                     @csrf
 
                     <div>

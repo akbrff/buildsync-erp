@@ -114,7 +114,7 @@
             Catatan Kualifikasi, Sertifikasi K3 & Pengalaman
         </label>
         <textarea id="notes" name="notes" rows="3"
-                  class="erp-input"
+                  class="w-full rounded-lg border border-slate-300 p-2.5 text-xs text-[#2C3E50] transition focus:border-[#136F9A] focus:outline-none focus:ring-1 focus:ring-[#136F9A] @error('notes') erp-input-error @enderror"
                   placeholder="Contoh: Memiliki Sertifikat K3 Ketinggian BNSP, pengalaman 5 tahun di konstruksi high-rise...">{{ old('notes', $worker?->notes) }}</textarea>
         <p class="mt-1 text-[11px] text-slate-400">Informasi tambahan mengenai lisensi, keahlian khusus, atau riwayat kerja.</p>
         @error('notes')

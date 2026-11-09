@@ -1,45 +1,42 @@
 @props([
     /**
-     * Varian semantik badge:
-     *   success  → Hijau  : Selesai / Aktif / Aman
-     *   warning  → Amber  : Pending / Ditunda / Belum Final
-     *   danger   → Merah  : Terlambat / Menipis / Overbudget / Hapus
-     *   info     → Biru   : Berjalan / Primary / Aksi
-     *   neutral  → Slate  : Perencanaan / Tidak Aktif / Default
+     * StarAdmin Soft-UI Badge:
+     *   success  → Turquoise : #27B1AE
+     *   warning  → Orange    : #ED7132
+     *   danger   → Orange    : #ED7132
+     *   info     → Blue      : #136F9A
+     *   neutral  → Dark Blue : #2C3E50
      */
     'variant' => 'neutral',
-    'dot'     => false,   // tampilkan dot indicator di kiri
-    'size'    => 'sm',    // sm | xs
+    'dot'     => false,
+    'size'    => 'sm',
 ])
 
 @php
-$styles = match ($variant) {
-    'success' => 'background:#f0fdf4; color:#15803d; border-color:#bbf7d0;',
-    'warning' => 'background:#fffbeb; color:#b45309; border-color:#fde68a;',
-    'danger'  => 'background:#fef2f2; color:#b91c1c; border-color:#fecaca;',
-    'info'    => 'background:#eff6ff; color:#1d4ed8; border-color:#bfdbfe;',
-    'neutral' => 'background:#f8fafc; color:#475569; border-color:#e2e8f0;',
-    default   => 'background:#f8fafc; color:#475569; border-color:#e2e8f0;',
+$classes = match ($variant) {
+    'success'           => 'bg-[#27B1AE]/15 text-[#27B1AE] border border-[#27B1AE]/25',
+    'warning', 'danger' => 'bg-[#ED7132]/15 text-[#ED7132] border border-[#ED7132]/25',
+    'info'              => 'bg-[#136F9A]/15 text-[#136F9A] border border-[#136F9A]/25',
+    'neutral'           => 'bg-[#2C3E50]/10 text-[#2C3E50] border border-[#2C3E50]/15',
+    default             => 'bg-[#2C3E50]/10 text-[#2C3E50] border border-[#2C3E50]/15',
 };
 
 $dotColor = match ($variant) {
-    'success' => 'background:#22c55e;',
-    'warning' => 'background:#f59e0b;',
-    'danger'  => 'background:#ef4444;',
-    'info'    => 'background:#3b82f6;',
-    'neutral' => 'background:#94a3b8;',
-    default   => 'background:#94a3b8;',
+    'success'           => 'bg-[#27B1AE]',
+    'warning', 'danger' => 'bg-[#ED7132]',
+    'info'              => 'bg-[#136F9A]',
+    'neutral'           => 'bg-[#2C3E50]',
+    default             => 'bg-[#2C3E50]',
 };
 
 $sizeClass = $size === 'xs'
-    ? 'text-[10px] px-1.5 py-0.5'
-    : 'text-[11px] px-2 py-0.5';
+    ? 'text-[10px] px-2 py-0.5'
+    : 'text-[11px] px-2.5 py-0.5';
 @endphp
 
-<span {{ $attributes->merge(['class' => "inline-flex items-center gap-1 rounded font-semibold leading-none border $sizeClass"]) }}
-      style="{{ $styles }}">
+<span {{ $attributes->merge(['class' => "inline-flex items-center gap-1.5 rounded-md font-semibold leading-none $classes $sizeClass"]) }}>
     @if ($dot)
-        <span class="inline-block h-1.5 w-1.5 rounded-full" style="{{ $dotColor }}"></span>
+        <span class="inline-block h-1.5 w-1.5 rounded-full {{ $dotColor }}"></span>
     @endif
     {{ $slot }}
 </span>
