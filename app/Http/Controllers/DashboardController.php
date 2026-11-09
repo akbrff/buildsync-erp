@@ -80,10 +80,14 @@ class DashboardController extends Controller
         $totalExpense = array_sum($costDistribution);
 
         // 4. Data Progres Proyek Aktif
-        $activeProjectsChart = Project::whereIn('status', ['ongoing', 'planning'])
-            ->orderBy('overall_progress', 'desc')
+        // overall_progress adalah accessor model, bukan kolom database.
+        // Ambil relasi jadwal dan progres terakhir, lalu urutkan hasil perhitungan di Collection.
+        $activeProjectsChart = Project::with('schedules.latestProgress')
+            ->whereIn('status', ['ongoing', 'planning'])
+            ->get()
+            ->sortByDesc(fn ($project) => $project->overall_progress)
             ->take(5)
-            ->get(['id', 'project_code', 'name', 'overall_progress', 'status']);
+            ->values();
 
         // 5. Data Proyek untuk Tabel
         $projects = Project::latest()->take(5)->get();
