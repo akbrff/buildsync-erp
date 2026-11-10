@@ -56,7 +56,11 @@
                 [
                     'label' => 'Penugasan & Kehadiran',
                     'route' => 'workforce.index',
-                    'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" d="M16 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>',
+                    'icon'  => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 shrink-0">
+  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+  <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+  <path d="m9 14 2 2 4-4"></path>
+</svg>',
                     'active_routes' => ['workforce.*'],
                 ],
                 [
@@ -73,7 +77,11 @@
                 [
                     'label' => 'Hak Akses Pengguna',
                     'route' => 'users.roles.index',
-                    'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M16 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>',
+                    'icon'  => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 shrink-0">
+  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+  <circle cx="12" cy="11" r="1"></circle>
+  <path d="M12 12v2.5"></path>
+</svg>',
                     'active_routes' => ['users.*'],
                 ],
             ],
@@ -187,18 +195,26 @@
                             @if (Route::has($item['route']))
                                 <a href="{{ route($item['route']) }}"
                                    class="flex items-center gap-3 text-[13px] transition-all {{ $isActive ? 'rounded-r-full mr-4 py-2.5 px-5 bg-[#ED7132]/12 text-[#ED7132] font-bold shadow-xs' : 'text-[#7F7F7F] hover:text-[#2C3E50] font-medium py-2 px-5' }}">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
-                                         class="w-4 h-4 shrink-0 {{ $isActive ? 'text-[#ED7132]' : 'text-[#7F7F7F]' }}">
-                                        {!! $item['icon'] !!}
-                                    </svg>
+                                    @if (str_starts_with(trim($item['icon']), '<svg'))
+                                        {!! preg_replace('/class="([^"]*)"/', 'class="$1 ' . ($isActive ? 'text-[#ED7132]' : 'text-[#7F7F7F]') . '"', $item['icon'], 1) !!}
+                                    @else
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
+                                             class="w-4 h-4 shrink-0 {{ $isActive ? 'text-[#ED7132]' : 'text-[#7F7F7F]' }}">
+                                            {!! $item['icon'] !!}
+                                        </svg>
+                                    @endif
                                     <span class="truncate">{{ $item['label'] }}</span>
                                 </a>
                             @else
                                 <span class="flex items-center gap-3 text-[13px] py-2 px-5 text-slate-400 cursor-not-allowed">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
-                                         class="w-4 h-4 shrink-0 text-slate-400 opacity-50">
-                                        {!! $item['icon'] !!}
-                                    </svg>
+                                    @if (str_starts_with(trim($item['icon']), '<svg'))
+                                        {!! preg_replace('/class="([^"]*)"/', 'class="$1 text-slate-400 opacity-50"', $item['icon'], 1) !!}
+                                    @else
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
+                                             class="w-4 h-4 shrink-0 text-slate-400 opacity-50">
+                                            {!! $item['icon'] !!}
+                                        </svg>
+                                    @endif
                                     <span class="truncate">{{ $item['label'] }}</span>
                                     <span class="ml-auto text-[10px] text-slate-400">(segera)</span>
                                 </span>

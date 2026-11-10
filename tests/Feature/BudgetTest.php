@@ -106,4 +106,22 @@ class BudgetTest extends TestCase
         $this->assertDatabaseHas('projects', ['id' => $project->id]);
         $this->assertDatabaseHas('budgets', ['id' => $budget->id]);
     }
+
+    public function test_budgets_index_page_loads_with_star_admin_ui(): void
+    {
+        $user = \App\Models\User::factory()->create(['role' => 'finance']);
+        $project = $this->makeProject();
+
+        $response = $this->actingAs($user)->get(route('budgets.index', ['project_id' => $project->id]));
+
+        $response->assertOk();
+        $response->assertSee('Realisasi Anggaran &amp; Kas Proyek', false);
+        $response->assertSee('Cari voucher / keterangan...');
+        $response->assertSee('rounded-2xl');
+        $response->assertSee('bg-[#F8FBFD]');
+        $response->assertSee('bg-[#136F9A]');
+        $response->assertSee('Terapkan');
+        $response->assertSee('Belum ada catatan pengeluaran kas yang sesuai filter.');
+        $response->assertSee('+ Catat Pengeluaran Pertama');
+    }
 }

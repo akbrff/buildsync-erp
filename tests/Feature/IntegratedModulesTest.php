@@ -75,4 +75,71 @@ class IntegratedModulesTest extends TestCase
         $response->assertSee('Buat PO');
         $response->assertSee('Filter riwayat');
     }
+
+    public function test_inventory_transactions_page_loads_with_star_admin_ui(): void
+    {
+        $user = User::factory()->create(['role' => 'logistics']);
+        $material = Material::create(['code' => 'MAT-002', 'name' => 'Pasir Pasang', 'unit' => 'm3', 'price' => 150000, 'stock' => 50, 'min_stock' => 10]);
+
+        $response = $this->actingAs($user)->get(route('inventory.transactions'));
+
+        $response->assertOk();
+        $response->assertSee('Riwayat Transaksi Inventaris');
+        $response->assertSee('Audit stok masuk dan keluar');
+        $response->assertSee('rounded-2xl');
+        $response->assertSee('bg-[#2C3E50]');
+        $response->assertSee('Belum ada transaksi stok.');
+    }
+
+    public function test_workforce_page_loads_with_star_admin_ui(): void
+    {
+        $user = User::factory()->create(['role' => 'project_manager']);
+        $worker = Worker::create(['worker_code' => 'WRK-001', 'name' => 'Budi Santoso', 'position' => 'Mandor', 'daily_rate' => 200000, 'status' => 'active']);
+        $project = $this->project();
+
+        $response = $this->actingAs($user)->get(route('workforce.index'));
+
+        $response->assertOk();
+        $response->assertSee('Penugasan & Kehadiran Tenaga Kerja', false);
+        $response->assertSee('Buat Penugasan');
+        $response->assertSee('Catat Kehadiran / Jam Kerja');
+        $response->assertSee('Penugasan Aktif');
+        $response->assertSee('Kehadiran & Pembayaran Upah', false);
+        $response->assertSee('rounded-2xl');
+        $response->assertSee('Simpan Penugasan');
+        $response->assertSee('Simpan Kehadiran');
+    }
+
+    public function test_user_roles_page_loads_with_star_admin_ui(): void
+    {
+        $superadmin = User::factory()->create(['name' => 'Administrator', 'role' => 'superadmin']);
+
+        $response = $this->actingAs($superadmin)->get(route('users.roles.index'));
+
+        $response->assertOk();
+        $response->assertSee('Manajemen Pengguna & Hak Akses', false);
+        $response->assertSee('rounded-2xl');
+        $response->assertSee('bg-[#F8FBFD]');
+        $response->assertSee('bg-[#136F9A]');
+        $response->assertSee('Administrator');
+        $response->assertSee('Superadmin');
+    }
+
+    public function test_finance_page_loads_with_star_admin_ui(): void
+    {
+        $financeUser = User::factory()->create(['name' => 'Finance Staff', 'role' => 'finance']);
+
+        $response = $this->actingAs($financeUser)->get(route('finance.index'));
+
+        $response->assertOk();
+        $response->assertSee('Arus Kas & Integrasi Keuangan', false);
+        $response->assertSee('Catat Arus Kas Manual');
+        $response->assertSee('Tagihan Supplier yang Belum Lunas');
+        $response->assertSee('Riwayat Transaksi Arus Kas');
+        $response->assertSee('rounded-2xl');
+        $response->assertSee('bg-[#136F9A]');
+        $response->assertSee('bg-[#2C3E50]');
+        $response->assertSee('Tidak ada tagihan supplier yang terbuka.');
+        $response->assertSee('Belum ada transaksi arus kas.');
+    }
 }

@@ -215,17 +215,16 @@
     {{-- ═══════════════════════════════════════════════════════════
          SECONDARY TAB NAVIGATION (Jadwal | Biaya | Informasi)
          ═══════════════════════════════════════════════════════════ --}}
-    <div class="mb-4 flex items-center gap-1 overflow-x-auto" style="border-bottom:1px solid #e2e8f0;">
+    <div class="mb-6 flex items-center gap-4 sm:gap-6 overflow-x-auto">
         <button type="button"
                 id="btn-tab-tahapan"
                 onclick="switchProjectTab('tahapan')"
-                class="project-tab-btn flex items-center gap-2 px-3.5 pb-2.5 pt-1 text-xs font-semibold whitespace-nowrap transition-colors"
-                style="color:#2563eb; border-bottom:2px solid #2563eb; margin-bottom:-1px;">
+                class="project-tab-btn flex items-center gap-2 text-[13px] font-bold text-[#136F9A] border-b-2 border-[#136F9A] pb-3 whitespace-nowrap transition-all">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
             </svg>
             Tahapan & Jadwal
-            <span class="tabular rounded px-1.5 py-0.2 text-[10px]" style="background:#eff6ff; color:#2563eb;">
+            <span class="project-tab-badge tabular bg-[#136F9A]/10 text-[#136F9A] rounded-full px-2 py-0.5 text-[10px]">
                 {{ $totalSchedules }}
             </span>
         </button>
@@ -233,13 +232,12 @@
         <button type="button"
                 id="btn-tab-biaya"
                 onclick="switchProjectTab('biaya')"
-                class="project-tab-btn flex items-center gap-2 px-3.5 pb-2.5 pt-1 text-xs font-semibold whitespace-nowrap transition-colors"
-                style="color:#64748b; border-bottom:2px solid transparent; margin-bottom:-1px;">
+                class="project-tab-btn flex items-center gap-2 text-[13px] font-medium text-[#7F7F7F] hover:text-[#2C3E50] border-b-2 border-transparent hover:border-slate-200 pb-3 transition-all whitespace-nowrap">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
             </svg>
             Realisasi Anggaran & Biaya
-            <span class="tabular rounded px-1.5 py-0.2 text-[10px]" style="background:#f1f5f9; color:#475569;">
+            <span class="project-tab-badge tabular bg-slate-100 text-[#7F7F7F] rounded-full px-2 py-0.5 text-[10px]">
                 {{ $project->budgets->count() }}
             </span>
         </button>
@@ -247,8 +245,7 @@
         <button type="button"
                 id="btn-tab-informasi"
                 onclick="switchProjectTab('informasi')"
-                class="project-tab-btn flex items-center gap-2 px-3.5 pb-2.5 pt-1 text-xs font-semibold whitespace-nowrap transition-colors"
-                style="color:#64748b; border-bottom:2px solid transparent; margin-bottom:-1px;">
+                class="project-tab-btn flex items-center gap-2 text-[13px] font-medium text-[#7F7F7F] hover:text-[#2C3E50] border-b-2 border-transparent hover:border-slate-200 pb-3 transition-all whitespace-nowrap">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
@@ -262,65 +259,58 @@
     <div id="tab-tahapan" class="project-tab-pane">
         {{-- Banner jika bobot belum 100% --}}
         @if ($totalWeight < 100)
-            <div class="mb-3 flex items-center justify-between gap-3 rounded-md px-3.5 py-2.5 text-xs"
-                 style="background:#fffbeb; border:1px solid #fde68a; color:#b45309;">
-                <div class="flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                    </svg>
-                    <span>
-                        Total bobot pekerjaan saat ini baru <strong class="tabular">{{ number_format($totalWeight, 2, ',', '.') }}%</strong> dari 100%.
-                        Tersisa <strong class="tabular">{{ number_format(100 - $totalWeight, 2, ',', '.') }}%</strong> alokasi bobot yang belum ditentukan.
-                    </span>
+            <div class="bg-[#ED7132]/10 rounded-xl p-4 mb-6 flex items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0 text-[#ED7132]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+                <div class="flex-1 text-[13px] text-[#ED7132] font-medium">
+                    Total bobot pekerjaan saat ini baru <strong class="tabular font-bold">{{ number_format($totalWeight, 2, ',', '.') }}%</strong> dari 100%.
+                    Tersisa <strong class="tabular font-bold">{{ number_format(100 - $totalWeight, 2, ',', '.') }}%</strong> alokasi bobot yang belum ditentukan.
                 </div>
                 <a href="{{ route('schedules.create', ['project_id' => $project->id]) }}"
-                   class="shrink-0 font-semibold underline hover:text-amber-900">
+                   class="shrink-0 text-[13px] text-[#ED7132] font-bold hover:underline cursor-pointer">
                     + Alokasikan Bobot
                 </a>
             </div>
         @endif
 
-        <div class="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_2px_12px_rgba(44,62,80,0.04)]">
-            <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+        <div class="bg-white rounded-2xl shadow-[0_2px_12px_rgba(44,62,80,0.04)] p-6 mb-6">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                 <div>
-                    <h3 class="text-[15px] font-bold text-[#2C3E50]">
+                    <h3 class="text-[15px] font-bold text-[#2C3E50] mb-1">
                         Tahapan Pekerjaan Terjadwal
                     </h3>
                     <p class="text-xs text-[#7F7F7F]">
                         Daftar rincian pekerjaan dan progres tertimbang aktual.
                     </p>
                 </div>
-                <div class="flex items-center gap-2">
+                <div class="flex flex-wrap items-center gap-2.5 shrink-0">
                     <a href="{{ route('schedules.timeline', ['project_id' => $project->id]) }}"
-                       class="inline-flex items-center gap-1 rounded px-2.5 py-1 text-xs font-medium transition-colors"
-                       style="border:1px solid #e2e8f0; background:#fff; color:#475569;"
-                       onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='#fff';">
+                       class="inline-flex items-center gap-1.5 bg-white border border-slate-200/80 text-[#2C3E50] rounded-lg px-4 py-2.5 text-xs font-semibold hover:bg-slate-50 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                         </svg>
                         Lihat Gantt Proyek
                     </a>
                     <a href="{{ route('schedules.create', ['project_id' => $project->id]) }}"
-                       class="inline-flex items-center gap-1 rounded px-2.5 py-1 text-xs font-semibold text-white transition-colors"
-                       style="background:#2563eb; border:1px solid #1d4ed8;"
-                       onmouseover="this.style.background='#1d4ed8';" onmouseout="this.style.background='#2563eb';">
+                       class="inline-flex items-center gap-1.5 bg-[#136F9A] text-white rounded-lg px-4 py-2.5 text-xs font-bold hover:bg-[#136F9A]/90 transition-colors shadow-[0_4px_10px_rgba(19,111,154,0.2)]">
                         + Tambah Tahapan
                     </a>
                 </div>
             </div>
 
-            <div class="overflow-x-auto">
-                <table class="erp-table w-full text-left">
+            <div class="overflow-x-auto w-full rounded-xl border border-slate-100">
+                <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr>
-                            <th style="width:40px;">#</th>
-                            <th>Pekerjaan</th>
-                            <th class="text-right" style="min-width:90px;">Bobot</th>
-                            <th style="min-width:160px;">Periode Jadwal</th>
-                            <th class="text-right" style="min-width:70px;">Durasi</th>
-                            <th style="min-width:180px;">Progres Aktual</th>
-                            <th style="min-width:110px;">Status</th>
-                            <th class="text-center" style="width:130px;">Aksi</th>
+                        <tr class="bg-[#F8FBFD]">
+                            <th class="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-[#7F7F7F] border-b border-slate-100" style="width:40px;">#</th>
+                            <th class="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-[#7F7F7F] border-b border-slate-100">PEKERJAAN</th>
+                            <th class="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-[#7F7F7F] border-b border-slate-100 text-right" style="min-width:90px;">BOBOT</th>
+                            <th class="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-[#7F7F7F] border-b border-slate-100 whitespace-nowrap" style="min-width:160px;">PERIODE JADWAL</th>
+                            <th class="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-[#7F7F7F] border-b border-slate-100 text-right" style="min-width:70px;">DURASI</th>
+                            <th class="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-[#7F7F7F] border-b border-slate-100" style="min-width:180px;">PROGRES AKTUAL</th>
+                            <th class="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-[#7F7F7F] border-b border-slate-100 text-center" style="min-width:110px;">STATUS</th>
+                            <th class="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-[#7F7F7F] border-b border-slate-100 text-center" style="width:140px;">AKSI</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -337,49 +327,49 @@
                                     default       => 'neutral',
                                 };
                             @endphp
-                            <tr>
-                                <td class="tabular text-xs text-slate-400">{{ $index + 1 }}</td>
-                                <td>
+                            <tr class="text-[13px] text-[#2C3E50] border-b border-slate-50 hover:bg-[#F8FBFD]/50 transition-colors">
+                                <td class="px-4 py-3 tabular text-xs text-slate-400">{{ $index + 1 }}</td>
+                                <td class="px-4 py-3">
                                     <a href="{{ route('schedules.show', $schedule) }}"
-                                       class="text-xs font-semibold text-blue-600 hover:underline">
+                                       class="font-medium text-[#2C3E50] hover:text-[#136F9A] transition-colors">
                                         {{ $schedule->name }}
                                     </a>
                                     @if ($schedule->description)
-                                        <p class="truncate text-[11px] text-slate-500 max-w-xs">{{ $schedule->description }}</p>
+                                        <p class="truncate text-[11px] text-[#7F7F7F] max-w-xs mt-0.5">{{ $schedule->description }}</p>
                                     @endif
                                 </td>
-                                <td class="text-right tabular font-semibold text-slate-900">
+                                <td class="px-4 py-3 text-right tabular font-semibold text-[#2C3E50]">
                                     {{ number_format($schedule->weight, 2, ',', '.') }}%
                                 </td>
-                                <td class="tabular text-xs text-slate-600">
+                                <td class="px-4 py-3 tabular text-xs text-slate-600 whitespace-nowrap">
                                     {{ $sStart->format('d M Y') }} – {{ $sEnd->format('d M Y') }}
                                 </td>
-                                <td class="text-right tabular text-xs text-slate-600">
+                                <td class="px-4 py-3 text-right tabular text-xs text-slate-600">
                                     {{ $sDuration }}h
                                 </td>
-                                <td>
+                                <td class="px-4 py-3">
                                     <div class="flex items-center gap-2">
-                                        <div class="relative h-2 flex-1 overflow-hidden rounded-full" style="background:#f1f5f9; min-width:80px;">
+                                        <div class="relative h-2 flex-1 overflow-hidden rounded-full bg-slate-100" style="min-width:80px;">
                                             <div class="h-full rounded-full transition-all"
                                                  style="width:{{ $schedule->current_progress }}%;
-                                                        background:{{ $schedule->current_progress >= 100 ? '#10b981' : '#2563eb' }};"></div>
+                                                        background:{{ $schedule->current_progress >= 100 ? '#27B1AE' : '#136F9A' }};"></div>
                                         </div>
-                                        <span class="shrink-0 text-xs font-semibold tabular w-11 text-right text-slate-900">
+                                        <span class="shrink-0 text-xs font-semibold tabular w-11 text-right text-[#2C3E50]">
                                             {{ number_format($schedule->current_progress, 1, ',', '.') }}%
                                         </span>
                                     </div>
                                 </td>
-                                <td>
+                                <td class="px-4 py-3 text-center whitespace-nowrap">
                                     <x-badge :variant="$scheduleStatusVariant">{{ $schedule->status }}</x-badge>
                                 </td>
-                                <td class="text-center">
+                                <td class="px-4 py-3 text-center whitespace-nowrap">
                                     <div class="flex items-center justify-center gap-2">
                                         <a href="{{ route('schedules.show', $schedule) }}"
-                                           class="rounded px-2 py-1 text-xs font-medium text-blue-600 hover:bg-blue-50 transition">
+                                           class="rounded px-2 py-1 text-xs font-semibold text-[#136F9A] hover:bg-[#136F9A]/10 transition-colors">
                                             Catat Progres
                                         </a>
                                         <a href="{{ route('schedules.edit', $schedule) }}"
-                                           class="rounded px-1.5 py-1 text-xs font-medium text-amber-600 hover:bg-amber-50 transition">
+                                           class="rounded px-1.5 py-1 text-xs font-semibold text-[#ED7132] hover:bg-[#ED7132]/10 transition-colors">
                                             Edit
                                         </a>
                                     </div>
@@ -394,7 +384,7 @@
                                     Belum ada tahapan pekerjaan untuk proyek ini.
                                     <br>
                                     <a href="{{ route('schedules.create', ['project_id' => $project->id]) }}"
-                                       class="mt-2 inline-flex items-center gap-1 rounded px-3 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 transition">
+                                       class="mt-3 inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-xs font-bold text-white bg-[#136F9A] hover:bg-[#136F9A]/90 transition-colors shadow-[0_4px_10px_rgba(19,111,154,0.2)]">
                                         + Buat Tahapan Pertama
                                     </a>
                                 </td>
@@ -402,19 +392,19 @@
                         @endforelse
                     </tbody>
                     @if ($project->schedules->isNotEmpty())
-                        <tfoot>
-                            <tr class="font-semibold text-xs text-slate-800" style="background:#f8fafc; border-top:1px solid #e2e8f0;">
-                                <td colspan="2" class="text-right uppercase tracking-wider text-[11px] text-slate-500">
-                                    Total Bobot & Rata-rata Progres:
+                        <tfoot class="bg-[#F8FBFD] font-bold text-[#2C3E50] border-t-2 border-slate-100">
+                            <tr>
+                                <td colspan="2" class="px-4 py-3 text-right uppercase tracking-wider text-[10px] text-[#7F7F7F]">
+                                    TOTAL BOBOT & RATA-RATA PROGRES:
                                 </td>
-                                <td class="text-right tabular font-bold {{ $totalWeight >= 100 ? 'text-green-700' : 'text-amber-700' }}">
+                                <td class="px-4 py-3 text-right tabular font-bold {{ $totalWeight >= 100 ? 'text-[#27B1AE]' : 'text-[#ED7132]' }}">
                                     {{ number_format($totalWeight, 2, ',', '.') }}%
                                 </td>
-                                <td colspan="2"></td>
-                                <td class="tabular font-bold text-blue-700">
+                                <td colspan="2" class="px-4 py-3"></td>
+                                <td class="px-4 py-3 tabular font-bold text-[#136F9A]">
                                     Weighted: {{ number_format($overallProgress, 2, ',', '.') }}%
                                 </td>
-                                <td colspan="2"></td>
+                                <td colspan="2" class="px-4 py-3"></td>
                             </tr>
                         </tfoot>
                     @endif
@@ -659,10 +649,15 @@ function switchProjectTab(tabId) {
         pane.classList.add('hidden');
     });
 
-    // Reset style semua tombol tab
+    // Reset style semua tombol tab ke state tidak aktif
     document.querySelectorAll('.project-tab-btn').forEach(function(btn) {
-        btn.style.color = '#64748b';
-        btn.style.borderBottomColor = 'transparent';
+        btn.classList.remove('font-bold', 'text-[#136F9A]', 'border-[#136F9A]');
+        btn.classList.add('font-medium', 'text-[#7F7F7F]', 'border-transparent');
+        const badge = btn.querySelector('.project-tab-badge');
+        if (badge) {
+            badge.classList.remove('bg-[#136F9A]/10', 'text-[#136F9A]');
+            badge.classList.add('bg-slate-100', 'text-[#7F7F7F]');
+        }
     });
 
     // Aktifkan panel target
@@ -674,8 +669,13 @@ function switchProjectTab(tabId) {
     // Aktifkan tombol target
     const activeBtn = document.getElementById('btn-tab-' + tabId);
     if (activeBtn) {
-        activeBtn.style.color = '#2563eb';
-        activeBtn.style.borderBottomColor = '#2563eb';
+        activeBtn.classList.remove('font-medium', 'text-[#7F7F7F]', 'border-transparent');
+        activeBtn.classList.add('font-bold', 'text-[#136F9A]', 'border-[#136F9A]');
+        const badge = activeBtn.querySelector('.project-tab-badge');
+        if (badge) {
+            badge.classList.remove('bg-slate-100', 'text-[#7F7F7F]');
+            badge.classList.add('bg-[#136F9A]/10', 'text-[#136F9A]');
+        }
     }
 
     // Update URL hash tanpa reload
