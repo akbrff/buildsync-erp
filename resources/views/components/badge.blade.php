@@ -9,34 +9,19 @@
      */
     'variant' => 'neutral',
     'dot'     => false,
-    'size'    => 'sm',
+    'size'    => null,
 ])
 
 @php
 $classes = match ($variant) {
-    'success'           => 'bg-[#27B1AE]/15 text-[#27B1AE] border border-[#27B1AE]/25',
-    'warning', 'danger' => 'bg-[#ED7132]/15 text-[#ED7132] border border-[#ED7132]/25',
-    'info'              => 'bg-[#136F9A]/15 text-[#136F9A] border border-[#136F9A]/25',
-    'neutral'           => 'bg-[#2C3E50]/10 text-[#2C3E50] border border-[#2C3E50]/15',
-    default             => 'bg-[#2C3E50]/10 text-[#2C3E50] border border-[#2C3E50]/15',
+    'success'           => 'bg-[#27B1AE]/15 text-[#27B1AE]',
+    'warning', 'danger' => 'bg-[#ED7132]/15 text-[#ED7132]',
+    'info'              => 'bg-[#136F9A]/15 text-[#136F9A]',
+    'neutral'           => 'bg-[#2C3E50]/10 text-[#2C3E50]',
+    default             => 'bg-[#2C3E50]/10 text-[#2C3E50]',
 };
-
-$dotColor = match ($variant) {
-    'success'           => 'bg-[#27B1AE]',
-    'warning', 'danger' => 'bg-[#ED7132]',
-    'info'              => 'bg-[#136F9A]',
-    'neutral'           => 'bg-[#2C3E50]',
-    default             => 'bg-[#2C3E50]',
-};
-
-$sizeClass = $size === 'xs'
-    ? 'text-[10px] px-2 py-0.5'
-    : 'text-[11px] px-2.5 py-0.5';
 @endphp
 
-<span {{ $attributes->merge(['class' => "inline-flex items-center gap-1.5 rounded-md font-semibold leading-none $classes $sizeClass"]) }}>
-    @if ($dot)
-        <span class="inline-block h-1.5 w-1.5 rounded-full {{ $dotColor }}"></span>
-    @endif
+<span {{ $attributes->merge(['class' => "inline-flex items-center justify-center px-2.5 py-1 rounded-md text-[11px] font-bold tracking-wide whitespace-nowrap $classes"]) }}>
     {{ $slot }}
 </span>

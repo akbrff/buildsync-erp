@@ -30,7 +30,7 @@
     <div class="flex items-center justify-between gap-1 mb-2">
         <p class="text-xs font-semibold text-[#7F7F7F] uppercase tracking-wider truncate">{{ $label }}</p>
         @if ($badge)
-            <x-badge :variant="$badgeVariant" size="xs" :dot="true">{{ $badge }}</x-badge>
+            <x-badge :variant="$badgeVariant">{{ $badge }}</x-badge>
         @endif
     </div>
 

@@ -55,4 +55,24 @@ class IntegratedModulesTest extends TestCase
             'worker_assignment_id'=>$otherAssignment->id,'work_date'=>now()->toDateString(),'hours'=>8,'days_worked'=>1,
         ])->assertForbidden();
     }
+
+    public function test_procurement_index_page_loads_with_star_admin_ui(): void
+    {
+        $user = User::factory()->create(['role' => 'logistics']);
+        $supplier = Supplier::create(['supplier_code' => 'SUP-001', 'name' => 'Supplier Baja', 'status' => 'active']);
+        $project = $this->project();
+        $material = Material::create(['code' => 'MAT-001', 'name' => 'Besi Beton', 'unit' => 'batang', 'price' => 50000, 'stock' => 100, 'min_stock' => 20]);
+
+        $response = $this->actingAs($user)->get(route('procurement.index'));
+
+        $response->assertOk();
+        $response->assertSee('Tambah Supplier');
+        $response->assertSee('Buat Purchase Order');
+        $response->assertSee('Riwayat Pembelian & Penerimaan', false);
+        $response->assertSee('rounded-2xl');
+        $response->assertSee('+ Tambah item material');
+        $response->assertSee('Simpan Supplier');
+        $response->assertSee('Buat PO');
+        $response->assertSee('Filter riwayat');
+    }
 }

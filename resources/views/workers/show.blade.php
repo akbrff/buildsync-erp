@@ -20,9 +20,9 @@
                 {{ $worker->worker_code }}
             </span>
             @if ($worker->status === 'active')
-                <x-badge variant="success" dot>Aktif</x-badge>
+                <x-badge variant="success">Aktif</x-badge>
             @else
-                <x-badge variant="neutral" dot>Tidak Aktif</x-badge>
+                <x-badge variant="neutral">Tidak Aktif</x-badge>
             @endif
         </x-slot:badges>
 
