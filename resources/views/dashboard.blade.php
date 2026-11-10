@@ -55,8 +55,8 @@
                 </div>
                 <div class="flex items-center gap-4 text-xs">
                     <span class="inline-flex items-center gap-1.5 text-[#7F7F7F]">
-                        <span class="h-2.5 w-3 rounded-xs bg-[#2C3E50]"></span>
-                        <span class="text-[11px] font-semibold text-[#2C3E50]">Pagu Rencana</span>
+                        <span class="h-2.5 w-3 rounded-xs bg-[#2C3E50] dark:bg-[#38BDF8]"></span>
+                        <span class="text-[11px] font-semibold text-[#2C3E50] dark:text-[#F1F5F9]">Pagu Rencana</span>
                     </span>
                     <span class="inline-flex items-center gap-1.5 text-[#7F7F7F]">
                         <span class="h-2.5 w-3 rounded-xs bg-[#ED7132]"></span>
@@ -72,7 +72,7 @@
         </div>
 
         {{-- Dark Accent Summary Card (1/3 width, kanan grafik utama) --}}
-        <div class="flex flex-col justify-between overflow-hidden rounded-2xl bg-[#2C3E50] text-white p-6 shadow-[0_2px_12px_rgba(44,62,80,0.04)]">
+        <div class="flex flex-col justify-between overflow-hidden rounded-2xl bg-[#2C3E50] dark:bg-gradient-to-br dark:from-[#16293D] dark:to-[#0F1E2E] dark:border dark:border-[#27B1AE]/25 text-white p-6 shadow-[0_2px_12px_rgba(44,62,80,0.04)]">
             <div>
                 <div class="flex items-center justify-between gap-2">
                     <div>
@@ -285,10 +285,28 @@
 document.addEventListener('DOMContentLoaded', function () {
     if (typeof Chart === 'undefined') return;
 
+    // Helper untuk membaca konfigurasi tema saat ini (Light / Dark)
+    function getThemeColors() {
+        const isDark = document.documentElement.classList.contains('dark');
+        return {
+            isDark: isDark,
+            paguColor: isDark ? '#38BDF8' : '#2C3E50',
+            tickColor: isDark ? '#94A3B8' : '#7F7F7F',
+            gridColor: isDark ? 'rgba(255, 255, 255, 0.06)' : '#EEF4F8',
+            tooltipBg: isDark ? '#0F172A' : '#2C3E50',
+            doughnutBorder: isDark ? '#101E2E' : '#2C3E50'
+        };
+    }
+
+    let themeColors = getThemeColors();
+
     // ── Global Chart.js Defaults (StarAdmin Soft-UI Typography & Colors) ──
     Chart.defaults.font.family = "'Plus Jakarta Sans', 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
     Chart.defaults.font.size   = 11;
-    Chart.defaults.color       = '#7F7F7F';
+    Chart.defaults.color       = themeColors.tickColor;
+
+    let trendChartInstance = null;
+    let distChartInstance = null;
 
     // 1. Chart Tren Anggaran vs Realisasi (Combo Bar & Line)
     const trendCtx = document.getElementById('budgetTrendChart');
@@ -299,7 +317,7 @@ document.addEventListener('DOMContentLoaded', function () {
         orangeGrad.addColorStop(0, '#ED7132');
         orangeGrad.addColorStop(1, 'rgba(237, 113, 50, 0.4)');
 
-        new Chart(trendCtx, {
+        trendChartInstance = new Chart(trendCtx, {
             type: 'bar',
             data: {
                 labels: @json($trendLabels),
@@ -308,12 +326,12 @@ document.addEventListener('DOMContentLoaded', function () {
                         type: 'line',
                         label: 'Pagu Rencana',
                         data: @json($trendBudgets),
-                        borderColor: '#2C3E50',
-                        backgroundColor: '#2C3E50',
+                        borderColor: themeColors.paguColor,
+                        backgroundColor: themeColors.paguColor,
                         borderWidth: 2.5,
                         borderDash: [5, 4],
                         pointRadius: 3.5,
-                        pointBackgroundColor: '#2C3E50',
+                        pointBackgroundColor: themeColors.paguColor,
                         pointHoverRadius: 5,
                         tension: 0.25,
                         order: 1
@@ -338,7 +356,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         display: false
                     },
                     tooltip: {
-                        backgroundColor: '#2C3E50',
+                        backgroundColor: themeColors.tooltipBg,
                         titleColor: '#FFFFFF',
                         bodyColor: '#F8FBFD',
                         titleFont: { size: 12, weight: '700' },
@@ -360,7 +378,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             drawBorder: false
                         },
                         ticks: {
-                            color: '#7F7F7F'
+                            color: themeColors.tickColor
                         }
                     },
                     y: {
@@ -368,11 +386,11 @@ document.addEventListener('DOMContentLoaded', function () {
                             dash: [4, 4]
                         },
                         grid: {
-                            color: '#EEF4F8',
+                            color: themeColors.gridColor,
                             drawBorder: false
                         },
                         ticks: {
-                            color: '#7F7F7F',
+                            color: themeColors.tickColor,
                             callback: function (value) {
                                 if (value >= 1000000000) return 'Rp ' + (value / 1000000000).toFixed(1) + 'M';
                                 if (value >= 1000000) return 'Rp ' + (value / 1000000).toFixed(0) + 'Jt';
@@ -394,7 +412,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // StarAdmin Palette: Orange, Turquoise, Primary Blue, Muted Light Blue
         const colorPalette = ['#ED7132', '#27B1AE', '#136F9A', '#9EACB9', '#F8FBFD'];
 
-        new Chart(distCtx, {
+        distChartInstance = new Chart(distCtx, {
             type: 'doughnut',
             data: {
                 labels: costLabels,
@@ -402,7 +420,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     data: costData,
                     backgroundColor: colorPalette.slice(0, costLabels.length),
                     borderWidth: 2,
-                    borderColor: '#2C3E50',
+                    borderColor: themeColors.doughnutBorder,
                     hoverOffset: 4
                 }]
             },
@@ -431,6 +449,28 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+
+    // Listener custom event theme-changed untuk reaktifitas Chart.js
+    window.addEventListener('theme-changed', function () {
+        const updatedColors = getThemeColors();
+        Chart.defaults.color = updatedColors.tickColor;
+
+        if (trendChartInstance) {
+            trendChartInstance.data.datasets[0].borderColor = updatedColors.paguColor;
+            trendChartInstance.data.datasets[0].backgroundColor = updatedColors.paguColor;
+            trendChartInstance.data.datasets[0].pointBackgroundColor = updatedColors.paguColor;
+            trendChartInstance.options.scales.x.ticks.color = updatedColors.tickColor;
+            trendChartInstance.options.scales.y.ticks.color = updatedColors.tickColor;
+            trendChartInstance.options.scales.y.grid.color = updatedColors.gridColor;
+            trendChartInstance.options.plugins.tooltip.backgroundColor = updatedColors.tooltipBg;
+            trendChartInstance.update();
+        }
+
+        if (distChartInstance) {
+            distChartInstance.data.datasets[0].borderColor = updatedColors.doughnutBorder;
+            distChartInstance.update();
+        }
+    });
 });
 </script>
 @endpush

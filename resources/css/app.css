@@ -2,6 +2,8 @@
 
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source "../**/*.blade.php";
@@ -213,3 +215,166 @@ body {
 .sidebar-link {
     transition: background 0.15s ease, color 0.15s ease;
 }
+
+/* ═════════════════════════════════════════════════════════════
+   GLOBAL DARK MODE OVERRIDES (StarAdmin Soft-UI Dark Palette)
+   ═════════════════════════════════════════════════════════════ */
+html.dark {
+    --bg-app:         #0B111E;
+    --bg-sidebar:     #0B111E;
+    --bg-surface:     #151F30;
+    --bg-subtle:      #0F172A;
+    --border-subtle:  rgba(255, 255, 255, 0.07);
+    --border-strong:  #26354D;
+    --text-main:      #F1F5F9;
+    --text-muted:     #94A3B8;
+    --text-dim:       #64748B;
+    --card-shadow:    0 4px 20px rgba(0, 0, 0, 0.25);
+    color-scheme: dark;
+}
+
+/* Kanvas Utama & Sidebar & Body */
+html.dark body {
+    background-color: #0B111E !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark [style*="background:#F8FBFD"],
+html.dark [style*="background: #F8FBFD"],
+html.dark .bg-\[\#F8FBFD\] {
+    background-color: #0B111E !important;
+}
+
+html.dark aside#sidebar {
+    background-color: #0B111E !important;
+    border-color: rgba(255, 255, 255, 0.07) !important;
+}
+
+html.dark header.sticky {
+    background-color: #0B111E !important;
+    border-color: rgba(255, 255, 255, 0.07) !important;
+}
+
+/* Kartu & Permukaan Putih */
+html.dark .bg-white {
+    background-color: #151F30 !important;
+    border-color: rgba(255, 255, 255, 0.06) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Teks Utama (#2C3E50) */
+html.dark .text-\[\#2C3E50\]:not(button.bg-\[\#136F9A\], button.bg-\[\#2C3E50\], a.bg-\[\#136F9A\], a.bg-\[\#2C3E50\], .text-white, .btn-primary) {
+    color: #F1F5F9 !important;
+}
+
+/* Teks Sekunder (#7F7F7F) */
+html.dark .text-\[\#7F7F7F\] {
+    color: #94A3B8 !important;
+}
+
+/* Link & Teks Aksen Biru (#136F9A) */
+html.dark .text-\[\#136F9A\]:not(button, a.bg-\[\#136F9A\], .bg-\[\#136F9A\], .text-white) {
+    color: #38BDF8 !important;
+}
+
+html.dark .bg-\[\#136F9A\]\/10,
+html.dark .bg-\[\#136F9A\]\/15 {
+    background-color: rgba(56, 189, 248, 0.15) !important;
+    color: #38BDF8 !important;
+}
+
+/* Badge Neutral di Dark Mode */
+html.dark .bg-\[\#2C3E50\]\/10 {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    color: #CBD5E1 !important;
+}
+
+/* Header & Footer Tabel */
+html.dark thead tr.bg-\[\#F8FBFD\],
+html.dark thead .bg-\[\#F8FBFD\],
+html.dark tfoot tr.bg-\[\#F8FBFD\],
+html.dark tfoot .bg-\[\#F8FBFD\],
+html.dark .erp-table thead th {
+    background-color: #101827 !important;
+    border-color: #1E293B !important;
+    color: #94A3B8 !important;
+}
+
+/* Garis Tabel & Border Slate */
+html.dark .border-slate-50,
+html.dark .border-slate-100,
+html.dark .border-slate-200,
+html.dark .border-slate-200\/70,
+html.dark .border-slate-200\/80,
+html.dark .border-\[\#EEF4F8\] {
+    border-color: rgba(255, 255, 255, 0.07) !important;
+}
+
+html.dark tbody tr {
+    border-color: rgba(255, 255, 255, 0.07) !important;
+}
+
+html.dark tbody tr:hover,
+html.dark tr.hover\:bg-\[\#F8FBFD\]\/50:hover {
+    background-color: rgba(255, 255, 255, 0.03) !important;
+}
+
+/* Form Input, Select, & Textarea */
+html.dark input:not([type="submit"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]),
+html.dark select,
+html.dark textarea,
+html.dark .erp-input,
+html.dark .bg-slate-50\/50 {
+    background-color: #0F172A !important;
+    border-color: #26354D !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+    color: #64748B !important;
+}
+
+html.dark input:focus,
+html.dark select:focus,
+html.dark textarea:focus,
+html.dark .erp-input:focus {
+    border-color: #27B1AE !important;
+    box-shadow: 0 0 0 1px #27B1AE !important;
+    background-color: #0F172A !important;
+}
+
+/* Tombol Sekunder di Dark Mode */
+html.dark .btn-secondary,
+html.dark button.bg-white,
+html.dark a.bg-white {
+    background-color: #1E293B !important;
+    border-color: #334155 !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .btn-secondary:hover,
+html.dark button.bg-white:hover,
+html.dark a.bg-white:hover {
+    background-color: #334155 !important;
+}
+
+/* Custom Scrollbar saat html.dark */
+html.dark ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+html.dark ::-webkit-scrollbar-track {
+    background: #0B111E;
+}
+html.dark ::-webkit-scrollbar-thumb {
+    background: #26354D;
+    border-radius: 4px;
+}
+html.dark ::-webkit-scrollbar-thumb:hover {
+    background: #334155;
+}
+html.dark {
+    scrollbar-color: #26354D #0B111E;
+}
+

@@ -18,6 +18,8 @@ class DashboardTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('BuildSync ERP');
         $response->assertSee('Total Proyek');
-        $response->assertSee('Progres Proyek');	
+        $response->assertSee('Progres Proyek');
+        $response->assertSee('theme-toggle');
+        $response->assertSee('localStorage.getItem(\'theme\')', false);
     }
 }

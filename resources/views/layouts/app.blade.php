@@ -8,8 +8,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+    </script>
 </head>
-<body class="antialiased" style="background:#F8FBFD; color:#2C3E50;">
+<body class="antialiased bg-[#F8FBFD] dark:bg-[#0B111E] text-[#2C3E50] dark:text-[#F1F5F9]">
 @php
     /**
      * StarAdmin Soft-UI Navigation Groups
@@ -309,6 +319,21 @@
 
             {{-- Right side: Soft capsule pill badge/filter --}}
             <div class="flex items-center gap-3">
+                {{-- Dark / Light Mode Toggle Button --}}
+                <button type="button"
+                        id="theme-toggle"
+                        aria-label="Toggle Dark Mode"
+                        class="rounded-xl bg-white dark:bg-[#162031] border border-slate-200/70 dark:border-slate-700/70 p-2 text-[#2C3E50] dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all cursor-pointer flex items-center justify-center">
+                    {{-- Moon SVG (Light Mode) --}}
+                    <svg id="theme-toggle-dark-icon" class="w-4 h-4 text-[#2C3E50] block dark:hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                    {{-- Sun SVG (Dark Mode) --}}
+                    <svg id="theme-toggle-light-icon" class="w-4 h-4 text-[#ED7132] hidden dark:block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                </button>
+
                 <div class="flex items-center gap-2 rounded-lg bg-white border border-slate-200/70 px-3 py-1.5 text-xs text-[#2C3E50] shadow-[0_1px_3px_rgba(44,62,80,0.03)]">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-[#7F7F7F]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
@@ -355,6 +380,18 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 backdrop.classList.add('hidden');
             }
+        });
+    }
+
+    // Toggle Dark / Light Mode
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', function () {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            window.dispatchEvent(new CustomEvent('theme-changed', {
+                detail: { theme: isDark ? 'dark' : 'light', isDark: isDark }
+            }));
         });
     }
 });
