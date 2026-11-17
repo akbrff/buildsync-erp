@@ -219,10 +219,19 @@ class ProgressUpdateTest extends TestCase
 
         $this->get(route('schedules.show', $schedule))
             ->assertStatus(200)
-            ->assertSee('Progres Terakhir')
-            ->assertSee('Riwayat Progres')
+            ->assertSee('Latest Progress')
+            ->assertSee('Progress History')
             ->assertSee('70,00%')
             ->assertSee('20,00%');
+
+        // Test Indonesian locale
+        $user = auth()->user();
+        $user->update(['locale' => 'id']);
+        $this->get(route('schedules.show', $schedule))
+            ->assertStatus(200)
+            ->assertSee('Progres Terakhir')
+            ->assertSee('Riwayat Progres');
+        $user->update(['locale' => 'en']);
     }
 
     public function test_history_is_ordered_newest_first(): void

@@ -1,0 +1,112 @@
+/* ═════════════════════════════════════════════════════════════
+   BUILDSYNC ERP DESIGN SYSTEM — TABLES
+   ═════════════════════════════════════════════════════════════
+   File: resources/css/design-system/tables.css
+   Deskripsi: Standar tabel enterprise (header 13px, baris 14px,
+   hover row highlight, dan wrapper kontainer bergaris lembut).
+   ═════════════════════════════════════════════════════════════ */
+
+/* ─── 1. Table Container Wrapper ───────────────────────────── */
+.erp-table-container {
+    overflow: hidden;
+    border-radius: var(--radius-lg, 8px);
+    border: 1px solid var(--border-subtle);
+    background-color: var(--bg-surface);
+    box-shadow: none;
+}
+
+/* ─── 2. Enterprise Table Base ─────────────────────────────── */
+.erp-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.erp-table th,
+.erp-table thead th {
+    padding: 0.75rem 1rem;          /* 12px 16px */
+    font-size: 0.8125rem;           /* 13px Header Standar */
+    font-weight: 500;               /* Medium weight */
+    color: var(--text-muted);       /* #64748B */
+    background-color: var(--color-frost);
+    border-bottom: 1px solid var(--border-subtle);
+    line-height: 1.25rem;
+    letter-spacing: normal;
+}
+
+.erp-table td {
+    padding: 0.75rem 1rem;          /* 12px 16px -> 48-52px row height */
+    font-size: 0.875rem;            /* 14px Readable Text */
+    color: var(--text-main);        /* #0B2545 */
+    vertical-align: middle;
+    line-height: 1.375rem;          /* 22px Line Height */
+}
+
+.erp-table tbody tr {
+    border-bottom: 1px solid var(--border-subtle);
+    background-color: var(--bg-surface);
+    transition: background-color 0.15s ease;
+}
+
+.erp-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.erp-table tbody tr:hover td {
+    background-color: var(--color-frost);
+}
+
+/* ─── 3. Dark Mode Table Overrides ─────────────────────────── */
+html.dark thead tr.bg-\[\#F8FBFD\],
+html.dark thead .bg-\[\#F8FBFD\],
+html.dark thead tr.bg-\[\#F8F6F2\],
+html.dark thead .bg-\[\#F8F6F2\],
+html.dark thead tr.bg-\[\#F4F8FB\],
+html.dark thead .bg-\[\#F4F8FB\],
+html.dark tfoot tr.bg-\[\#F8FBFD\],
+html.dark tfoot .bg-\[\#F8FBFD\],
+html.dark .erp-table thead th,
+html.dark .erp-table th {
+    background-color: var(--dark-surface-elevated) !important;
+    border-color: var(--dark-border) !important;
+    color: var(--dark-text-secondary) !important;
+}
+
+html.dark .erp-table-container {
+    border-color: var(--dark-border) !important;
+    background-color: var(--dark-surface) !important;
+}
+
+html.dark tbody tr {
+    border-color: var(--dark-border) !important;
+    background-color: var(--dark-surface) !important;
+}
+
+html.dark tbody tr:hover,
+html.dark tr:hover td,
+html.dark .erp-table tbody tr:hover td,
+html.dark tr.hover\:bg-\[\#F8FBFD\]\/50:hover,
+html.dark tr.hover\:bg-\[\#F8FBFD\]:hover,
+html.dark tr.hover\:bg-\[\#F8F6F2\]:hover,
+html.dark tr.hover\:bg-\[\#F4F8FB\]:hover,
+html.dark tr.hover\:bg-slate-50:hover,
+html.dark tr.hover\:bg-slate-50\/70:hover,
+html.dark tr.hover\:bg-slate-100:hover,
+html.dark .hover\:bg-slate-50:hover,
+html.dark .hover\:bg-slate-100:hover,
+html.dark .hover\:bg-gray-50:hover,
+html.dark .hover\:bg-gray-100:hover,
+html.dark .hover\:bg-white:hover {
+    background-color: rgba(255, 255, 255, 0.04) !important;
+}
+
+html.dark .border-slate-50,
+html.dark .border-slate-100,
+html.dark .border-slate-200,
+html.dark .border-slate-200\/70,
+html.dark .border-slate-200\/80,
+html.dark .border-\[\#EEF4F8\],
+html.dark .border-\[\#E2E8F0\],
+html.dark .border-\[\#E5E7EB\] {
+    border-color: var(--dark-border) !important;
+}

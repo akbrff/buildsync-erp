@@ -17,14 +17,19 @@ use App\Http\Controllers\ScheduleMonitoringController;
 use App\Http\Controllers\ScheduleDashboardController;
 use App\Http\Controllers\ProjectScheduleController;
 use App\Http\Controllers\ProgressUpdateController;
+use App\Http\Controllers\SettingsController;
 
 Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('locale/{locale}', [SettingsController::class, 'switchLocale'])->name('locale.switch');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'active'])->group(function () {
     Route::get('/', fn () => redirect()->route('dashboard'));
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
+    Route::put('settings/language', [SettingsController::class, 'updateLanguage'])->name('settings.language.update');
 
     Route::middleware('role:project_manager')->group(function () {
         Route::resource('projects', ProjectController::class);
@@ -63,6 +68,13 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('role:superadmin')->group(function () {
         Route::get('users/roles', [UserRoleController::class, 'index'])->name('users.roles.index');
-        Route::patch('users/{user}/role', [UserRoleController::class, 'update'])->name('users.role.update');
+        Route::get('users', [UserRoleController::class, 'index'])->name('users.index');
+        Route::post('users', [UserRoleController::class, 'store'])->name('users.store');
+        Route::get('users/{user}', [UserRoleController::class, 'show'])->name('users.show');
+        Route::put('users/{user}', [UserRoleController::class, 'update'])->name('users.update');
+        Route::patch('users/{user}/role', [UserRoleController::class, 'updateRole'])->name('users.role.update');
+        Route::patch('users/{user}/status', [UserRoleController::class, 'toggleStatus'])->name('users.status.update');
+        Route::patch('users/{user}/reset-password', [UserRoleController::class, 'resetPassword'])->name('users.reset-password');
+        Route::delete('users/{user}', [UserRoleController::class, 'destroy'])->name('users.destroy');
     });
 });

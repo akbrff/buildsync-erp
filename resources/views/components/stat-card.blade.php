@@ -11,6 +11,7 @@
     'unit'         => null,     // Alias untuk suffix
     'badge'        => null,     // Opsional badge teks
     'badgeVariant' => 'neutral',
+    'plain'        => false,    // Tampilan terbuka / minimalis tanpa boks kartu
 ])
 
 @php
@@ -18,47 +19,52 @@
     $displayNote   = $note ?? $subtext;
 
     $noteColor = $subtextColor ?? match ($variant) {
-        'success'           => 'text-[#27B1AE]',
-        'warning', 'danger' => 'text-[#ED7132]',
-        'info'              => 'text-[#136F9A]',
-        default             => 'text-[#7F7F7F]',
+        'success'           => 'text-[#16A34A] dark:text-emerald-400',
+        'warning'           => 'text-[#D97706] dark:text-amber-400',
+        'danger'            => 'text-[#DC2626] dark:text-rose-400',
+        'info'              => 'text-[#1D4E89] dark:text-[#93C5FD]',
+        default             => 'text-[#64748B] dark:text-[#A1A1AA]',
     };
+
+    $containerClass = $plain
+        ? 'bg-transparent border-0 p-2 sm:p-3 shadow-none'
+        : 'erp-card p-5';
 @endphp
 
-<div {{ $attributes->merge(['class' => 'rounded-2xl border border-slate-100 bg-white p-5 shadow-[0_2px_12px_rgba(44,62,80,0.04)]']) }}>
+<div {{ $attributes->merge(['class' => $containerClass]) }}>
     {{-- Label (descriptor) & Optional Badge --}}
     <div class="flex items-center justify-between gap-1 mb-2">
-        <p class="text-xs font-semibold text-[#7F7F7F] uppercase tracking-wider truncate">{{ $label }}</p>
+        <p class="text-[13px] font-medium text-[#64748B] dark:text-[#A1A1AA] truncate">{{ $label }}</p>
         @if ($badge)
             <x-badge :variant="$badgeVariant">{{ $badge }}</x-badge>
         @endif
     </div>
 
     {{-- Value row --}}
-    <div class="flex items-baseline gap-1.5">
+    <div class="flex items-baseline gap-2">
         @if ($icon)
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0 text-[#7F7F7F]" fill="none"
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0 text-[#64748B] dark:text-[#A1A1AA]" fill="none"
                  viewBox="0 0 24 24" stroke="currentColor">
                 {!! $icon !!}
             </svg>
         @endif
-        <span class="text-2xl font-extrabold text-[#2C3E50] tabular-nums tracking-tight">
+        <span class="text-2xl lg:text-[28px] leading-tight font-semibold text-[#0B2545] dark:text-[#F4F4F5] tabular-nums tracking-tight">
             {{ $value }}
         </span>
         @if ($displaySuffix)
-            <span class="text-xs font-medium text-[#7F7F7F]">{{ $displaySuffix }}</span>
+            <span class="text-sm font-normal text-[#64748B] dark:text-[#A1A1AA]">{{ $displaySuffix }}</span>
         @endif
     </div>
 
     {{-- Note / sub info --}}
     @if ($displayNote)
-        <p class="mt-2.5 truncate text-[11px] font-semibold {{ $noteColor }}">
+        <p class="mt-2 truncate text-[13px] font-normal {{ $noteColor }}">
             {{ $displayNote }}
         </p>
     @endif
 
     {{-- Slot untuk konten tambahan (progress bar, dll) --}}
     @if ($slot->isNotEmpty())
-        <div class="mt-2">{{ $slot }}</div>
+        <div class="mt-3">{{ $slot }}</div>
     @endif
 </div>

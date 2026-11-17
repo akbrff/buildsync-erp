@@ -1,40 +1,39 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah Jadwal Pekerjaan')
+@section('title', __('schedules.add_schedule'))
 
 @section('breadcrumbs')
 <x-breadcrumb :links="[
-    ['label' => 'Dashboard',     'href' => route('dashboard')],
-    ['label' => 'Jadwal Proyek', 'href' => route('schedules.index')],
-    ['label' => 'Tambah Jadwal', 'href' => '#'],
+    ['label' => __('nav.dashboard'),     'href' => route('dashboard')],
+    ['label' => __('schedules.title'),  'href' => route('schedules.index')],
+    ['label' => __('schedules.add_schedule'), 'href' => '#'],
 ]"/>
 @endsection
 
 @section('content')
     <x-page-header
-        title="Tambah Jadwal Pekerjaan"
-        subtitle="Alokasikan tahapan pekerjaan baru dan tentukan bobot kontribusi terhadap total proyek.">
+        :title="__('schedules.add_schedule')">
         <a href="{{ route('schedules.index', $selectedProjectId ? ['project_id' => $selectedProjectId] : []) }}"
            class="btn-secondary">
-            &larr; Batal & Kembali
+            {!! __('schedules.cancel_and_back') !!}
         </a>
     </x-page-header>
 
     <x-flash-alert/>
 
-    <div class="max-w-4xl rounded-2xl p-6 border border-slate-100 bg-white shadow-[0_2px_12px_rgba(44,62,80,0.04)]">
+    <div class="max-w-4xl erp-card p-5 sm:p-6">
         <form action="{{ route('schedules.store') }}" method="POST">
             @csrf
             @include('schedules.partials.form', ['schedule' => null])
 
-            <div class="mt-6 flex items-center justify-end gap-2.5 pt-4 border-t border-[#EEF4F8]">
+            <div class="mt-8 flex items-center justify-end gap-3 pt-6 border-t border-[#E5E7EB] dark:border-[#27272A]">
                 <a href="{{ route('schedules.index', $selectedProjectId ? ['project_id' => $selectedProjectId] : []) }}"
-                   class="btn-secondary">
-                    Batal
+                   class="inline-flex items-center px-3.5 py-1.5 text-[11px] font-medium rounded border border-[#E5E7EB] dark:border-[#27272A] bg-white dark:bg-[#27272A] text-[#0B2545] dark:text-[#F4F4F5] hover:bg-slate-50 dark:hover:bg-white/5 transition-colors shadow-none">
+                    {{ __('common.cancel') }}
                 </a>
                 <button type="submit"
-                        class="btn-primary">
-                    Simpan Jadwal
+                        class="inline-flex items-center px-3.5 py-1.5 text-[11px] font-medium rounded bg-[#1D4E89] hover:bg-[#153A66] text-white transition-colors shadow-none cursor-pointer">
+                    {{ __('schedules.save_schedule') }}
                 </button>
             </div>
         </form>

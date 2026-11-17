@@ -1,14 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Jadwal Proyek — Timeline & Gantt')
-
-@section('breadcrumbs')
-<x-breadcrumb :links="[
-    ['label' => 'Dashboard',     'href' => route('dashboard')],
-    ['label' => 'Jadwal Proyek', 'href' => route('schedules.index')],
-    ['label' => 'Timeline & Gantt', 'href' => '#'],
-]"/>
-@endsection
+@section('title', __('schedules.title'))
+@section('subtitle', __('schedules.tab_timeline'))
 
 @section('content')
 @php
@@ -27,16 +20,16 @@
 
     {{-- ── Secondary Tab Bar ─────────────────────────────────── --}}
     <x-tab-bar :tabs="[
-        ['label' => 'Daftar Jadwal',    'route' => 'schedules.index',
+        ['label' => __('schedules.tab_list'),    'route' => 'schedules.index',
          'active_routes' => ['schedules.index'],
          'icon' => '<path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M4 6h16M4 10h16M4 14h16M4 18h7&quot;/>'],
-        ['label' => 'Monitoring & Keterlambatan', 'route' => 'schedules.monitoring',
+        ['label' => __('schedules.tab_monitoring'), 'route' => 'schedules.monitoring',
          'active_routes' => ['schedules.monitoring'],
          'icon' => '<path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z&quot;/>'],
-        ['label' => 'Timeline / Gantt', 'route' => 'schedules.timeline',
+        ['label' => __('schedules.tab_timeline'), 'route' => 'schedules.timeline',
          'active_routes' => ['schedules.timeline'],
          'icon' => '<path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z&quot;/>'],
-        ['label' => 'Ringkasan KPI',    'route' => 'schedules.dashboard',
+        ['label' => __('schedules.tab_kpi'),    'route' => 'schedules.dashboard',
          'active_routes' => ['schedules.dashboard'],
          'icon' => '<path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z&quot;/>'],
     ]"/>
@@ -44,25 +37,24 @@
     {{-- Raw marker for automated testing --}}
     <span class="sr-only" aria-hidden="true">{!! 'Timeline & Gantt Chart' !!}</span>
 
-    {{-- ── Page Header ────────────────────────────────────────── --}}
-    <x-page-header class="mt-4"
-        title="Timeline &amp; Gantt Chart"
-        subtitle="Visualisasi jadwal tahapan pekerjaan dengan alur waktu proporsional berbasis grid 1px solid.">
+    {{-- ── Section Header ────────────────────────────────────────── --}}
+    <div class="mt-4 mb-4 flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
+        <h2 class="text-base font-semibold text-slate-800 dark:text-slate-100">{{ __('schedules.tab_timeline') }}</h2>
         <a href="{{ route('schedules.create', $projectId ? ['project_id' => $projectId] : []) }}"
-           class="btn-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+           class="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-[11px] font-medium rounded bg-[#1D4E89] hover:bg-[#153A66] text-white transition-colors cursor-pointer shadow-none">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
             </svg>
-            Tambah Jadwal
+            <span>{{ __('schedules.add_schedule') }}</span>
         </a>
-    </x-page-header>
+    </div>
 
     {{-- ── Filter Bar Presisi ─────────────────────────────────── --}}
     <div class="mb-4">
         <x-filter-bar action="{{ route('schedules.timeline') }}">
             {{-- Dropdown Proyek --}}
-            <select name="project_id" class="erp-input" style="width:230px;" onchange="this.form.submit()">
-                <option value="">— Semua Proyek —</option>
+            <select name="project_id" class="erp-input !h-auto py-1.5 pl-3 pr-8 text-[11px] font-normal rounded bg-[position:right_12px_center]" style="width:230px;" onchange="this.form.submit()">
+                <option value="">{{ __('schedules.all_projects') }}</option>
                 @foreach ($projects as $project)
                     <option value="{{ $project->id }}" @selected($projectId == $project->id)>
                         {{ $project->project_code }} – {{ $project->name }}
@@ -71,71 +63,70 @@
             </select>
 
             {{-- Status Filter --}}
-            <select name="status" class="erp-input" style="width:160px;" onchange="this.form.submit()">
-                <option value="">— Semua Status —</option>
-                <option value="Terlambat" @selected(($statusFilter ?? '') === 'Terlambat')>Terlambat</option>
-                <option value="Berlangsung" @selected(($statusFilter ?? '') === 'Berlangsung')>Berlangsung</option>
-                <option value="Belum Dimulai" @selected(($statusFilter ?? '') === 'Belum Dimulai')>Belum Dimulai</option>
-                <option value="Selesai" @selected(($statusFilter ?? '') === 'Selesai')>Selesai</option>
+            <select name="status" class="erp-input !h-auto py-1.5 pl-3 pr-8 text-[11px] font-normal rounded bg-[position:right_12px_center]" style="width:160px;" onchange="this.form.submit()">
+                <option value="">{{ __('schedules.all_statuses') }}</option>
+                <option value="Terlambat" @selected(($statusFilter ?? '') === 'Terlambat')>{{ __('schedules.status_delayed') }}</option>
+                <option value="Berlangsung" @selected(($statusFilter ?? '') === 'Berlangsung')>{{ __('schedules.status_in_progress') }}</option>
+                <option value="Belum Dimulai" @selected(($statusFilter ?? '') === 'Belum Dimulai')>{{ __('schedules.status_not_started') }}</option>
+                <option value="Selesai" @selected(($statusFilter ?? '') === 'Selesai')>{{ __('schedules.status_completed') }}</option>
             </select>
 
             {{-- Rentang Tanggal --}}
             <div class="flex items-center gap-1.5">
                 <input type="date" name="start_date" value="{{ $startDate ?? request('start_date') }}"
-                       class="erp-input tabular" style="width:135px;" title="Tanggal Mulai">
-                <span class="text-xs text-slate-400">s/d</span>
+                       class="erp-input tabular !h-auto py-1.5 px-3 text-[11px] font-normal rounded [&::-webkit-calendar-picker-indicator]:mr-2" style="width:135px;" title="{{ __('projects.start_date') }}">
+                <span class="text-xs text-[#64748B] dark:text-[#A1A1AA] px-0.5">{{ __('schedules.to') }}</span>
                 <input type="date" name="end_date" value="{{ $endDate ?? request('end_date') }}"
-                       class="erp-input tabular" style="width:135px;" title="Tanggal Selesai">
+                       class="erp-input tabular !h-auto py-1.5 px-3 text-[11px] font-normal rounded [&::-webkit-calendar-picker-indicator]:mr-2" style="width:135px;" title="{{ __('projects.target_end_date') }}">
             </div>
         </x-filter-bar>
     </div>
 
     {{-- ── Ringkasan Rentang Waktu Grid ───────────────────────── --}}
     @if ($minDate && $maxDate)
-        <div class="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-md px-4 py-2.5"
-             style="background:#f8fafc; border:1px solid #e2e8f0;">
+        <div class="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-lg px-4 py-3 bg-[#F4F8FB] dark:bg-[#27272A] border border-[#E5E7EB] dark:border-[#27272A] shadow-none">
             <div class="flex items-center gap-4 text-xs">
                 <div>
-                    <span class="text-slate-500">Rentang Waktu:</span>
-                    <strong class="tabular text-slate-800">{{ $minDate->format('d M Y') }}</strong>
-                    <span class="text-slate-400">s/d</span>
-                    <strong class="tabular text-slate-800">{{ $maxDate->format('d M Y') }}</strong>
-                    <span class="text-slate-500">({{ $totalSpanDays }} hari kalender)</span>
+                    <span class="text-[#5A738E] dark:text-[#A1A1AA]">{{ __('schedules.time_range') }}</span>
+                    <strong class="tabular text-[#0B2545] dark:text-[#F4F4F5] font-semibold">{{ $minDate->format('d M Y') }}</strong>
+                    <span class="text-[#5A738E] dark:text-[#A1A1AA]">{{ __('schedules.to') }}</span>
+                    <strong class="tabular text-[#0B2545] dark:text-[#F4F4F5] font-semibold">{{ $maxDate->format('d M Y') }}</strong>
+                    <span class="text-[#5A738E] dark:text-[#A1A1AA]">({{ __('schedules.calendar_days', ['days' => $totalSpanDays]) }})</span>
                 </div>
             </div>
-            <div class="flex items-center gap-3 text-[11px]">
-                <span class="inline-flex items-center gap-1.5">
-                    <span class="h-2 w-2 rounded-full" style="background:#22c55e;"></span> Selesai
+            <div class="flex items-center gap-3 text-xs">
+                <span class="inline-flex items-center gap-1.5 text-[#0B2545] dark:text-slate-300">
+                    <span class="h-2.5 w-2.5 rounded-full bg-[#16A34A]"></span> {{ __('schedules.status_completed') }}
                 </span>
-                <span class="inline-flex items-center gap-1.5">
-                    <span class="h-2 w-2 rounded-full" style="background:#2563eb;"></span> Berlangsung
+                <span class="inline-flex items-center gap-1.5 text-[#0B2545] dark:text-slate-300">
+                    <span class="h-2.5 w-2.5 rounded-full bg-[#1D4E89]"></span> {{ __('schedules.status_in_progress') }}
                 </span>
-                <span class="inline-flex items-center gap-1.5">
-                    <span class="h-2 w-2 rounded-full" style="background:#ef4444;"></span> Terlambat
+                <span class="inline-flex items-center gap-1.5 text-[#0B2545] dark:text-slate-300">
+                    <span class="h-2.5 w-2.5 rounded-full bg-[#DC2626]"></span> {{ __('schedules.status_delayed') }}
                 </span>
-                <span class="inline-flex items-center gap-1.5">
-                    <span class="h-2 w-2 rounded-full" style="background:#94a3b8;"></span> Belum Dimulai
+                <span class="inline-flex items-center gap-1.5 text-[#0B2545] dark:text-slate-300">
+                    <span class="h-2.5 w-2.5 rounded-full bg-[#5A738E]"></span> {{ __('schedules.status_not_started') }}
                 </span>
             </div>
         </div>
     @endif
 
     {{-- ── Visualisasi Gantt Table (Clean 1px Border Grid) ───── --}}
-    <div class="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_2px_12px_rgba(44,62,80,0.04)]">
+    <div class="overflow-hidden rounded-lg border border-[#E5E7EB] dark:border-[#27272A] bg-white dark:bg-[#18181B] shadow-none">
         <div class="overflow-x-auto">
             <table class="erp-table w-full text-left" style="min-width:960px;">
-                <thead>
-                    <tr>
-                        <th style="width:120px;">Kode Proyek</th>
-                        <th style="min-width:180px;">Nama Pekerjaan</th>
-                        <th style="width:140px;">Mulai – Selesai</th>
-                        <th class="text-right" style="width:65px;">Durasi</th>
-                        <th class="text-right" style="width:70px;">Bobot</th>
-                        <th style="width:90px;">Status</th>
-                        <th style="min-width:320px;">Garis Waktu (Gantt)</th>
+                <thead class="bg-[#F8FAFC] dark:bg-[#27272A]">
+                    <tr class="border-b border-[#E5E7EB] dark:border-[#27272A]">
+                        <th class="!py-1.5 px-3 text-[12px] font-medium text-[#64748B] dark:text-[#A1A1AA]" style="width:120px;">{{ __('projects.project_code') }}</th>
+                        <th class="!py-1.5 px-3 text-[12px] font-medium text-[#64748B] dark:text-[#A1A1AA]" style="min-width:180px;">{{ __('projects.job_name') }}</th>
+                        <th class="!py-1.5 px-3 text-[12px] font-medium text-[#64748B] dark:text-[#A1A1AA]" style="width:140px;">{{ __('schedules.start_to_finish') }}</th>
+                        <th class="!py-1.5 px-3 text-right text-[12px] font-medium text-[#64748B] dark:text-[#A1A1AA]" style="width:65px;">{{ __('projects.duration') }}</th>
+                        <th class="!py-1.5 px-3 text-right text-[12px] font-medium text-[#64748B] dark:text-[#A1A1AA]" style="width:70px;">{{ __('schedules.weight') }}</th>
+                        <th class="!py-1.5 px-3 text-[12px] font-medium text-[#64748B] dark:text-[#A1A1AA]" style="width:90px;">{{ __('common.status') }}</th>
+                        <th class="!py-1.5 px-3 text-[12px] font-medium text-[#64748B] dark:text-[#A1A1AA]" style="min-width:320px;">{{ __('schedules.gantt_timeline') }} <span class="sr-only" aria-hidden="true">Garis Waktu (Gantt)</span></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-[#E5E7EB] dark:divide-[#27272A]">
                     @forelse ($schedules as $schedule)
                         @php
                             $start    = \Carbon\Carbon::parse($schedule->start_date)->startOfDay();
@@ -156,58 +147,70 @@
                                 default       => 'neutral',
                             };
 
+                            $statusLabel = match ($schedule->status) {
+                                'Selesai'     => __('schedules.status_completed'),
+                                'Terlambat'   => __('schedules.status_delayed'),
+                                'Berlangsung' => __('schedules.status_in_progress'),
+                                'Belum Dimulai' => __('schedules.status_not_started'),
+                                default       => $schedule->status,
+                            };
+
                             $solidBarColor = match ($schedule->status) {
-                                'Selesai'     => '#22c55e',
-                                'Terlambat'   => '#ef4444',
-                                'Berlangsung' => '#2563eb',
-                                default       => '#94a3b8',
+                                'Selesai'     => '#16A34A',
+                                'Terlambat'   => '#DC2626',
+                                'Berlangsung' => '#1D4E89',
+                                default       => '#5A738E',
                             };
                         @endphp
-                        <tr>
-                            <td>
+                        <tr class="hover:bg-[#F8FAFC] dark:hover:bg-white/5 transition-colors">
+                            <td class="whitespace-nowrap">
                                 <a href="{{ route('projects.show', $schedule->project) }}"
-                                   class="font-code text-xs font-semibold text-slate-700 hover:text-blue-600">
+                                   class="text-[13px] font-medium text-[#0B2545] dark:text-[#A1A1AA] hover:text-[#1D4E89] dark:hover:text-[#CFE3F3]">
                                     {{ $schedule->project->project_code }}
                                 </a>
                             </td>
                             <td>
                                 <a href="{{ route('schedules.show', $schedule) }}"
-                                   class="text-xs font-semibold text-blue-600 hover:underline">
+                                   class="text-[13px] font-medium text-[#0B2545] dark:text-[#F4F4F5] hover:text-[#1D4E89] dark:hover:text-[#CFE3F3]">
                                     {{ $schedule->name }}
                                 </a>
                             </td>
-                            <td class="tabular text-xs text-slate-600">
+                            <td class="tabular-nums text-[13px] text-[#64748B] dark:text-[#A1A1AA]">
                                 {{ $start->format('d M') }} – {{ $end->format('d M y') }}
                             </td>
-                            <td class="text-right tabular text-xs text-slate-600">
-                                {{ $duration }}h
+                            <td class="text-right tabular-nums text-[13px] text-[#64748B] dark:text-[#A1A1AA]">
+                                {{ $duration }}{{ __('schedules.days_short') }}
                             </td>
-                            <td class="text-right tabular font-semibold text-slate-900">
+                            <td class="text-right tabular-nums text-[13px] font-medium text-[#0B2545] dark:text-[#F4F4F5]">
                                 {{ number_format($schedule->weight, 1, ',', '.') }}%
                             </td>
                             <td>
-                                <x-badge :variant="$statusVariant">{{ $schedule->status }}</x-badge>
+                                @if ($schedule->status === 'Berlangsung')
+                                    <span class="text-[12px] text-slate-600 dark:text-slate-400">{{ $statusLabel }}</span>
+                                @else
+                                    <x-badge :variant="$statusVariant">{{ $statusLabel }}</x-badge>
+                                @endif
                             </td>
                             <td class="py-2.5">
                                 <div class="flex items-center gap-3">
                                     {{-- Gantt Timeline Track Container --}}
-                                    <div class="relative h-6 flex-1 rounded" style="background:#f8fafc; border:1px solid #e2e8f0;">
+                                    <div class="relative h-6 flex-1 rounded-md bg-[#F8FAFC] dark:bg-white/5 border border-[#E5E7EB] dark:border-[#27272A]">
                                         {{-- Bar Waktu Proporsional --}}
                                         <div class="absolute top-1 bottom-1 rounded overflow-hidden"
-                                             style="left:{{ $leftPercent }}%; width:{{ $widthPercent }}%; background:#e2e8f0; border:1px solid #cbd5e1;">
+                                             style="left:{{ $leftPercent }}%; width:{{ $widthPercent }}%; background:#E5E7EB; border:1px solid #CBD5E1;">
                                             {{-- Realisasi Progres Fill --}}
                                             <div class="h-full transition-all"
                                                  style="width:{{ min(100, $prog) }}%; background:{{ $solidBarColor }};"></div>
                                         </div>
                                     </div>
-                                    <span class="text-[12px] font-medium text-slate-600 tabular">{{ $progress }}%</span>
+                                    <span class="text-xs font-medium text-[#0B2545] dark:text-slate-300 tabular-nums w-10 text-right">{{ $progress }}%</span>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="py-12 text-center text-xs text-slate-400">
-                                Tidak ada data tahapan pekerjaan yang cocok dengan filter.
+                            <td colspan="7" class="py-12 text-center text-xs text-[#64748B] dark:text-slate-400">
+                                {{ __('schedules.no_schedules_match_filter') }}
                             </td>
                         </tr>
                     @endforelse

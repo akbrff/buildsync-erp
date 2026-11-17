@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -22,13 +24,23 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+        $user = User::where('email', $credentials['email'])->first();
+
+        if ($user && $user->status === 'inactive') {
+            if (Hash::check($credentials['password'], $user->password)) {
+                return back()->withErrors([
+                    'email' => __('auth.deactivated_error'),
+                ])->onlyInput('email');
+            }
+        }
+
+        if (Auth::attempt(array_merge($credentials, ['status' => 'active']), $request->boolean('remember'))) {
             $request->session()->regenerate();
             return redirect()->intended(route('dashboard'));
         }
 
         return back()->withErrors([
-            'email' => 'Email atau password yang Anda masukkan salah.',
+            'email' => __('auth.invalid_credentials'),
         ])->onlyInput('email');
     }
 

@@ -13,8 +13,7 @@
 @section('content')
     {{-- Page Header --}}
     <x-page-header
-        title="{{ $worker->name }}"
-        subtitle="Profil kualifikasi spesialisasi tenaga kerja, status penugasan, dan kalkulasi estimasi upah.">
+        title="{{ $worker->name }}">
         <x-slot:badges>
             <span class="font-code rounded border border-slate-300 bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-700">
                 {{ $worker->worker_code }}
@@ -45,7 +44,7 @@
                 @csrf
                 @method('DELETE')
                 <button type="submit"
-                        class="inline-flex items-center gap-1.5 rounded-lg border border-[#ED7132]/25 bg-[#ED7132]/15 px-3 py-2 text-xs font-semibold text-[#ED7132] hover:bg-[#ED7132]/25 transition-colors">
+                        class="inline-flex items-center gap-1.5 rounded-md border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-950/30 px-3 py-2 text-xs font-semibold text-red-700 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors">
                     Hapus
                 </button>
             </form>
@@ -60,14 +59,12 @@
         <x-stat-card
             label="Tarif Upah Harian"
             :value="'Rp ' . number_format($worker->daily_rate, 0, ',', '.')"
-            subtext="Rate standar per hari (8 jam kerja)"
             color="navy"
         />
 
         <x-stat-card
             label="Status Ketersediaan"
             :value="$worker->status === 'active' ? 'Siap Kerja' : 'Standby'"
-            :subtext="$worker->status === 'active' ? 'Aktif dalam roster lapangan' : 'Tidak aktif / istirahat'"
             :color="$worker->status === 'active' ? 'emerald' : 'amber'"
             :badge="$worker->status === 'active' ? 'Aktif' : 'Non-Aktif'"
             :badgeVariant="$worker->status === 'active' ? 'success' : 'neutral'"
@@ -76,14 +73,12 @@
         <x-stat-card
             label="Estimasi Mingguan (6 Hari)"
             :value="'Rp ' . number_format($weeklyWageEst, 0, ',', '.')"
-            subtext="Beban payroll per minggu kerja"
             color="navy"
         />
 
         <x-stat-card
             label="Estimasi Bulanan (25 Hari)"
             :value="'Rp ' . number_format($monthlyWageEst, 0, ',', '.')"
-            subtext="Proyeksi beban upah bulanan"
             color="navy"
         />
     </div>
@@ -92,56 +87,56 @@
     <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
         {{-- Detail Profil (2 Cols) --}}
         <div class="space-y-4 lg:col-span-2">
-            <div class="rounded-2xl border border-slate-100 bg-white shadow-[0_2px_12px_rgba(44,62,80,0.04)] overflow-hidden">
-                <div class="border-b border-[#EEF4F8] px-6 py-4 bg-[#F8FBFD] flex items-center justify-between">
-                    <h3 class="text-[15px] font-bold text-[#2C3E50]">Biodata & Informasi Kepegawaian</h3>
-                    <span class="text-xs text-[#7F7F7F] font-mono">ID #{{ $worker->id }}</span>
+            <div class="rounded-lg border border-[#E5E7EB] dark:border-[#27272A] bg-white dark:bg-[#18181B] shadow-none overflow-hidden">
+                <div class="border-b border-[#E5E7EB] dark:border-[#27272A] px-5 py-3.5 bg-slate-50/50 dark:bg-white/5 flex items-center justify-between">
+                    <h3 class="text-[15px] font-bold text-[#1E293B] dark:text-white">Biodata & Informasi Kepegawaian</h3>
+                    <span class="text-xs text-[#64748B] dark:text-slate-400 font-mono">ID #{{ $worker->id }}</span>
                 </div>
-                <div class="p-6">
+                <div class="p-5">
                     <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 text-xs">
-                        <div class="border-b border-slate-100 pb-2.5">
-                            <dt class="text-slate-400 font-medium uppercase text-[10px] tracking-wider">Nomor Induk Karyawan / Kode</dt>
-                            <dd class="mt-0.5 font-code font-semibold text-slate-800 text-sm">{{ $worker->worker_code }}</dd>
+                        <div class="border-b border-slate-100 dark:border-[#27272A] pb-2.5">
+                            <dt class="text-[#64748B] dark:text-[#A1A1AA] font-medium text-[13px]">Nomor Induk Karyawan / Kode</dt>
+                            <dd class="mt-0.5 font-mono font-semibold text-[#0B2545] dark:text-slate-100 text-sm">{{ $worker->worker_code }}</dd>
                         </div>
-                        <div class="border-b border-slate-100 pb-2.5">
-                            <dt class="text-slate-400 font-medium uppercase text-[10px] tracking-wider">Nama Lengkap</dt>
-                            <dd class="mt-0.5 font-semibold text-slate-800 text-sm">{{ $worker->name }}</dd>
+                        <div class="border-b border-slate-100 dark:border-[#27272A] pb-2.5">
+                            <dt class="text-[#64748B] dark:text-[#A1A1AA] font-medium text-[13px]">Nama Lengkap</dt>
+                            <dd class="mt-0.5 font-semibold text-[#0B2545] dark:text-slate-100 text-sm">{{ $worker->name }}</dd>
                         </div>
-                        <div class="border-b border-slate-100 pb-2.5">
-                            <dt class="text-slate-400 font-medium uppercase text-[10px] tracking-wider">Jabatan / Spesialisasi Keahlian</dt>
-                            <dd class="mt-0.5 font-medium text-slate-800">
-                                <span class="inline-flex items-center rounded border border-slate-200 bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-700">
+                        <div class="border-b border-slate-100 dark:border-[#27272A] pb-2.5">
+                            <dt class="text-[#64748B] dark:text-[#A1A1AA] font-medium text-[13px]">Jabatan / Spesialisasi Keahlian</dt>
+                            <dd class="mt-0.5 font-medium text-[#0B2545] dark:text-slate-200">
+                                <span class="inline-flex items-center rounded border border-[#E5E7EB] dark:border-[#27272A] bg-[#F8FAFC] dark:bg-white/5 px-2 py-0.5 text-xs font-medium text-[#0B2545] dark:text-slate-300">
                                     {{ $worker->position }}
                                 </span>
                             </dd>
                         </div>
-                        <div class="border-b border-slate-100 pb-2.5">
-                            <dt class="text-slate-400 font-medium uppercase text-[10px] tracking-wider">Kontak Telepon / WhatsApp</dt>
-                            <dd class="mt-0.5 tabular font-medium text-slate-800">
+                        <div class="border-b border-slate-100 dark:border-[#27272A] pb-2.5">
+                            <dt class="text-[#64748B] dark:text-[#A1A1AA] font-medium text-[13px]">Kontak Telepon / WhatsApp</dt>
+                            <dd class="mt-0.5 tabular-nums font-medium text-[#0B2545] dark:text-slate-200">
                                 @if($worker->phone)
                                     {{ $worker->formatted_phone ?? $worker->phone }}
                                 @else
-                                    <span class="text-slate-300 font-mono">-</span>
+                                    <span class="text-slate-300 dark:text-slate-600 font-mono">-</span>
                                 @endif
                             </dd>
                         </div>
-                        <div class="border-b border-slate-100 pb-2.5">
-                            <dt class="text-slate-400 font-medium uppercase text-[10px] tracking-wider">Tanggal Terdaftar</dt>
-                            <dd class="mt-0.5 text-slate-600 tabular">
+                        <div class="border-b border-slate-100 dark:border-[#27272A] pb-2.5">
+                            <dt class="text-[#64748B] dark:text-[#A1A1AA] font-medium text-[13px]">Tanggal Terdaftar</dt>
+                            <dd class="mt-0.5 text-[#64748B] dark:text-[#A1A1AA] tabular-nums">
                                 @if($worker->created_at)
                                     {{ $worker->created_at->format('d M Y, H:i') }}
                                 @else
-                                    <span class="text-slate-300 font-mono">-</span>
+                                    <span class="text-slate-300 dark:text-slate-600 font-mono">-</span>
                                 @endif
                             </dd>
                         </div>
-                        <div class="border-b border-slate-100 pb-2.5">
-                            <dt class="text-slate-400 font-medium uppercase text-[10px] tracking-wider">Pembaruan Terakhir</dt>
-                            <dd class="mt-0.5 text-slate-600 tabular">
+                        <div class="border-b border-slate-100 dark:border-[#27272A] pb-2.5">
+                            <dt class="text-[#64748B] dark:text-[#A1A1AA] font-medium text-[13px]">Pembaruan Terakhir</dt>
+                            <dd class="mt-0.5 text-[#64748B] dark:text-[#A1A1AA] tabular-nums">
                                 @if($worker->updated_at)
                                     {{ $worker->updated_at->format('d M Y, H:i') }}
                                 @else
-                                    <span class="text-slate-300 font-mono">-</span>
+                                    <span class="text-slate-300 dark:text-slate-600 font-mono">-</span>
                                 @endif
                             </dd>
                         </div>
@@ -152,24 +147,24 @@
 
         {{-- Catatan & Kualifikasi Lapangan (1 Col) --}}
         <div>
-            <div class="rounded-2xl border border-slate-100 bg-white shadow-[0_2px_12px_rgba(44,62,80,0.04)] overflow-hidden">
-                <div class="border-b border-[#EEF4F8] px-6 py-4 bg-[#F8FBFD]">
-                    <h3 class="text-[15px] font-bold text-[#2C3E50]">Catatan Kualifikasi & Sertifikasi</h3>
+            <div class="rounded-lg border border-[#E5E7EB] dark:border-[#27272A] bg-white dark:bg-[#18181B] shadow-none overflow-hidden">
+                <div class="border-b border-[#E5E7EB] dark:border-[#27272A] px-5 py-3.5 bg-slate-50/50 dark:bg-white/5">
+                    <h3 class="text-[15px] font-bold text-[#1E293B] dark:text-white">Catatan Kualifikasi & Sertifikasi</h3>
                 </div>
-                <div class="p-6">
+                <div class="p-5">
                     @if($worker->notes)
-                        <div class="rounded border border-slate-100 bg-slate-50/70 p-3.5 text-xs leading-relaxed text-slate-700 whitespace-pre-line">
+                        <div class="rounded-md border border-[#E5E7EB] dark:border-[#27272A] bg-slate-50/70 dark:bg-white/5 p-3.5 text-xs leading-relaxed text-slate-700 dark:text-slate-300 whitespace-pre-line">
                             {{ $worker->notes }}
                         </div>
                     @else
                         <p class="text-xs text-slate-400 italic">Tidak ada catatan sertifikasi atau keterangan tambahan.</p>
                     @endif
 
-                    <div class="mt-4 pt-3.5 border-t border-slate-100">
+                    <div class="mt-4 pt-3.5 border-t border-[#E5E7EB] dark:border-[#27272A]">
                         <span class="text-[11px] text-slate-400 block mb-2 font-medium uppercase tracking-wider">Aksi Cepat</span>
                         <div class="flex flex-col gap-2">
                             <a href="{{ route('workers.edit', $worker) }}"
-                               class="w-full text-center rounded border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 transition-colors">
+                               class="w-full text-center rounded-md border border-slate-200 dark:border-[#27272A] bg-white dark:bg-[#27272A] px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
                                 Edit Biodata & Upah
                             </a>
                         </div>

@@ -24,23 +24,23 @@
         @if (!$isLast && $targetUrl && $targetUrl !== '#')
             {{-- Ancestor link --}}
             <a href="{{ $targetUrl }}"
-               class="text-xs font-medium text-[#136F9A] transition-colors hover:underline">
+               class="text-xs sm:text-sm font-medium text-[#1D4E89] dark:text-[#93C5FD] transition-colors hover:underline">
                 {{ $item['label'] }}
             </a>
             {{-- Separator --}}
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 shrink-0 text-[#7F7F7F]"
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 shrink-0 text-[#64748B] dark:text-[#71717A]"
                  fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round"
                       stroke-width="2" d="M9 5l7 7-7 7"/>
             </svg>
         @else
             {{-- Current page (tidak bisa diklik) --}}
-            <span class="text-xs font-semibold truncate max-w-[220px] text-[#2C3E50]"
+            <span class="text-xs sm:text-sm font-semibold truncate max-w-[220px] text-[#0B2545] dark:text-[#F4F4F5]"
                   aria-current="page">
                 {{ $item['label'] }}
             </span>
             @if (!$isLast)
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 shrink-0 text-[#7F7F7F]"
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 shrink-0 text-[#64748B] dark:text-[#71717A]"
                      fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round"
                           stroke-width="2" d="M9 5l7 7-7 7"/>

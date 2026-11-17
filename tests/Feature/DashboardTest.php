@@ -17,9 +17,17 @@ class DashboardTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSee('BuildSync ERP');
-        $response->assertSee('Total Proyek');
-        $response->assertSee('Progres Proyek');
+        $response->assertSee('Total Projects');
+        $response->assertSee('Project Progress');
         $response->assertSee('theme-toggle');
         $response->assertSee('localStorage.getItem(\'theme\')', false);
+
+        // Test Indonesian locale preference
+        $user = auth()->user();
+        $user->update(['locale' => 'id']);
+        $idResponse = $this->get('/dashboard');
+        $idResponse->assertStatus(200);
+        $idResponse->assertSee('Total Proyek');
+        $idResponse->assertSee('Progres Proyek');
     }
 }

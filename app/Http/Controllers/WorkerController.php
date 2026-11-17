@@ -69,7 +69,7 @@ class WorkerController extends Controller
         $worker = Worker::create($request->validated());
 
         return redirect()->route('workers.index')
-            ->with('success', "Tenaga kerja baru [{$worker->worker_code}] {$worker->name} berhasil ditambahkan.");
+            ->with('success', __('messages.worker_created', ['code' => $worker->worker_code, 'name' => $worker->name]));
     }
 
     public function show(Worker $worker)
@@ -91,7 +91,7 @@ class WorkerController extends Controller
         $worker->update($request->validated());
 
         return redirect()->route('workers.index')
-            ->with('success', "Data tenaga kerja [{$worker->worker_code}] {$worker->name} berhasil diperbarui.");
+            ->with('success', __('messages.worker_updated', ['code' => $worker->worker_code, 'name' => $worker->name]));
     }
 
     public function destroy(Worker $worker)
@@ -101,6 +101,6 @@ class WorkerController extends Controller
         $worker->delete();
 
         return redirect()->route('workers.index')
-            ->with('success', "Tenaga kerja [{$code}] {$name} berhasil dihapus dari sistem.");
+            ->with('success', __('messages.worker_deleted', ['code' => $code, 'name' => $name]));
     }
 }

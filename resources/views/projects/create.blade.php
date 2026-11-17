@@ -1,40 +1,39 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah Proyek')
+@section('title', __('projects.create_project'))
 
 @section('breadcrumbs')
 <x-breadcrumb :links="[
-    ['label' => 'Dashboard', 'href' => route('dashboard')],
-    ['label' => 'Proyek',    'href' => route('projects.index')],
-    ['label' => 'Tambah Proyek', 'href' => '#'],
+    ['label' => __('nav.dashboard'), 'href' => route('dashboard')],
+    ['label' => __('nav.projects'),  'href' => route('projects.index')],
+    ['label' => __('projects.create_project'), 'href' => '#'],
 ]"/>
 @endsection
 
 @section('content')
     <x-page-header
-        title="Tambah Proyek Baru"
-        subtitle="Daftarkan proyek konstruksi baru dan tentukan pagu kontrak awal.">
+        :title="__('projects.create_project')">
         <a href="{{ route('projects.index') }}"
            class="btn-secondary">
-            &larr; Kembali
+            &larr; {{ __('common.back') }}
         </a>
     </x-page-header>
 
     <x-flash-alert/>
 
-    <div class="max-w-4xl rounded-2xl p-6 border border-slate-100 bg-white shadow-[0_2px_12px_rgba(44,62,80,0.04)]">
+    <div class="erp-card max-w-4xl p-5 sm:p-6">
         <form action="{{ route('projects.store') }}" method="POST">
             @csrf
             @include('projects.partials.form', ['project' => null])
 
-            <div class="mt-6 flex items-center justify-end gap-2.5 pt-4 border-t border-[#EEF4F8]">
+            <div class="mt-8 flex items-center justify-end gap-3 pt-6 border-t border-[#E5E7EB] dark:border-[#27272A]">
                 <a href="{{ route('projects.index') }}"
                    class="btn-secondary">
-                    Batal
+                    {{ __('common.cancel') }}
                 </a>
                 <button type="submit"
                         class="btn-primary">
-                    Simpan Proyek
+                    {{ __('common.save') }}
                 </button>
             </div>
         </form>

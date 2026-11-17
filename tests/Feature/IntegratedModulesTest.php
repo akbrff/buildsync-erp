@@ -112,12 +112,12 @@ class IntegratedModulesTest extends TestCase
 
     public function test_user_roles_page_loads_with_star_admin_ui(): void
     {
-        $superadmin = User::factory()->create(['name' => 'Administrator', 'role' => 'superadmin']);
+        $superadmin = User::factory()->create(['name' => 'Administrator', 'role' => 'superadmin', 'locale' => 'id']);
 
         $response = $this->actingAs($superadmin)->get(route('users.roles.index'));
 
         $response->assertOk();
-        $response->assertSee('Manajemen Pengguna & Hak Akses', false);
+        $response->assertSee('Hak Akses Pengguna', false);
         $response->assertSee('rounded-2xl');
         $response->assertSee('bg-[#F8FBFD]');
         $response->assertSee('bg-[#136F9A]');

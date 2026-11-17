@@ -37,7 +37,7 @@ class ProjectController extends Controller
 
         return redirect()
             ->route('projects.index')
-            ->with('success', 'Data proyek berhasil ditambahkan.');
+            ->with('success', __('messages.project_created'));
     }
 
     /**
@@ -69,7 +69,7 @@ class ProjectController extends Controller
 
         return redirect()
             ->route('projects.index')
-            ->with('success', 'Data proyek berhasil diperbarui.');
+            ->with('success', __('messages.project_updated'));
     }
 
     /**
@@ -80,20 +80,20 @@ class ProjectController extends Controller
         if ($project->schedules()->exists()) {
             return redirect()
                 ->route('projects.index')
-                ->with('error', 'Proyek tidak dapat dihapus karena masih memiliki Jadwal Pekerjaan. Hapus atau selesaikan data jadwal terlebih dahulu.');
+                ->with('error', __('messages.project_cannot_delete_has_schedules'));
         }
 
         if ($project->budgets()->exists()) {
             return redirect()
                 ->route('projects.index')
-                ->with('error', 'Proyek tidak dapat dihapus karena masih memiliki catatan anggaran. Pertahankan riwayat biaya proyek.');
+                ->with('error', __('messages.project_cannot_delete_has_budgets'));
         }
 
         $project->delete();
 
         return redirect()
             ->route('projects.index')
-            ->with('success', 'Data proyek berhasil dihapus.');
+            ->with('success', __('messages.project_deleted'));
     }
 
     /**

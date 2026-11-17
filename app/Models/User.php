@@ -4,13 +4,14 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -23,6 +24,8 @@ class User extends Authenticatable
         'password',
         'role',
         'worker_id',
+        'status',
+        'locale',
     ];
 
     /**
@@ -50,11 +53,34 @@ class User extends Authenticatable
         return $this->role === 'superadmin' || in_array($this->role, $roles, true);
     }
 
+    public function isActive(): bool
+    {
+        return $this->status === 'active';
+    }
+
+    public function isPrimaryAdmin(): bool
+    {
+        return $this->email === 'admin@buildsync.com' || (int) $this->id === 1;
+    }
+
+    public function isLastActiveAdmin(): bool
+    {
+        if ($this->role !== 'superadmin' || $this->status !== 'active') {
+            return false;
+        }
+
+        return static::where('role', 'superadmin')
+            ->where('status', 'active')
+            ->where('id', '!=', $this->id)
+            ->count() === 0;
+    }
+
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'deleted_at' => 'datetime',
         ];
     }
 }

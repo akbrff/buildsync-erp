@@ -54,7 +54,7 @@ class ProjectScheduleController extends Controller
 
         return redirect()
             ->route('schedules.index', ['project_id' => $data['project_id']])
-            ->with('success', 'Jadwal pekerjaan berhasil ditambahkan.');
+            ->with('success', __('messages.schedule_created'));
     }
 
         public function show(ProjectSchedule $schedule)
@@ -90,7 +90,7 @@ class ProjectScheduleController extends Controller
 
         return redirect()
             ->route('schedules.index', ['project_id' => $schedule->project_id])
-            ->with('success', 'Jadwal pekerjaan berhasil diperbarui.');
+            ->with('success', __('messages.schedule_updated'));
     }
 
     public function destroy(ProjectSchedule $schedule)
@@ -100,14 +100,14 @@ class ProjectScheduleController extends Controller
         if ($schedule->progressUpdates()->exists()) {
             return redirect()
                 ->route('schedules.index', ['project_id' => $projectId])
-                ->with('error', 'Jadwal tidak dapat dihapus karena memiliki riwayat progres. Riwayat tersebut harus dipertahankan sebagai catatan proyek.');
+                ->with('error', __('messages.schedule_cannot_delete_has_progress'));
         }
 
         $schedule->delete();
 
         return redirect()
             ->route('schedules.index', ['project_id' => $projectId])
-            ->with('success', 'Jadwal pekerjaan berhasil dihapus.');
+            ->with('success', __('messages.schedule_deleted'));
     }
 
     /**

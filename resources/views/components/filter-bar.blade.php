@@ -3,7 +3,7 @@
     'method'            => 'GET',
     'searchable'        => false,
     'searchName'        => 'q',
-    'searchPlaceholder' => 'Cari...',
+    'searchPlaceholder' => null,
 ])
 {{--
     Komponen Filter Bar — form GET untuk menyaring data tabel.
@@ -18,6 +18,7 @@
 @php
     $currentQuery = request()->except($searchName);
     $hasFilters   = count(array_filter(request()->except(['page', '_token']))) > 0;
+    $placeholder  = $searchPlaceholder ?? __('common.search_placeholder');
 @endphp
 
 <form method="{{ strtoupper($method) }}"
@@ -35,9 +36,9 @@
             <input type="text"
                    name="{{ $searchName }}"
                    value="{{ request($searchName) }}"
-                   placeholder="{{ $searchPlaceholder }}"
-                   class="erp-input !pl-10 rounded-lg"
-                   style="width:220px; min-width:160px;">
+                   placeholder="{{ $placeholder }}"
+                   class="erp-input !pl-10 !h-11 rounded-md text-sm"
+                   style="width:240px; min-width:160px;">
         </div>
     @endif
 
@@ -48,26 +49,26 @@
     @if (!$searchable && $slot->isEmpty())
     @else
         <button type="submit"
-                class="btn-secondary h-9">
-            <svg class="h-3.5 w-3.5 text-[#7F7F7F]" xmlns="http://www.w3.org/2000/svg" fill="none"
+                class="flex items-center justify-center gap-2 !px-4 py-1.5 text-[11px] font-medium rounded border border-[#E5E7EB] dark:border-[#27272A] bg-white dark:bg-[#27272A] text-[#0B2545] dark:text-[#F4F4F5] hover:bg-slate-50 dark:hover:bg-white/5 transition-colors cursor-pointer shadow-none">
+            <svg class="h-3 w-3 text-[#64748B] dark:text-[#A1A1AA] shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
                  viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z"/>
             </svg>
-            Terapkan
+            <span>{{ __('common.apply') }}</span>
         </button>
     @endif
 
     {{-- Tombol Reset Filter --}}
     @if ($hasFilters)
         <a href="{{ $action }}"
-           class="inline-flex items-center gap-1.5 rounded-lg px-3 h-9 text-xs font-semibold bg-[#ED7132]/15 text-[#ED7132] border border-[#ED7132]/25 hover:bg-[#ED7132]/25 transition-colors">
-            <svg class="h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" fill="none"
+           class="flex items-center justify-center gap-2 !px-4 py-1.5 text-[11px] font-medium rounded bg-[#DC2626]/10 text-[#DC2626] border border-[#DC2626]/20 hover:bg-[#DC2626]/20 transition-colors shadow-none">
+            <svg class="h-3 w-3 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
                  viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M6 18L18 6M6 6l12 12"/>
             </svg>
-            Reset
+            <span>{{ __('common.reset') }}</span>
         </a>
     @endif
 </form>

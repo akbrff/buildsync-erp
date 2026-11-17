@@ -28,12 +28,18 @@ class MaterialTest extends TestCase
         $user = User::factory()->create();
         Material::create($this->validMaterialData());
 
+        // Default English
         $response = $this->actingAs($user)->get(route('materials.index'));
-
         $response->assertStatus(200);
-        $response->assertSee('Logistik &amp; Inventaris Material', false);
+        $response->assertSee('Materials &amp; Inventory', false);
         $response->assertSee('MAT-CMT-01');
         $response->assertSee('Semen Portland Komposit');
+
+        // Indonesian preference
+        $user->update(['locale' => 'id']);
+        $responseId = $this->actingAs($user)->get(route('materials.index'));
+        $responseId->assertStatus(200);
+        $responseId->assertSee('Logistik &amp; Inventaris Material', false);
     }
 
     public function test_material_can_be_stored(): void

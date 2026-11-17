@@ -54,6 +54,6 @@ class ProgressUpdateController extends Controller
 
         return redirect()
             ->route('schedules.show', $schedule)
-            ->with('success', 'Progres berhasil dicatat.');
+            ->with('success', __('messages.progress_recorded'));
     }
 }

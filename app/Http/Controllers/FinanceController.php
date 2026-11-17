@@ -12,6 +12,6 @@ class FinanceController extends Controller {
  }
  public function store(Request $r) {
   $d=$r->validate(['project_id'=>['nullable','exists:projects,id'],'type'=>['required','in:in,out'],'category'=>['required','max:80'],'description'=>['required','max:255'],'amount'=>['required','numeric','min:1'],'transaction_date'=>['required','date'],'reference'=>['nullable','max:100']]);
-  CashFlow::create($d+['user_id'=>$r->user()->id]);return back()->with('success','Arus kas berhasil dicatat.');
+  CashFlow::create($d+['user_id'=>$r->user()->id]);return back()->with('success',__('messages.cash_flow_created'));
  }
 }

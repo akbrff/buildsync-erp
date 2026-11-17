@@ -1,52 +1,44 @@
 @extends('layouts.app')
 
-@section('title', 'Jadwal Proyek — Daftar Tahapan')
-
-@section('breadcrumbs')
-<x-breadcrumb :links="[
-    ['label' => 'Dashboard',      'href' => route('dashboard')],
-    ['label' => 'Jadwal Proyek',  'href' => route('schedules.index')],
-    ['label' => 'Daftar Tahapan', 'href' => '#'],
-]"/>
-@endsection
+@section('title', __('schedules.title'))
+@section('subtitle', __('schedules.tab_list'))
 
 @section('content')
 
     {{-- ── Secondary Tab Bar ─────────────────────────────────── --}}
     <x-tab-bar :tabs="[
-        ['label' => 'Daftar Jadwal',    'route' => 'schedules.index',
+        ['label' => __('schedules.tab_list'),    'route' => 'schedules.index',
          'active_routes' => ['schedules.index'],
          'icon' => '<path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M4 6h16M4 10h16M4 14h16M4 18h7&quot;/>'],
-        ['label' => 'Monitoring & Keterlambatan', 'route' => 'schedules.monitoring',
+        ['label' => __('schedules.tab_monitoring'), 'route' => 'schedules.monitoring',
          'active_routes' => ['schedules.monitoring'],
          'icon' => '<path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z&quot;/>'],
-        ['label' => 'Timeline / Gantt', 'route' => 'schedules.timeline',
+        ['label' => __('schedules.tab_timeline'), 'route' => 'schedules.timeline',
          'active_routes' => ['schedules.timeline'],
          'icon' => '<path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z&quot;/>'],
-        ['label' => 'Ringkasan KPI',    'route' => 'schedules.dashboard',
+        ['label' => __('schedules.tab_kpi'),    'route' => 'schedules.dashboard',
          'active_routes' => ['schedules.dashboard'],
          'icon' => '<path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z&quot;/>'],
     ]"/>
 
-    {{-- ── Page Header ────────────────────────────────────────── --}}
-    <x-page-header class="mt-4"
-        title="Daftar Jadwal Pekerjaan"
-        subtitle="Kelola tahapan pekerjaan, bobot kontribusi, dan progres fisik untuk setiap proyek konstruksi.">
+    {{-- ── Section Header & Tambah Jadwal ────────────────────── --}}
+    <div class="mt-4 mb-4 flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
+        <h2 class="text-base font-semibold text-slate-800 dark:text-slate-100">{{ __('schedules.list_title') }}</h2>
         <a href="{{ route('schedules.create', $projectId ? ['project_id' => $projectId] : []) }}"
-           class="btn-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+           class="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-[11px] font-medium rounded bg-[#1D4E89] hover:bg-[#153A66] text-white transition-colors cursor-pointer shadow-none">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
             </svg>
-            Tambah Jadwal
+            <span>{{ __('schedules.add_schedule') }}</span>
         </a>
-    </x-page-header>
+    </div>
 
     {{-- ── Filter Bar Presisi ─────────────────────────────────── --}}
-    <div class="mb-4">
+    <div class="flex flex-wrap items-center gap-3 w-full mb-4">
         <x-filter-bar action="{{ route('schedules.index') }}">
             {{-- Dropdown Proyek --}}
-            <select name="project_id" class="erp-input" style="width:220px;" onchange="this.form.submit()">
-                <option value="">— Semua Proyek —</option>
+            <select name="project_id" class="erp-select erp-select-sm w-48" onchange="this.form.submit()">
+                <option value="">{{ __('schedules.all_projects') }}</option>
                 @foreach ($projects as $project)
                     <option value="{{ $project->id }}" @selected($projectId === $project->id)>
                         {{ $project->project_code }} – {{ $project->name }}
@@ -55,21 +47,21 @@
             </select>
 
             {{-- Filter Status --}}
-            <select name="status" class="erp-input" style="width:160px;" onchange="this.form.submit()">
-                <option value="">— Semua Status —</option>
-                <option value="Terlambat" @selected(($statusFilter ?? '') === 'Terlambat')>Terlambat</option>
-                <option value="Berlangsung" @selected(($statusFilter ?? '') === 'Berlangsung')>Berlangsung</option>
-                <option value="Belum Dimulai" @selected(($statusFilter ?? '') === 'Belum Dimulai')>Belum Dimulai</option>
-                <option value="Selesai" @selected(($statusFilter ?? '') === 'Selesai')>Selesai</option>
+            <select name="status" class="erp-select erp-select-sm w-48" onchange="this.form.submit()">
+                <option value="">{{ __('schedules.all_statuses') }}</option>
+                <option value="Terlambat" @selected(($statusFilter ?? '') === 'Terlambat')>{{ __('schedules.status_delayed') }}</option>
+                <option value="Berlangsung" @selected(($statusFilter ?? '') === 'Berlangsung')>{{ __('schedules.status_in_progress') }}</option>
+                <option value="Belum Dimulai" @selected(($statusFilter ?? '') === 'Belum Dimulai')>{{ __('schedules.status_not_started') }}</option>
+                <option value="Selesai" @selected(($statusFilter ?? '') === 'Selesai')>{{ __('schedules.status_completed') }}</option>
             </select>
 
             {{-- Rentang Tanggal --}}
-            <div class="flex items-center gap-1.5">
+            <div class="flex items-center gap-2">
                 <input type="date" name="start_date" value="{{ $startDate ?? request('start_date') }}"
-                       class="erp-input tabular" style="width:135px;" title="Tanggal Mulai">
-                <span class="text-xs text-slate-400">s/d</span>
+                       class="erp-date-input w-36" title="{{ __('projects.start_date') }}">
+                <span class="text-xs text-[#64748B] dark:text-[#A1A1AA] select-none shrink-0 font-medium">{{ __('schedules.to') }}</span>
                 <input type="date" name="end_date" value="{{ $endDate ?? request('end_date') }}"
-                       class="erp-input tabular" style="width:135px;" title="Tanggal Selesai">
+                       class="erp-date-input w-36" title="{{ __('projects.target_end_date') }}">
             </div>
         </x-filter-bar>
     </div>
@@ -77,22 +69,22 @@
     <x-flash-alert/>
 
     {{-- ── Data Table ─────────────────────────────────────────── --}}
-    <div class="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_2px_12px_rgba(44,62,80,0.04)]">
+    <div class="erp-table-container">
         <div class="overflow-x-auto">
             <table class="erp-table w-full text-left">
-                <thead>
-                    <tr>
-                        <th style="width:110px;">Kode Proyek</th>
-                        <th>Nama Pekerjaan</th>
-                        <th style="min-width:150px;">Target Jadwal</th>
-                        <th class="text-right" style="width:70px;">Durasi</th>
-                        <th class="text-right" style="width:85px;">Bobot</th>
-                        <th style="min-width:160px;">Progres Aktual</th>
-                        <th style="width:110px;">Status</th>
-                        <th class="text-center" style="width:130px;">Aksi</th>
+                <thead class="bg-[#F8FAFC] dark:bg-[#27272A]">
+                    <tr class="border-b border-[#E5E7EB] dark:border-[#27272A]">
+                        <th class="!py-1.5 px-4 text-[12px] font-medium text-[#64748B] dark:text-[#A1A1AA] whitespace-nowrap" style="width:130px; min-width:120px;">{{ __('projects.project_code') }}</th>
+                        <th class="!py-1.5 px-4 text-[12px] font-medium text-[#64748B] dark:text-[#A1A1AA]">{{ __('projects.job_name') }}</th>
+                        <th class="!py-1.5 px-4 text-[12px] font-medium text-[#64748B] dark:text-[#A1A1AA]" style="min-width:150px;">{{ __('schedules.target_schedule') }}</th>
+                        <th class="!py-1.5 px-4 text-right text-[12px] font-medium text-[#64748B] dark:text-[#A1A1AA]" style="width:70px;">{{ __('projects.duration') }}</th>
+                        <th class="!py-1.5 px-4 text-right text-[12px] font-medium text-[#64748B] dark:text-[#A1A1AA]" style="width:85px;">{{ __('schedules.weight') }}</th>
+                        <th class="!py-1.5 px-4 text-[12px] font-medium text-[#64748B] dark:text-[#A1A1AA]" style="min-width:160px;">{{ __('projects.actual_progress') }}</th>
+                        <th class="!py-1.5 px-4 text-[12px] font-medium text-[#64748B] dark:text-[#A1A1AA]" style="width:110px;">{{ __('common.status') }}</th>
+                        <th class="!py-1.5 px-4 text-center text-[12px] font-medium text-[#64748B] dark:text-[#A1A1AA]" style="width:130px;">{{ __('common.actions') }}</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-[#E5E7EB] dark:divide-[#27272A]">
                     @forelse ($schedules as $schedule)
                         @php
                             $start = \Carbon\Carbon::parse($schedule->start_date);
@@ -106,69 +98,81 @@
                                 'Berlangsung' => 'info',
                                 default       => 'neutral',
                             };
+
+                            $statusLabel = match ($schedule->status) {
+                                'Selesai'     => __('schedules.status_completed'),
+                                'Terlambat'   => __('schedules.status_delayed'),
+                                'Berlangsung' => __('schedules.status_in_progress'),
+                                'Belum Dimulai' => __('schedules.status_not_started'),
+                                default       => $schedule->status,
+                            };
                         @endphp
-                        <tr>
-                            <td>
+                        <tr class="hover:bg-[#F8FAFC] dark:hover:bg-white/5 transition-colors">
+                            <td class="whitespace-nowrap">
                                 <a href="{{ route('projects.show', $schedule->project) }}"
-                                   class="font-code text-xs font-semibold text-slate-700 hover:text-blue-600">
+                                   class="text-[13px] font-medium text-[#0B2545] dark:text-[#A1A1AA] hover:text-[#1D4E89] dark:hover:text-[#CFE3F3]">
                                     {{ $schedule->project->project_code }}
                                 </a>
                             </td>
                             <td>
                                 <a href="{{ route('schedules.show', $schedule) }}"
-                                   class="text-xs font-semibold text-blue-600 hover:underline">
+                                   class="text-[13px] font-medium text-[#0B2545] dark:text-[#F4F4F5] hover:text-[#1D4E89] dark:hover:text-[#CFE3F3]">
                                     {{ $schedule->name }}
                                 </a>
                                 @if ($schedule->description)
-                                    <p class="truncate text-[11px] text-slate-400 max-w-xs">{{ $schedule->description }}</p>
+                                    <p class="truncate text-xs text-[#64748B] dark:text-[#A1A1AA] max-w-xs mt-0.5">{{ $schedule->description }}</p>
                                 @endif
                             </td>
-                            <td class="tabular text-xs text-slate-600">
+                            <td class="tabular-nums text-[13px] text-[#64748B] dark:text-[#A1A1AA] whitespace-nowrap">
                                 {{ $start->format('d M') }} – {{ $end->format('d M Y') }}
                             </td>
-                            <td class="text-right tabular text-xs text-slate-600">
-                                {{ $duration }}h
+                            <td class="text-right tabular-nums text-[13px] text-[#64748B] dark:text-[#A1A1AA]">
+                                {{ $duration }}{{ __('schedules.days_short') }}
                             </td>
-                            <td class="text-right tabular font-semibold text-slate-900">
+                            <td class="text-right tabular-nums text-[13px] font-medium text-[#0B2545] dark:text-[#F4F4F5]">
                                 {{ number_format($schedule->weight, 2, ',', '.') }}%
                             </td>
                             <td>
                                 <div class="flex items-center gap-2">
-                                    <div class="relative h-2 flex-1 overflow-hidden rounded-full" style="background:#f1f5f9; min-width:70px;">
+                                    <div class="relative h-2 flex-1 overflow-hidden rounded-full bg-slate-100 dark:bg-white/10" style="min-width:70px;">
                                         <div class="h-full rounded-full transition-all"
                                              style="width:{{ min(100, $currentProg) }}%;
-                                                    background:{{ $currentProg >= 100 ? '#10b981' : ($schedule->status === 'Terlambat' ? '#ef4444' : '#2563eb') }};"></div>
+                                                    background:{{ $currentProg >= 100 ? '#10B981' : ($schedule->status === 'Terlambat' ? '#DC2626' : '#1D4E89') }};"></div>
                                     </div>
-                                    <span class="shrink-0 text-xs font-bold tabular w-10 text-right text-slate-900">
+                                    <span class="shrink-0 text-xs font-medium tabular-nums w-10 text-right text-[#0B2545] dark:text-[#F4F4F5]">
                                         {{ number_format($currentProg, 0) }}%
                                     </span>
                                 </div>
                             </td>
                             <td>
-                                <x-badge :variant="$statusVariant">{{ $schedule->status }}</x-badge>
+                                @if ($schedule->status === 'Berlangsung')
+                                    <span class="text-[12px] text-slate-600 dark:text-slate-400">{{ $statusLabel }}</span>
+                                @else
+                                    <x-badge :variant="$statusVariant">{{ $statusLabel }}</x-badge>
+                                @endif
                             </td>
                             <td class="text-center">
-                                <div class="flex items-center justify-center gap-2">
+                                <div class="flex items-center justify-center gap-3">
                                     <a href="{{ route('schedules.show', $schedule) }}"
-                                       class="rounded px-2 py-1 text-xs font-medium text-blue-600 hover:bg-blue-50 transition">
-                                        Detail
+                                       class="text-[13px] font-medium text-[#1D4E89] dark:text-[#93C5FD] hover:underline">
+                                        {{ __('common.details') }}
                                     </a>
                                     <a href="{{ route('schedules.edit', $schedule) }}"
-                                       class="rounded px-1.5 py-1 text-xs font-medium text-amber-600 hover:bg-amber-50 transition">
-                                        Edit
+                                       class="text-[13px] font-medium text-[#0B2545] dark:text-[#A1A1AA] hover:underline">
+                                        {{ __('common.edit') }}
                                     </a>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="py-12 text-center text-xs text-slate-400">
-                                Belum ada data jadwal pekerjaan yang ditemukan.
+                            <td colspan="8" class="py-12 text-center text-[13px] text-[#64748B] dark:text-[#A1A1AA]">
+                                {{ __('schedules.no_schedules') }}
                                 @if (!$projectId)
                                     <br>
                                     <a href="{{ route('schedules.create') }}"
-                                       class="mt-2 inline-flex items-center gap-1 rounded px-3 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 transition">
-                                        + Tambah Jadwal Pertama
+                                       class="mt-2 inline-flex items-center gap-1.5 px-3.5 py-1.5 text-[11px] font-medium text-white bg-[#1D4E89] hover:bg-[#153A66] transition rounded shadow-none">
+                                        {{ __('schedules.create_first_schedule') }}
                                     </a>
                                 @endif
                             </td>
@@ -179,7 +183,7 @@
         </div>
 
         @if ($schedules->hasPages())
-            <div class="px-4 py-3" style="border-top:1px solid #f1f5f9;">
+            <div class="px-6 py-4 border-t border-[#E5E7EB] dark:border-[#27272A]">
                 {{ $schedules->links() }}
             </div>
         @endif

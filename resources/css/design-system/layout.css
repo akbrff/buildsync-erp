@@ -1,0 +1,155 @@
+/* ═════════════════════════════════════════════════════════════
+   BUILDSYNC ERP DESIGN SYSTEM — LAYOUT
+   ═════════════════════════════════════════════════════════════
+   File: resources/css/design-system/layout.css
+   Deskripsi: Struktur kerangka aplikasi (shell, main canvas,
+   topbar header, footer, dan scrollbar).
+   ═════════════════════════════════════════════════════════════ */
+
+/* ─── 1. Application Shell Structure ───────────────────────── */
+.app-shell {
+    min-height: 100vh;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+    background-color: var(--bg-app);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+}
+
+.app-main-content {
+    flex: 1 1 0%;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    min-width: 0;
+    overflow-y: auto;
+}
+
+.app-main {
+    flex: 1 1 0%;
+    min-width: 0;
+    padding: 1.5rem;               /* 24px (p-6) */
+    background-color: var(--bg-app);
+}
+
+@media (min-width: 1024px) {
+    .app-main {
+        padding: 1.75rem;          /* 28px (lg:p-7) */
+    }
+}
+
+/* ─── 2. Topbar / Header Layout ────────────────────────────── */
+.topbar,
+.app-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    height: var(--header-height, 64px);
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+@media (min-width: 1024px) {
+    .topbar,
+    .app-header {
+        padding-left: 1.75rem;
+        padding-right: 1.75rem;
+    }
+}
+
+/* ─── 3. Global Footer Layout ──────────────────────────────── */
+.app-footer {
+    margin-top: auto;
+    padding: 1.25rem 1.5rem;
+    text-align: center;
+    font-size: 0.8125rem;          /* 13px */
+    color: var(--text-muted);
+    font-weight: 400;
+    user-select: none;
+}
+
+/* ─── 4. Scrollbar Utilities ───────────────────────────────── */
+.scrollbar-none {
+    scrollbar-width: none;         /* Firefox */
+    -ms-overflow-style: none;      /* IE and Edge */
+}
+.scrollbar-none::-webkit-scrollbar {
+    display: none;                 /* Chrome, Safari, Opera */
+}
+
+/* ─── 5. Dark Mode Layout Overrides ────────────────────────── */
+html.dark .app-shell,
+html.dark body {
+    background-color: var(--dark-bg) !important;
+    color: var(--dark-text-primary) !important;
+}
+
+html.dark .app-main {
+    background-color: var(--dark-bg) !important;
+}
+
+html.dark .topbar,
+html.dark .app-header,
+html.dark header.sticky {
+    background-color: var(--dark-sidebar) !important;
+    border-color: var(--dark-border) !important;
+}
+
+html.dark .app-footer {
+    color: var(--dark-text-muted) !important;
+}
+
+/* Custom Scrollbar saat html.dark */
+html.dark ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+html.dark ::-webkit-scrollbar-track {
+    background: var(--dark-bg);
+}
+html.dark ::-webkit-scrollbar-thumb {
+    background: var(--dark-border);
+    border-radius: var(--radius-sm);
+}
+html.dark ::-webkit-scrollbar-thumb:hover {
+    background: #3F3F46;
+}
+html.dark {
+    scrollbar-color: var(--dark-border) var(--dark-bg);
+}
+
+/* Tailwind Arbitrary Navy Class Bridge to Neutral Dark Mode */
+html.dark .dark\:bg-\[\#0B2545\],
+html.dark [class*="dark:bg-[#0B2545]"] {
+    background-color: var(--dark-bg) !important;
+}
+
+html.dark .dark\:bg-\[\#112A4A\],
+html.dark [class*="dark:bg-[#112A4A]"],
+html.dark .dark\:bg-\[\#151F30\],
+html.dark [class*="dark:bg-[#151F30]"] {
+    background-color: var(--dark-surface) !important;
+}
+
+html.dark .dark\:bg-\[\#0E223D\],
+html.dark [class*="dark:bg-[#0E223D]"],
+html.dark .dark\:bg-\[\#0D223D\],
+html.dark [class*="dark:bg-[#0D223D]"],
+html.dark .dark\:bg-\[\#071A32\],
+html.dark [class*="dark:bg-[#071A32]"] {
+    background-color: var(--dark-surface-elevated) !important;
+}
+
+html.dark .dark\:border-white\/10,
+html.dark [class*="dark:border-white/10"],
+html.dark .dark\:border-white\/15,
+html.dark [class*="dark:border-white/15"] {
+    border-color: var(--dark-border) !important;
+}

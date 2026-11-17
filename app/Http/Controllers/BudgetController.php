@@ -103,7 +103,7 @@ class BudgetController extends Controller
         Budget::create($validated);
 
         return redirect()->route('budgets.index', ['project_id' => $validated['project_id']])
-            ->with('success', 'Pengeluaran biaya berhasil dicatat.');
+            ->with('success', __('messages.expense_created'));
     }
 
     public function show(Budget $budget)
@@ -134,7 +134,7 @@ class BudgetController extends Controller
         $budget->update($validated);
 
         return redirect()->route('budgets.index', ['project_id' => $validated['project_id']])
-            ->with('success', 'Data pengeluaran biaya berhasil diperbarui.');
+            ->with('success', __('messages.expense_updated'));
     }
 
     public function destroy(Budget $budget)
@@ -148,7 +148,7 @@ class BudgetController extends Controller
         $budget->delete();
 
         return redirect()->route('budgets.index', ['project_id' => $projectId])
-            ->with('success', 'Catatan pengeluaran biaya berhasil dihapus.');
+            ->with('success', __('messages.expense_deleted'));
     }
 
     private function validateBudget(Request $request, ?Budget $budget = null): array

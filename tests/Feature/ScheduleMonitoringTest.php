@@ -144,8 +144,17 @@ class ScheduleMonitoringTest extends TestCase
         $response = $this->get(route('schedules.monitoring', ['project_id' => $project->id]));
 
         $response->assertStatus(200);
-        // Memastikan teks peringatan muncul
-        $response->assertSee('Belum Final');
-        $response->assertSee('50,00% dari 100%');
+        // Memastikan teks peringatan muncul (English default)
+        $response->assertSee('Not Final');
+        $response->assertSee('50,00% of 100%');
+
+        // Memastikan teks peringatan muncul (Indonesian)
+        $user = auth()->user();
+        $user->update(['locale' => 'id']);
+        $idResponse = $this->get(route('schedules.monitoring', ['project_id' => $project->id]));
+        $idResponse->assertStatus(200);
+        $idResponse->assertSee('Belum Final');
+        $idResponse->assertSee('50,00% dari 100%');
+        $user->update(['locale' => 'en']);
     }
 }

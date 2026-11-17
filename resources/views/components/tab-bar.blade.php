@@ -12,8 +12,7 @@
     'tabs' => [],
 ])
 
-<div class="flex items-center gap-1 overflow-x-auto"
-     style="border-bottom:1px solid #EEF4F8;">
+<div class="flex items-center gap-1 sm:gap-2 overflow-x-auto border-b border-[#E5E7EB] dark:border-[#27272A] scrollbar-none [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
     @foreach ($tabs as $tab)
         @php
             $activeRoutes = $tab['active_routes'] ?? [$tab['route']];
@@ -24,20 +23,16 @@
             $href         = Route::has($tab['route']) ? route($tab['route'], $params) : '#';
         @endphp
         <a href="{{ $href }}"
-           class="relative flex shrink-0 items-center gap-1.5 px-3.5 pb-2.5 pt-1.5 text-xs font-semibold transition-colors whitespace-nowrap"
-           style="{{ $isActive
-               ? 'color:#136F9A; border-bottom:2px solid #136F9A; margin-bottom:-1px;'
-               : 'color:#7F7F7F; border-bottom:2px solid transparent; margin-bottom:-1px;' }}"
-           onmouseover="if (!this.dataset.active) { this.style.color='#2C3E50'; }"
-           onmouseout="if (!this.dataset.active) { this.style.color='#7F7F7F'; }"
-           {{ $isActive ? 'data-active=1' : '' }}>
+           class="relative z-10 flex shrink-0 items-center gap-2 px-3.5 sm:px-4 py-2.5 text-[13px] font-medium transition-all whitespace-nowrap {{ $isActive
+               ? 'text-[#1D4E89] dark:text-[#93C5FD] border-b-2 border-[#1D4E89] dark:border-[#93C5FD] -mb-px'
+               : 'text-[#64748B] dark:text-[#A1A1AA] border-b-2 border-transparent -mb-px hover:text-[#0B2545] dark:hover:text-[#F4F4F5] hover:border-slate-300 dark:hover:border-[#3F3F46]' }}">
             @if (!empty($tab['icon']))
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 shrink-0"
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0 {{ $isActive ? 'text-[#1D4E89] dark:text-[#93C5FD]' : 'text-[#64748B] dark:text-[#71717A]' }}"
                      fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     {!! $tab['icon'] !!}
                 </svg>
             @endif
-            {{ $tab['label'] }}
+            <span>{{ $tab['label'] }}</span>
         </a>
     @endforeach
 </div>

@@ -1,0 +1,213 @@
+/* ═════════════════════════════════════════════════════════════
+   BUILDSYNC ERP DESIGN SYSTEM — FORMS
+   ═════════════════════════════════════════════════════════════
+   File: resources/css/design-system/forms.css
+   Deskripsi: Komponen input form, label, select dropdown,
+   date picker, dan pesan validasi error.
+   ═════════════════════════════════════════════════════════════ */
+
+/* ─── 1. Form Inputs ───────────────────────────────────────── */
+.erp-input,
+.form-input {
+    height: var(--input-height, 44px);  /* 2.75rem / 44px standard */
+    padding: 0.625rem 0.875rem;         /* 10px 14px */
+    font-size: 0.875rem;                /* 14px readable text */
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md, 6px);
+    background-color: #FFFFFF;
+    color: var(--text-main);
+    width: 100%;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    box-sizing: border-box;
+}
+
+.erp-input:focus,
+.form-input:focus {
+    outline: none;
+    border-color: var(--color-cobalt);
+    box-shadow: 0 0 0 1px var(--color-cobalt);
+}
+
+/* ─── 2. Form Labels & Hints ───────────────────────────────── */
+.erp-label,
+.form-label {
+    display: block;
+    font-size: 0.875rem;                /* 14px */
+    font-weight: 500;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;              /* 8px spacing */
+}
+
+.form-hint,
+.form-help {
+    font-size: 0.75rem;                 /* 12px */
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+}
+
+/* ─── 3. Validation States ─────────────────────────────────── */
+.erp-input-error,
+.form-input-error {
+    border-color: #DC2626 !important;
+    box-shadow: 0 0 0 1px #DC2626 !important;
+}
+
+.form-error-text {
+    font-size: 0.75rem;
+    color: #DC2626;
+    margin-top: 0.25rem;
+}
+
+/* ─── 4. Standardized Date Inputs (.erp-date-input) ───────── */
+@layer components {
+    .erp-date-input {
+        display: inline-flex;
+        align-items: center;
+        width: 9rem;                /* 144px standar */
+        height: 32px;
+        min-height: 32px;
+        max-height: 32px;
+        padding-top: 0;
+        padding-bottom: 0;
+        padding-left: 0.625rem;     /* 10px */
+        padding-right: 0.5rem;      /* 8px clearance untuk ikon kalender */
+        font-family: var(--font-sans);
+        font-size: 0.75rem;         /* 12px */
+        line-height: 30px;
+        font-variant-numeric: tabular-nums;
+        font-feature-settings: "tnum";
+        color: var(--text-main);
+        background-color: #FFFFFF;
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-sm, 4px);
+        box-sizing: border-box;
+        vertical-align: middle;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .erp-date-input:hover {
+        border-color: #CBD5E1;
+    }
+
+    .erp-date-input:focus {
+        outline: none;
+        border-color: var(--color-cobalt);
+        box-shadow: 0 0 0 1px var(--color-cobalt);
+    }
+
+    .erp-date-input::-webkit-datetime-edit {
+        display: inline-flex;
+        align-items: center;
+        padding: 0;
+        line-height: 30px;
+        height: 30px;
+    }
+
+    .erp-date-input::-webkit-datetime-edit-fields-wrapper {
+        padding: 0;
+    }
+
+    .erp-date-input::-webkit-date-and-time-value {
+        min-height: 30px;
+        line-height: 30px;
+        text-align: left;
+    }
+
+    /* Indikator Kalender Presisi: SVG Icon dengan area klik nyaman */
+    .erp-date-input::-webkit-calendar-picker-indicator {
+        display: inline-block;
+        color: transparent;
+        background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='18' height='18' x='3' y='4' rx='2'/%3E%3Cline x1='16' x2='16' y1='2' y2='6'/%3E%3Cline x1='8' x2='8' y1='2' y2='6'/%3E%3Cline x1='3' x2='21' y1='10' y2='10'/%3E%3C/svg%3E") no-repeat center;
+        background-size: 14px 14px;
+        width: 18px;
+        height: 18px;
+        margin: 0 0 0 auto;
+        padding: 0;
+        cursor: pointer;
+        vertical-align: middle;
+        opacity: 0.85;
+        transition: opacity 0.15s ease;
+    }
+
+    .erp-date-input::-webkit-calendar-picker-indicator:hover {
+        opacity: 1;
+    }
+}
+
+/* Native Browser Date Adjustments for Legacy Inputs */
+select {
+    background-position: right 12px center !important;
+    padding-right: 2.5rem !important;
+}
+
+input[type="date"]:not(.erp-date-input)::-webkit-calendar-picker-indicator {
+    margin-right: 8px !important;
+    cursor: pointer;
+}
+
+input[type="date"]:not(.erp-date-input) {
+    padding-right: 12px !important;
+}
+
+/* ─── 5. Dark Mode Form Overrides ──────────────────────────── */
+html.dark input:not([type="submit"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]),
+html.dark select,
+html.dark textarea,
+html.dark .erp-input,
+html.dark .form-input,
+html.dark .bg-slate-50\/50 {
+    background-color: var(--dark-surface) !important;
+    border-color: var(--dark-border) !important;
+    color: var(--dark-text-primary) !important;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+    color: var(--dark-text-muted) !important;
+}
+
+html.dark input:focus,
+html.dark select:focus,
+html.dark textarea:focus,
+html.dark .erp-input:focus,
+html.dark .form-input:focus {
+    border-color: var(--color-cobalt) !important;
+    box-shadow: 0 0 0 1px var(--color-cobalt) !important;
+    background-color: var(--dark-surface) !important;
+}
+
+html.dark .erp-label,
+html.dark .form-label {
+    color: var(--dark-text-primary) !important;
+}
+
+html.dark .erp-date-input {
+    color-scheme: dark;
+    background-color: var(--dark-surface) !important;
+    border-color: var(--dark-border) !important;
+    color: var(--dark-text-primary) !important;
+}
+
+html.dark .erp-date-input:hover {
+    border-color: #3F3F46 !important;
+}
+
+html.dark .erp-date-input:focus {
+    border-color: var(--color-cobalt) !important;
+    box-shadow: 0 0 0 1px var(--color-cobalt) !important;
+    background-color: var(--dark-surface) !important;
+}
+
+html.dark .erp-date-input::-webkit-calendar-picker-indicator {
+    color: transparent !important;
+    background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23F4F4F5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='18' height='18' x='3' y='4' rx='2'/%3E%3Cline x1='16' x2='16' y1='2' y2='6'/%3E%3Cline x1='8' x2='8' y1='2' y2='6'/%3E%3Cline x1='3' x2='21' y1='10' y2='10'/%3E%3C/svg%3E") no-repeat center !important;
+    background-size: 14px 14px !important;
+    filter: none !important;
+    opacity: 1 !important;
+    cursor: pointer;
+}
+
+html.dark .erp-date-input::-webkit-calendar-picker-indicator:hover {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FFFFFF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='18' height='18' x='3' y='4' rx='2'/%3E%3Cline x1='16' x2='16' y1='2' y2='6'/%3E%3Cline x1='8' x2='8' y1='2' y2='6'/%3E%3Cline x1='3' x2='21' y1='10' y2='10'/%3E%3C/svg%3E") !important;
+    opacity: 1 !important;
+}

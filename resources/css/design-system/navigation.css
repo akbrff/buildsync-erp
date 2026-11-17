@@ -1,0 +1,154 @@
+/* ═════════════════════════════════════════════════════════════
+   BUILDSYNC ERP DESIGN SYSTEM — NAVIGATION
+   ═════════════════════════════════════════════════════════════
+   File: resources/css/design-system/navigation.css
+   Deskripsi: Sistem navigasi sidebar (lebar tetap 248px,
+   header selaras 64px, collapsible groups, link aktif & non-aktif).
+   ═════════════════════════════════════════════════════════════ */
+
+/* ─── 1. Sidebar Container ─────────────────────────────────── */
+.sidebar {
+    width: var(--sidebar-width, 248px);
+    min-width: var(--sidebar-width, 248px);
+    max-width: var(--sidebar-width, 248px);
+    height: 100vh;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-sidebar);
+    color: var(--text-main);
+    border-right: 1px solid var(--border-subtle);
+    user-select: none;
+    overflow: hidden;
+}
+
+/* ─── 2. Sidebar Brand Header ──────────────────────────────── */
+.sidebar-header {
+    height: var(--header-height, 64px);
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border-subtle);
+    flex-shrink: 0;
+}
+
+/* ─── 3. Navigation Menu Area ──────────────────────────────── */
+.sidebar-nav,
+.sidebar-navigation {
+    flex: 1 1 0%;
+    overflow-y: auto;
+    padding: 0.75rem;
+    scrollbar-width: none;         /* Firefox */
+    -ms-overflow-style: none;      /* IE and Edge */
+}
+
+.sidebar-nav::-webkit-scrollbar,
+.sidebar-navigation::-webkit-scrollbar {
+    display: none;                 /* Chrome, Safari, Opera */
+}
+
+/* ─── 4. Navigation Items & Links ──────────────────────────── */
+.sidebar-item,
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;                  /* 12px gap */
+    font-size: 0.875rem;           /* 14px */
+    border-radius: var(--radius-md, 6px);
+    padding: 0.5rem 0.75rem;       /* 8px 12px */
+    font-weight: 400;
+    color: rgba(11, 37, 69, 0.8);
+    transition: background-color 0.15s ease, color 0.15s ease;
+    text-decoration: none;
+}
+
+.sidebar-item:hover,
+.sidebar-link:hover {
+    color: var(--text-main);
+    background-color: var(--color-frost);
+}
+
+.sidebar-item-active {
+    background-color: rgba(29, 78, 137, 0.1) !important;
+    color: var(--color-cobalt) !important;
+    font-weight: 500 !important;
+}
+
+/* ─── 5. Collapsible Sidebar Groups ────────────────────────── */
+.sidebar-group {
+    padding-top: 0.25rem;
+}
+
+.sidebar-group-btn {
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;            /* 12px */
+    font-weight: 500;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: color 0.15s ease;
+    margin-top: 0.5rem;
+    margin-bottom: 0.125rem;
+    border: none;
+    background: transparent;
+    text-align: left;
+}
+
+.sidebar-group-btn:hover {
+    color: var(--text-main);
+}
+
+/* ─── 6. User Profile Footer (Pinned at Bottom) ────────────── */
+.sidebar-user-footer {
+    margin-top: auto;
+    flex-shrink: 0;
+    padding: 0.875rem;             /* 14px */
+    border-top: 1px solid var(--border-subtle);
+    background-color: var(--bg-sidebar);
+}
+
+/* ─── 7. Dark Mode Navigation Overrides ────────────────────── */
+html.dark .sidebar,
+html.dark aside#sidebar {
+    background-color: var(--dark-sidebar) !important;
+    border-color: var(--dark-border) !important;
+    color: var(--dark-text-primary) !important;
+}
+
+html.dark .sidebar-header {
+    border-color: var(--dark-border) !important;
+}
+
+html.dark .sidebar-item,
+html.dark .sidebar-link {
+    color: var(--dark-text-secondary);
+}
+
+html.dark .sidebar-item:hover,
+html.dark .sidebar-link:hover {
+    color: var(--dark-text-primary);
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+html.dark .sidebar-item-active {
+    background-color: var(--dark-surface-elevated) !important;
+    color: var(--dark-text-primary) !important;
+}
+
+html.dark .sidebar-group-btn {
+    color: var(--dark-text-muted);
+}
+
+html.dark .sidebar-group-btn:hover {
+    color: var(--dark-text-primary);
+}
+
+html.dark .sidebar-user-footer {
+    border-color: var(--dark-border) !important;
+    background-color: var(--dark-sidebar) !important;
+}

@@ -12,8 +12,7 @@
 
 @section('content')
     <x-page-header
-        title="Catat Pengeluaran Kas Proyek"
-        subtitle="Entri bukti pengeluaran dana riil, alokasikan ke proyek, dan sertakan dokumen kwitansi/struk.">
+        title="Catat Pengeluaran Kas Proyek">
         <a href="{{ route('budgets.index', $selectedProjectId ? ['project_id' => $selectedProjectId] : []) }}"
            class="btn-secondary">
             &larr; Batal & Kembali
@@ -22,7 +21,7 @@
 
     <x-flash-alert/>
 
-    <div class="max-w-4xl rounded-2xl p-6 border border-slate-100 bg-white shadow-[0_2px_12px_rgba(44,62,80,0.04)]">
+    <div class="erp-card max-w-4xl p-5 sm:p-6">
         <form method="POST" action="{{ route('budgets.store') }}" enctype="multipart/form-data">
             @csrf
 
@@ -94,12 +93,12 @@
                     <label for="description" class="erp-label">Uraian / Keterangan Pengeluaran <span class="text-red-500">*</span></label>
                     <textarea id="description" name="description" rows="2"
                               placeholder="Contoh: Pembelian semen 50 sak toko Makmur Jaya untuk pengecoran lantai 2"
-                              class="w-full rounded-lg border border-slate-300 p-2.5 text-xs text-[#2C3E50] transition focus:border-[#136F9A] focus:outline-none focus:ring-1 focus:ring-[#136F9A] @error('description') erp-input-error @enderror">{{ old('description') }}</textarea>
+                              class="w-full rounded-lg border border-[#E5E7EB] dark:border-[#27272A] bg-white dark:bg-[#18181B] p-3 text-sm text-[#0B2545] dark:text-[#F4F4F5] transition focus:border-[#1D4E89] focus:outline-none focus:ring-2 focus:ring-[#1D4E89]/20 @error('description') erp-input-error @enderror">{{ old('description') }}</textarea>
                     @error('description')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                 </div>
             </div>
 
-            <div class="mt-6 flex items-center justify-end gap-2.5 pt-4 border-t border-[#EEF4F8]">
+            <div class="mt-8 flex items-center justify-end gap-3 pt-6 border-t border-[#E5E7EB] dark:border-[#27272A]">
                 <a href="{{ route('budgets.index', $selectedProjectId ? ['project_id' => $selectedProjectId] : []) }}"
                    class="btn-secondary">
                     Batal

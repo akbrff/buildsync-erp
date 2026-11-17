@@ -79,7 +79,7 @@ class MaterialController extends Controller
             ]);
         }
 
-        return redirect()->route('materials.index')->with('success', 'Material baru berhasil ditambahkan ke inventaris.');
+        return redirect()->route('materials.index')->with('success', __('messages.material_created'));
     }
 
     public function show(Material $material)
@@ -109,19 +109,19 @@ class MaterialController extends Controller
         $validated['stock'] = $material->stock;
         $material->update($validated);
 
-        return redirect()->route('materials.index')->with('success', 'Data material ' . $material->code . ' berhasil diperbarui.');
+        return redirect()->route('materials.index')->with('success', __('messages.material_updated', ['code' => $material->code]));
     }
 
     public function destroy(Material $material)
     {
         if ($material->stockTransactions()->exists() || $material->purchaseOrderItems()->exists()) {
-            return back()->with('error', 'Material memiliki riwayat transaksi dan tidak dapat dihapus.');
+            return back()->with('error', __('messages.material_has_transactions'));
         }
 
         $code = $material->code;
         $material->delete();
 
-        return redirect()->route('materials.index')->with('success', "Material [{$code}] berhasil dihapus dari inventaris.");
+        return redirect()->route('materials.index')->with('success', __('messages.material_deleted', ['code' => $code]));
     }
 
     public function adjustStock(Request $request, Material $material)
@@ -160,10 +160,10 @@ class MaterialController extends Controller
         });
 
         if (! $success) {
-            return back()->with('error', "Gagal mengeluarkan material! Stok fisik hanya tersisa {$material->stock} {$material->unit}, permintaan: {$quantity} {$material->unit}.");
+            return back()->with('error', __('messages.insufficient_stock', ['stock' => $material->stock, 'unit' => $material->unit, 'requested' => $quantity]));
         }
 
-        return back()->with('success', 'Mutasi stok dan histori inventaris berhasil dicatat.');
+        return back()->with('success', __('messages.stock_adjusted'));
     }
 
     private function validateMaterial(Request $request, ?Material $material = null): array

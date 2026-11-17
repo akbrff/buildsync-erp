@@ -1,0 +1,84 @@
+/* ═════════════════════════════════════════════════════════════
+   BUILDSYNC ERP DESIGN SYSTEM — CARDS
+   ═════════════════════════════════════════════════════════════
+   File: resources/css/design-system/cards.css
+   Deskripsi: Standar kartu enterprise (border 1px lembut,
+   radius 8px, tanpa shadow berlebih, dan header/body terstruktur).
+   ═════════════════════════════════════════════════════════════ */
+
+/* ─── 1. Card Container Base ───────────────────────────────── */
+.erp-card,
+.card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg, 8px);
+    box-shadow: var(--card-shadow, none);
+    overflow: hidden;
+    transition: border-color 0.15s ease;
+}
+
+/* ─── 2. Card Sub-Elements ─────────────────────────────────── */
+.erp-card-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.875rem 1.25rem;     /* 14px 20px */
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.erp-card-body {
+    padding: 1.25rem;              /* 20px */
+}
+
+@media (min-width: 640px) {
+    .erp-card-body {
+        padding: 1.5rem;           /* 24px */
+    }
+}
+
+.erp-card-footer {
+    padding: 0.875rem 1.25rem;
+    border-top: 1px solid var(--border-subtle);
+}
+
+/* ─── 3. Unified Metric Strip (KPI Dashboard) ──────────────── */
+.stat-card-unified {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    border-radius: var(--radius-lg, 8px);
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    box-shadow: none;
+}
+
+@media (min-width: 640px) {
+    .stat-card-unified {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        padding: 1.25rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .stat-card-unified {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+/* ─── 4. Dark Mode Card Overrides ──────────────────────────── */
+html.dark .erp-card,
+html.dark .card,
+html.dark .stat-card-unified,
+html.dark .bg-white {
+    background-color: var(--dark-surface) !important;
+    border-color: var(--dark-border) !important;
+    box-shadow: none !important;
+}
+
+html.dark .erp-card-header,
+html.dark .erp-card-footer {
+    border-color: var(--dark-border) !important;
+}

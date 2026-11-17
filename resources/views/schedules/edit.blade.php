@@ -1,42 +1,41 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Jadwal: ' . $schedule->name)
+@section('title', __('schedules.edit_schedule') . ': ' . $schedule->name)
 
 @section('breadcrumbs')
 <x-breadcrumb :links="[
-    ['label' => 'Dashboard',     'href' => route('dashboard')],
-    ['label' => 'Jadwal Proyek', 'href' => route('schedules.index', ['project_id' => $schedule->project_id])],
-    ['label' => $schedule->name, 'href' => route('schedules.show', $schedule)],
-    ['label' => 'Edit',          'href' => '#'],
+    ['label' => __('nav.dashboard'),     'href' => route('dashboard')],
+    ['label' => __('schedules.title'),  'href' => route('schedules.index', ['project_id' => $schedule->project_id])],
+    ['label' => $schedule->name,         'href' => route('schedules.show', $schedule)],
+    ['label' => __('common.edit'),       'href' => '#'],
 ]"/>
 @endsection
 
 @section('content')
     <x-page-header
-        title="Edit Jadwal: {{ $schedule->name }}"
-        subtitle="Perbarui target waktu, alokasi bobot, atau deskripsi pekerjaan untuk {{ $schedule->project->project_code }}.">
+        :title="__('schedules.edit_schedule') . ': ' . $schedule->name">
         <a href="{{ route('schedules.show', $schedule) }}"
            class="btn-secondary">
-            &larr; Kembali ke Detail
+            {!! __('schedules.back_to_details') !!}
         </a>
     </x-page-header>
 
     <x-flash-alert/>
 
-    <div class="max-w-4xl rounded-2xl p-6 border border-slate-100 bg-white shadow-[0_2px_12px_rgba(44,62,80,0.04)]">
+    <div class="max-w-4xl erp-card p-5 sm:p-6">
         <form action="{{ route('schedules.update', $schedule) }}" method="POST">
             @csrf
             @method('PUT')
             @include('schedules.partials.form', ['schedule' => $schedule])
 
-            <div class="mt-6 flex items-center justify-end gap-2.5 pt-4 border-t border-[#EEF4F8]">
+            <div class="mt-8 flex items-center justify-end gap-3 pt-6 border-t border-[#E5E7EB] dark:border-[#27272A]">
                 <a href="{{ route('schedules.show', $schedule) }}"
-                   class="btn-secondary">
-                    Batal
+                   class="inline-flex items-center px-3.5 py-1.5 text-[11px] font-medium rounded border border-[#E5E7EB] dark:border-[#27272A] bg-white dark:bg-[#27272A] text-[#0B2545] dark:text-[#F4F4F5] hover:bg-slate-50 dark:hover:bg-white/5 transition-colors shadow-none">
+                    {{ __('common.cancel') }}
                 </a>
                 <button type="submit"
-                        class="btn-primary">
-                    Perbarui Jadwal
+                        class="inline-flex items-center px-3.5 py-1.5 text-[11px] font-medium rounded bg-[#1D4E89] hover:bg-[#153A66] text-white transition-colors shadow-none cursor-pointer">
+                    {{ __('schedules.update_schedule') }}
                 </button>
             </div>
         </form>

@@ -15,8 +15,7 @@
 <div class="max-w-4xl">
     {{-- Page Header --}}
     <x-page-header
-        title="Perbarui Data Tenaga Kerja"
-        subtitle="Ubah informasi kualifikasi, penyesuaian tarif upah harian, kontak telepon, atau status penugasan.">
+        title="Perbarui Data Tenaga Kerja">
         <x-slot:badges>
             <x-badge variant="neutral">{{ $worker->worker_code }}</x-badge>
         </x-slot:badges>
@@ -32,20 +31,20 @@
     <x-flash-alert />
 
     {{-- Form Container --}}
-    <div class="rounded-2xl border border-slate-100 bg-white shadow-[0_2px_12px_rgba(44,62,80,0.04)] overflow-hidden">
-        <div class="border-b border-[#EEF4F8] px-6 py-4 bg-[#F8FBFD] flex items-center justify-between">
-            <h3 class="text-[15px] font-bold text-[#2C3E50]">Perubahan Biodata & Tarif Upah</h3>
-            <span class="text-xs text-[#7F7F7F]">ID #{{ $worker->id }}</span>
+    <div class="rounded-lg border border-[#E5E7EB] dark:border-[#27272A] bg-white dark:bg-[#18181B] shadow-none overflow-hidden">
+        <div class="border-b border-[#E5E7EB] dark:border-[#27272A] px-5 py-3.5 bg-[#F4F8FB] dark:bg-[#27272A] flex items-center justify-between">
+            <h3 class="text-base font-bold text-[#1E293B] dark:text-white">Perubahan Biodata & Tarif Upah</h3>
+            <span class="text-xs text-[#64748B] dark:text-slate-400 font-mono">ID #{{ $worker->id }}</span>
         </div>
 
-        <form action="{{ route('workers.update', $worker) }}" method="POST" class="p-6">
+        <form action="{{ route('workers.update', $worker) }}" method="POST" class="p-5 sm:p-6">
             @csrf
             @method('PUT')
 
             @include('workers.partials.form', ['worker' => $worker])
 
             {{-- Form Footer Actions --}}
-            <div class="mt-6 border-t border-[#EEF4F8] pt-4 flex items-center justify-end gap-2.5">
+            <div class="mt-8 border-t border-[#E5E7EB] dark:border-[#27272A] pt-6 flex items-center justify-end gap-3">
                 <a href="{{ route('workers.show', $worker) }}"
                    class="btn-secondary">
                     Batal

@@ -1,0 +1,186 @@
+/* ═════════════════════════════════════════════════════════════
+   BUILDSYNC ERP DESIGN SYSTEM — DESIGN TOKENS
+   ═════════════════════════════════════════════════════════════
+   File: resources/css/design-system/tokens.css
+   Deskripsi: Sumber utama nilai desain (warna, border, spacing,
+   radius, dan variabel mode gelap).
+   Ubah nilai di file ini untuk mengubah tema visual secara global.
+   ═════════════════════════════════════════════════════════════ */
+
+:root {
+    /* ─── 1. Brand Palette (Warna Utama & Aksen) ─────────────── */
+    --color-deep-navy:     #0B2545;   /* Deep Navy: Teks utama, identitas struktural */
+    --color-cobalt:        #1D4E89;   /* Cobalt: Tombol aksi utama, tautan aktif */
+    --color-cobalt-hover:  #153A66;   /* Cobalt hover state */
+    --color-dusty-blue:    #8DA9C4;   /* Aksen sekunder / subtle */
+    --color-ice-blue:      #CFE3F3;   /* Highlight lembut / active background */
+    --color-frost:         #F8FAFC;   /* Kanvas netral terang */
+
+    /* ─── 2. Legacy Brand Bridge Variables ───────────────────── */
+    --brand-burgundy:       var(--color-cobalt);
+    --brand-burgundy-hover: var(--color-cobalt-hover);
+    --brand-green:          var(--color-deep-navy);
+    --brand-green-hover:    #071A32;
+    --brand-cream:          var(--color-ice-blue);
+    --brand-cream-text:     var(--color-deep-navy);
+
+    /* ─── 3. Neutral Surfaces (Kanvas & Permukaan Terang) ────── */
+    --bg-app:              #F8FAFC;                  /* Kanvas utama aplikasi */
+    --bg-sidebar:          #FFFFFF;                  /* Latar belakang sidebar */
+    --bg-surface:          #FFFFFF;                  /* Latar belakang kartu & tabel */
+    --bg-surface-elevated: #F1F5F9;                  /* Permukaan kontras lembut */
+    --bg-subtle:           #F1F5F9;                  /* Permukaan netral lembut */
+    --bg-selected:         rgba(29, 78, 137, 0.08);  /* Background item terpilih */
+
+    /* ─── 4. Borders & Dividers ──────────────────────────────── */
+    --border-subtle:       #E5E7EB;                  /* Border kartu, tabel, divider */
+    --border-input:        #D1D5DB;                  /* Border input form standar */
+    --border-strong:       #CBD5E1;                  /* Border penegas */
+
+    /* ─── 5. Typography Tokens ───────────────────────────────── */
+    --font-sans:           'Inter', 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-heading:        'Inter', 'Plus Jakarta Sans', sans-serif;
+    --font-mono:           'JetBrains Mono', ui-monospace, monospace;
+
+    --text-main:           #0B2545;                  /* Teks utama (Deep Navy, kontras tinggi) */
+    --text-muted:          #64748B;                  /* Teks sekunder / keterangan (WCAG AA 4.5:1+) */
+    --text-dim:            #94A3B8;                  /* Teks tersier / placeholder */
+
+    /* ─── 6. Action Tokens (Tombol & Interaksi) ──────────────── */
+    --primary:             var(--color-cobalt);      /* Tombol aksi utama */
+    --primary-hover:       var(--color-cobalt-hover);
+    --primary-bg:          rgba(29, 78, 137, 0.08);
+
+    --secondary:           var(--color-deep-navy);   /* Tombol sekunder */
+    --secondary-hover:     #071A32;
+    --secondary-bg:        rgba(11, 37, 69, 0.06);
+
+    /* ─── 7. Dimensions & Sizing (Ukuran Komponen Utama) ─────── */
+    --sidebar-width:       248px;                    /* Lebar sidebar desktop */
+    --header-height:       64px;                     /* Tinggi topbar header */
+    --input-height:        44px;                     /* Tinggi input standar ERP (2.75rem) */
+    --btn-height:          42px;                     /* Tinggi tombol standar ERP (2.625rem) */
+
+    /* ─── 8. Border Radiuses (Sudut Kelengkungan) ─────────────── */
+    --radius-xs:           2px;
+    --radius-sm:           4px;                      /* Standar input & tombol ERP */
+    --radius-md:           6px;                      /* Standar menu navigation */
+    --radius-lg:           8px;                      /* Standar kartu & tabel */
+    --radius-full:         9999px;
+
+    /* ─── 9. Semantic Status Tokens (Badge & Indikator) ──────── */
+    --status-green-bg:     rgba(22, 163, 74, 0.12);
+    --status-green-text:   #16A34A;
+    --status-green-border: rgba(22, 163, 74, 0.25);
+
+    --status-amber-bg:     rgba(217, 119, 6, 0.12);
+    --status-amber-text:   #D97706;
+    --status-amber-border: rgba(217, 119, 6, 0.25);
+
+    --status-red-bg:       rgba(220, 38, 38, 0.12);
+    --status-red-text:     #DC2626;
+    --status-red-border:   rgba(220, 38, 38, 0.25);
+
+    --status-blue-bg:      rgba(14, 165, 233, 0.12);
+    --status-blue-text:    #0EA5E9;
+    --status-blue-border:  rgba(14, 165, 233, 0.25);
+
+    --status-slate-bg:     rgba(100, 116, 139, 0.12);
+    --status-slate-text:   #64748B;
+    --status-slate-border: rgba(100, 116, 139, 0.25);
+
+    --card-shadow:         none;
+
+    /* ─── 10. Dark Mode Defaults ─────────────────────────────── */
+    --dark-bg:               #09090B;
+    --dark-sidebar:          #111113;
+    --dark-surface:          #18181B;
+    --dark-surface-elevated: #27272A;
+    --dark-border:           #27272A;
+    --dark-text-primary:     #F4F4F5;
+    --dark-text-secondary:   #A1A1AA;
+    --dark-text-muted:       #71717A;
+    --dark-accent:           #1D4E89;
+}
+
+/* ═════════════════════════════════════════════════════════════
+   DARK MODE TOKEN MAPPINGS (Neutral Charcoal Theme)
+   ═════════════════════════════════════════════════════════════ */
+html.dark {
+    --bg-app:                var(--dark-bg);                  /* #09090B Kanvas gelap */
+    --bg-sidebar:            var(--dark-sidebar);             /* #111113 Sidebar netral gelap */
+    --bg-surface:            var(--dark-surface);             /* #18181B Permukaan kartu gelap */
+    --bg-surface-elevated:   var(--dark-surface-elevated);    /* #27272A Permukaan elevasi */
+    --bg-subtle:             var(--dark-surface-elevated);
+    --bg-selected:           rgba(29, 78, 137, 0.25);
+    --border-subtle:         var(--dark-border);              /* #27272A Border subtle */
+    --border-strong:         #3F3F46;
+    --border-input:          var(--dark-border);
+    --text-main:             var(--dark-text-primary);        /* #F4F4F5 Teks utama */
+    --text-muted:            var(--dark-text-secondary);      /* #A1A1AA Teks sekunder */
+    --text-dim:              var(--dark-text-muted);          /* #71717A Teks muted */
+    --primary:               var(--dark-accent);
+    --primary-hover:         #2460A7;
+    --card-shadow:           none;
+    color-scheme: dark;
+}
+
+/* ─── Legacy Class Bridge (Menjaga Kompatibilitas 100%) ─────── */
+.rounded-2xl {
+    border-radius: var(--radius-lg) !important;
+}
+.bg-\[\#136F9A\],
+button.bg-\[\#136F9A\],
+a.bg-\[\#136F9A\],
+.bg-\[\#6C151E\],
+button.bg-\[\#6C151E\],
+a.bg-\[\#6C151E\] {
+    background-color: var(--color-cobalt) !important;
+}
+.text-\[\#136F9A\],
+.text-\[\#6C151E\] {
+    color: var(--color-cobalt) !important;
+}
+.border-\[\#136F9A\],
+.border-\[\#6C151E\] {
+    border-color: var(--color-cobalt) !important;
+}
+.bg-\[\#2C3E50\],
+button.bg-\[\#2C3E50\],
+a.bg-\[\#2C3E50\],
+.bg-\[\#0F3D3A\],
+aside.bg-\[\#0F3D3A\] {
+    background-color: var(--color-deep-navy) !important;
+}
+.text-\[\#2C3E50\],
+.text-\[\#0F3D3A\] {
+    color: var(--text-main) !important;
+}
+.bg-\[\#F8FBFD\],
+.bg-\[\#F8F6F2\] {
+    background-color: var(--bg-app) !important;
+}
+.text-\[\#7F7F7F\] {
+    color: var(--text-muted) !important;
+}
+.border-\[\#EEF4F8\] {
+    border-color: var(--border-subtle) !important;
+}
+.bg-\[\#27B1AE\] {
+    background-color: var(--color-deep-navy) !important;
+}
+.text-\[\#27B1AE\] {
+    color: #16A34A !important;
+}
+.bg-\[\#ED7132\] {
+    background-color: var(--color-cobalt) !important;
+}
+.text-\[\#ED7132\] {
+    color: #D97706 !important;
+}
+.bg-\[\#F5DABF\] {
+    background-color: var(--color-ice-blue) !important;
+}
+.text-\[\#F5DABF\] {
+    color: var(--color-deep-navy) !important;
+}

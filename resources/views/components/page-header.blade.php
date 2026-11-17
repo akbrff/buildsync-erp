@@ -21,13 +21,13 @@
                 {{ $badges }}
             </div>
         @endif
-        <h2 class="text-xl font-bold tracking-tight text-[#2C3E50]">{{ $title }}</h2>
+        <h2 class="page-title">{{ $title }}</h2>
         @if ($subtitle)
-            <p class="mt-1 text-xs text-[#7F7F7F]">{{ $subtitle }}</p>
+            <p class="page-subtitle">{{ $subtitle }}</p>
         @endif
     </div>
     @if ($hasActions || $hasSlot)
-        <div class="flex shrink-0 items-center gap-2.5">
+        <div class="flex shrink-0 items-center gap-3">
             {{ $hasActions ? $actions : $slot }}
         </div>
     @endif
