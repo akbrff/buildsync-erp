@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Dashboard') | {{ config('app.name') }}</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -161,12 +163,9 @@
         {{-- Header Workspace Ringkas (Height: 64px / h-16, divider perfectly aligned with topbar) --}}
         <div class="sidebar-header">
             <div class="flex items-center min-w-0">
-                <div class="w-7 h-7 rounded-md bg-[#1D4E89] bg-[#136F9A] text-white flex items-center justify-center shrink-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                    </svg>
-                </div>
+                <img src="{{ asset('images/buildsync-logo-white.png') }}"
+                     alt="BuildSync ERP"
+                     class="sidebar-brand-logo h-8 w-8 object-contain shrink-0 mix-blend-screen" />
                 <div class="ml-2.5 min-w-0">
                     <span class="text-[15px] font-semibold text-[#0B2545] dark:text-[#F4F4F5] tracking-tight block truncate">BuildSync ERP</span>
                     <span class="text-xs text-[#64748B] dark:text-[#A1A1AA] font-medium block">Enterprise Suite</span>

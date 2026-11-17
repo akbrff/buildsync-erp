@@ -34,6 +34,20 @@
     flex-shrink: 0;
 }
 
+.sidebar-brand-logo {
+    height: 32px;
+    width: 32px;
+    object-fit: contain;
+    flex-shrink: 0;
+    display: block;
+    mix-blend-mode: screen;
+}
+
+html:not(.dark) .sidebar-brand-logo {
+    filter: invert(1);
+    mix-blend-mode: multiply;
+}
+
 /* ─── 3. Navigation Menu Area ──────────────────────────────── */
 .sidebar-nav,
 .sidebar-navigation {
