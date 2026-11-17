@@ -50,10 +50,18 @@ class WorkerTest extends TestCase
     {
         $this->withoutVite();
         Worker::create($this->validData());
+        $user = \App\Models\User::factory()->create();
 
-        $response = $this->get(route('workers.index'));
-
+        // English default
+        $response = $this->actingAs($user)->get(route('workers.index'));
         $response->assertStatus(200);
+        $response->assertSee('Workforce &amp; Labor', false);
+
+        // Indonesian preference
+        $user->update(['locale' => 'id']);
+        $responseId = $this->actingAs($user)->get(route('workers.index'));
+        $responseId->assertStatus(200);
+        $responseId->assertSee('Tenaga Kerja');
     }
 
     public function test_status_must_be_active_or_inactive(): void

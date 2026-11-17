@@ -63,17 +63,29 @@ class IntegratedModulesTest extends TestCase
         $project = $this->project();
         $material = Material::create(['code' => 'MAT-001', 'name' => 'Besi Beton', 'unit' => 'batang', 'price' => 50000, 'stock' => 100, 'min_stock' => 20]);
 
+        // English default
         $response = $this->actingAs($user)->get(route('procurement.index'));
-
         $response->assertOk();
-        $response->assertSee('Tambah Supplier');
-        $response->assertSee('Buat Purchase Order');
-        $response->assertSee('Riwayat Pembelian & Penerimaan', false);
+        $response->assertSee('Add Supplier');
+        $response->assertSee('Create Purchase Order');
+        $response->assertSee('Purchase &amp; Receiving History', false);
         $response->assertSee('rounded-2xl');
-        $response->assertSee('+ Tambah item material');
-        $response->assertSee('Simpan Supplier');
-        $response->assertSee('Buat PO');
-        $response->assertSee('Filter riwayat');
+        $response->assertSee('+ Add Material Item');
+        $response->assertSee('Save Supplier');
+        $response->assertSee('Create PO');
+        $response->assertSee('Filter history');
+
+        // Indonesian preference
+        $user->update(['locale' => 'id']);
+        $responseId = $this->actingAs($user)->get(route('procurement.index'));
+        $responseId->assertOk();
+        $responseId->assertSee('Tambah Supplier');
+        $responseId->assertSee('Buat Purchase Order');
+        $responseId->assertSee('Riwayat Pembelian &amp; Penerimaan', false);
+        $responseId->assertSee('+ Tambah item material');
+        $responseId->assertSee('Simpan Supplier');
+        $responseId->assertSee('Buat PO');
+        $responseId->assertSee('Filter riwayat');
     }
 
     public function test_inventory_transactions_page_loads_with_star_admin_ui(): void
@@ -81,14 +93,22 @@ class IntegratedModulesTest extends TestCase
         $user = User::factory()->create(['role' => 'logistics']);
         $material = Material::create(['code' => 'MAT-002', 'name' => 'Pasir Pasang', 'unit' => 'm3', 'price' => 150000, 'stock' => 50, 'min_stock' => 10]);
 
+        // English default
         $response = $this->actingAs($user)->get(route('inventory.transactions'));
-
         $response->assertOk();
-        $response->assertSee('Riwayat Transaksi Inventaris');
-        $response->assertSee('Audit stok masuk dan keluar');
+        $response->assertSee('Inventory Transaction History');
+        $response->assertSee('Inbound &amp; outbound stock audit', false);
         $response->assertSee('rounded-2xl');
         $response->assertSee('bg-[#2C3E50]');
-        $response->assertSee('Belum ada transaksi stok.');
+        $response->assertSee('No stock transactions found.');
+
+        // Indonesian preference
+        $user->update(['locale' => 'id']);
+        $responseId = $this->actingAs($user)->get(route('inventory.transactions'));
+        $responseId->assertOk();
+        $responseId->assertSee('Riwayat Transaksi Inventaris');
+        $responseId->assertSee('Audit stok masuk dan keluar');
+        $responseId->assertSee('Belum ada transaksi stok.');
     }
 
     public function test_workforce_page_loads_with_star_admin_ui(): void
@@ -97,17 +117,29 @@ class IntegratedModulesTest extends TestCase
         $worker = Worker::create(['worker_code' => 'WRK-001', 'name' => 'Budi Santoso', 'position' => 'Mandor', 'daily_rate' => 200000, 'status' => 'active']);
         $project = $this->project();
 
+        // English default
         $response = $this->actingAs($user)->get(route('workforce.index'));
-
         $response->assertOk();
-        $response->assertSee('Penugasan & Kehadiran Tenaga Kerja', false);
-        $response->assertSee('Buat Penugasan');
-        $response->assertSee('Catat Kehadiran / Jam Kerja');
-        $response->assertSee('Penugasan Aktif');
-        $response->assertSee('Kehadiran & Pembayaran Upah', false);
+        $response->assertSee('Workforce Assignments &amp; Attendance', false);
+        $response->assertSee('Assign Worker');
+        $response->assertSee('Log Attendance / Work Hours');
+        $response->assertSee('Active Assignments');
+        $response->assertSee('Attendance &amp; Wage Payments', false);
         $response->assertSee('rounded-2xl');
-        $response->assertSee('Simpan Penugasan');
-        $response->assertSee('Simpan Kehadiran');
+        $response->assertSee('Save Assignment');
+        $response->assertSee('Save Attendance');
+
+        // Indonesian preference
+        $user->update(['locale' => 'id']);
+        $responseId = $this->actingAs($user)->get(route('workforce.index'));
+        $responseId->assertOk();
+        $responseId->assertSee('Penugasan &amp; Kehadiran Tenaga Kerja', false);
+        $responseId->assertSee('Buat Penugasan');
+        $responseId->assertSee('Catat Kehadiran / Jam Kerja');
+        $responseId->assertSee('Penugasan Aktif');
+        $responseId->assertSee('Kehadiran &amp; Pembayaran Upah', false);
+        $responseId->assertSee('Simpan Penugasan');
+        $responseId->assertSee('Simpan Kehadiran');
     }
 
     public function test_user_roles_page_loads_with_star_admin_ui(): void
@@ -129,17 +161,28 @@ class IntegratedModulesTest extends TestCase
     {
         $financeUser = User::factory()->create(['name' => 'Finance Staff', 'role' => 'finance']);
 
+        // English default
         $response = $this->actingAs($financeUser)->get(route('finance.index'));
-
         $response->assertOk();
-        $response->assertSee('Arus Kas & Integrasi Keuangan', false);
-        $response->assertSee('Catat Arus Kas Manual');
-        $response->assertSee('Tagihan Supplier yang Belum Lunas');
-        $response->assertSee('Riwayat Transaksi Arus Kas');
+        $response->assertSee('Cash Flow &amp; Financial Integration', false);
+        $response->assertSee('Record Manual Cash Flow');
+        $response->assertSee('Outstanding Supplier Invoices');
+        $response->assertSee('Cash Flow Transaction History');
         $response->assertSee('rounded-2xl');
         $response->assertSee('bg-[#136F9A]');
         $response->assertSee('bg-[#2C3E50]');
-        $response->assertSee('Tidak ada tagihan supplier yang terbuka.');
-        $response->assertSee('Belum ada transaksi arus kas.');
+        $response->assertSee('No open supplier bills.');
+        $response->assertSee('No cash flow transactions recorded.');
+
+        // Indonesian preference
+        $financeUser->update(['locale' => 'id']);
+        $responseId = $this->actingAs($financeUser)->get(route('finance.index'));
+        $responseId->assertOk();
+        $responseId->assertSee('Arus Kas &amp; Integrasi Keuangan', false);
+        $responseId->assertSee('Catat Arus Kas Manual');
+        $responseId->assertSee('Tagihan Supplier yang Belum Lunas');
+        $responseId->assertSee('Riwayat Transaksi Arus Kas');
+        $responseId->assertSee('Tidak ada tagihan supplier yang terbuka.');
+        $responseId->assertSee('Belum ada transaksi arus kas.');
     }
 }

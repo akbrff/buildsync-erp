@@ -112,16 +112,27 @@ class BudgetTest extends TestCase
         $user = \App\Models\User::factory()->create(['role' => 'finance']);
         $project = $this->makeProject();
 
+        // English default
         $response = $this->actingAs($user)->get(route('budgets.index', ['project_id' => $project->id]));
 
         $response->assertOk();
-        $response->assertSee('Realisasi Anggaran &amp; Kas Proyek', false);
-        $response->assertSee('Cari voucher / keterangan...');
+        $response->assertSee('Project Budget &amp; Cash Realization', false);
+        $response->assertSee('Search voucher / description...');
         $response->assertSee('rounded-2xl');
         $response->assertSee('bg-[#F8FBFD]');
         $response->assertSee('bg-[#136F9A]');
-        $response->assertSee('Terapkan');
-        $response->assertSee('Belum ada catatan pengeluaran kas yang sesuai filter.');
-        $response->assertSee('+ Catat Pengeluaran Pertama');
+        $response->assertSee('Apply');
+        $response->assertSee('No budget expense records match your filter.');
+        $response->assertSee('+ Record First Expense');
+
+        // Indonesian preference
+        $user->update(['locale' => 'id']);
+        $responseId = $this->actingAs($user)->get(route('budgets.index', ['project_id' => $project->id]));
+        $responseId->assertOk();
+        $responseId->assertSee('Realisasi Anggaran &amp; Kas Proyek', false);
+        $responseId->assertSee('Cari voucher / keterangan...');
+        $responseId->assertSee('Terapkan');
+        $responseId->assertSee('Belum ada catatan pengeluaran kas yang sesuai filter.');
+        $responseId->assertSee('+ Catat Pengeluaran Pertama');
     }
 }

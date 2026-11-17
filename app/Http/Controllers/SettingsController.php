@@ -33,7 +33,7 @@ class SettingsController extends Controller
 
         $request->session()->put('locale', $locale);
 
-        return back()->with('success', __('settings.saved_successfully'));
+        return redirect()->route('settings.index')->with('success', __('settings.saved_successfully'));
     }
 
     /**
@@ -41,7 +41,9 @@ class SettingsController extends Controller
      */
     public function switchLocale(Request $request, string $locale)
     {
-        abort_unless(in_array($locale, ['en', 'id'], true), 400);
+        if (!in_array($locale, ['en', 'id'], true)) {
+            $locale = config('app.fallback_locale', 'en');
+        }
 
         if (Auth::check()) {
             Auth::user()->update(['locale' => $locale]);
