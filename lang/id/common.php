@@ -50,6 +50,7 @@ return [
     'description' => 'Deskripsi',
 
     // Common Badges
+    'dashboard' => 'Dasbor',
     'active' => 'Aktif',
     'inactive' => 'Nonaktif',
     'pending' => 'Menunggu',

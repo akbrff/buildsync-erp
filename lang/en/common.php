@@ -48,8 +48,9 @@ return [
     'updated_at' => 'Updated At',
     'pic' => 'PIC',
     'description' => 'Description',
-
+    
     // Common Badges
+    'dashboard' => 'Dasboard',
     'active' => 'Active',
     'inactive' => 'Inactive',
     'pending' => 'Pending',
