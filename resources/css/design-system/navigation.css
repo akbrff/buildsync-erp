@@ -43,7 +43,16 @@
     mix-blend-mode: screen;
 }
 
-html:not(.dark) .sidebar-brand-logo {
+.login-brand-logo {
+    height: 52px;
+    width: 52px;
+    object-fit: contain;
+    display: block;
+    mix-blend-mode: screen;
+}
+
+html:not(.dark) .sidebar-brand-logo,
+html:not(.dark) .login-brand-logo {
     filter: invert(1);
     mix-blend-mode: multiply;
 }

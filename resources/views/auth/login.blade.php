@@ -59,12 +59,10 @@
 
             {{-- Logo & Tipografi Header --}}
             <div class="flex flex-col items-start text-left w-full">
-                <div class="flex h-11 w-11 items-center justify-center rounded-lg bg-[#1D4E89] bg-[#136F9A] text-white shadow-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                    </svg>
-                </div>
-                <h1 class="text-2xl font-bold text-[#0B2545] dark:text-[#F4F4F5] tracking-tight mt-4 text-left">BuildSync ERP</h1>
+                <img src="{{ asset('images/buildsync-logo-white.png') }}"
+                     alt="BuildSync ERP"
+                     class="login-brand-logo h-[52px] w-[52px] object-contain -ml-2.5 mix-blend-screen" />
+                <h1 class="text-2xl font-bold text-[#0B2545] dark:text-[#F4F4F5] tracking-tight mt-2.5 text-left">BuildSync ERP</h1>
                 <p class="font-normal text-[13px] text-[#64748B] dark:text-[#A1A1AA] text-left mt-1.5 mb-8 leading-relaxed">{{ __('auth.sign_in_subtitle') }}</p>
             </div>
 
